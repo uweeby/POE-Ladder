@@ -153,44 +153,48 @@ namespace POELadder
 
             this.UpdateTime.Insert(0, Time);
 
-            if (this.Rank.Count == 1)
-            {
-                this.Rank.Insert(0, Rank);
-            }
+            this.Rank.Insert(0, Rank);
+            this.Level.Insert(0, Level);
+            this.Experience.Insert(0, Experience);
 
-            if (this.Rank.Count > 1)
-            {
-                if (this.Rank[0] != Rank)
-                {
-                    this.Rank.Insert(0, Rank);
-                }
-            }
+            //if (this.Rank.Count == 1)
+            //{
+            //    this.Rank.Insert(0, Rank);
+            //}
 
-            if (this.Level.Count == 1)
-            {
-                this.Level.Insert(0, Level);
-            }
+            //if (this.Rank.Count > 1)
+            //{
+            //    if (this.Rank[0] != Rank)
+            //    {
+            //        this.Rank.Insert(0, Rank);
+            //    }
+            //}
 
-            if (this.Level.Count > 1)
-            {
-                if (this.Level[0] != Level)
-                {
-                    this.Level.Insert(0, Level);
-                }
-            }
+            //if (this.Level.Count == 1)
+            //{
+            //    this.Level.Insert(0, Level);
+            //}
 
-            if (this.Experience.Count == 1)
-            {
-                this.Experience.Insert(0, Experience);
-            }
+            //if (this.Level.Count > 1)
+            //{
+            //    if (this.Level[0] != Level)
+            //    {
+            //        this.Level.Insert(0, Level);
+            //    }
+            //}
 
-            if (this.Experience.Count > 1)
-            {
-                if (this.Experience[0] != Experience)
-                {
-                    this.Experience.Insert(0, Experience);
-                }
-            }
+            //if (this.Experience.Count == 1)
+            //{
+            //    this.Experience.Insert(0, Experience);
+            //}
+
+            //if (this.Experience.Count > 1)
+            //{
+            //    if (this.Experience[0] != Experience)
+            //    {
+            //        this.Experience.Insert(0, Experience);
+            //    }
+            //}
 
             ShrinkCollections();
         }
