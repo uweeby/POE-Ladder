@@ -150,9 +150,9 @@ namespace POELadder
             LadderTable.Columns[9].HeaderText = "EXP behind:";
             LadderTable.Columns[9].ToolTipText = "Experience behind the leader";
             LadderTable.Columns[10].HeaderText = "EXP/Minute:";
-            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained perminute";
+            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].HeaderText = "Change:";
-            LadderTable.Columns[11].ToolTipText = "Change in rank since last update";
+            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
             #endregion
         }
 
