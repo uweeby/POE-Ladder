@@ -126,6 +126,16 @@ namespace POELadder
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = arrPlayers;
 
+            for (int i = 0; i < playerDB.Count; i++)
+            {
+                if (LadderTable.Rows[i].Cells[4].Equals("Marauder"))
+                {
+                    LadderTable.Rows[i].Cells[4].Value = "Hey";
+                }
+
+            }
+
+            #region LadderTable Formatting
             LadderTable.Columns[0].HeaderText = "Online:";
             LadderTable.Columns[1].HeaderText = "Rank:";
             LadderTable.Columns[2].HeaderText = "Account:";
@@ -134,10 +144,16 @@ namespace POELadder
             LadderTable.Columns[5].HeaderText = "Level:";
             LadderTable.Columns[6].HeaderText = "Experience:";
             LadderTable.Columns[7].HeaderText = "EXP To Level:";
-            LadderTable.Columns[8].HeaderText = "Est EXP/Minute:";
-            LadderTable.Columns[9].HeaderText = "EXP To Leader:";
-            LadderTable.Columns[10].HeaderText = "Est EXP/Minute:";
-            LadderTable.Columns[11].HeaderText = "Rank Change:";
+            LadderTable.Columns[7].ToolTipText = "Experience required to level";
+            LadderTable.Columns[8].HeaderText = "EXP/update:";
+            LadderTable.Columns[8].ToolTipText = "Experience gained this update";
+            LadderTable.Columns[9].HeaderText = "EXP behind:";
+            LadderTable.Columns[9].ToolTipText = "Experience behind the leader";
+            LadderTable.Columns[10].HeaderText = "EXP/Minute:";
+            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained perminute";
+            LadderTable.Columns[11].HeaderText = "Change:";
+            LadderTable.Columns[11].ToolTipText = "Change in rank since last update";
+            #endregion
         }
 
         //Update Ladder Table with the current DB data

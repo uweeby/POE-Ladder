@@ -1,14 +1,2 @@
-# git ignore file
-POELadder/obj/x86/Debug/DesignTimeResolveAssemblyReferences.cache
-POELadder/obj/x86/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-POELadder/obj/x86/Debug/POELadder.csproj.FileListAbsolute.txt
-POELadder/obj/x86/Debug/POELadder.csproj.GenerateResource.Cache
-POELadder/obj/x86/Debug/POELadder.csprojResolveAssemblyReference.cache
-POELadder/obj/x86/Debug/POELadder.exe
-POELadder/obj/x86/Debug/POELadder.Form1.resources
-POELadder/obj/x86/Debug/POELadder.pdb
-POELadder/obj/x86/Debug/POELadder.Properties.Resources.resources
-POELadder/bin/Debug/POELadder.exe
-POELadder/bin/Debug/POELadder.pdb
-POELadder/bin/Debug/POELadder.vshost.exe
-POELadder/bin/Debug/POELadder.vshost.exe.manifest
+/POELadder/obj
+/POELadder/bin
