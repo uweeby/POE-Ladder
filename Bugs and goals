@@ -1,6 +1,4 @@
-POE-Ladder
-==========
-*/ Bugs
+    */ Bugs
 
           * Exp/update returning to zero due to everyone not updating at the same update
           * Exp/minute calculation cleanup and make as accurate as possible
