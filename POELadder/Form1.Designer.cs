@@ -38,7 +38,6 @@
             this.ladderselectBox = new System.Windows.Forms.ComboBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.LadderTable = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
             this.DeathTable = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
@@ -50,24 +49,24 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
             this.Rank = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Account = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Points = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timerLabel = new System.Windows.Forms.Label();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // selectladderLabel
             // 
             this.selectladderLabel.AutoSize = true;
-            this.selectladderLabel.Location = new System.Drawing.Point(7, 15);
+            this.selectladderLabel.Location = new System.Drawing.Point(11, 15);
             this.selectladderLabel.Name = "selectladderLabel";
             this.selectladderLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.selectladderLabel.Size = new System.Drawing.Size(76, 13);
@@ -78,7 +77,7 @@
             // 
             this.ladderselectBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ladderselectBox.FormattingEnabled = true;
-            this.ladderselectBox.Location = new System.Drawing.Point(102, 12);
+            this.ladderselectBox.Location = new System.Drawing.Point(93, 12);
             this.ladderselectBox.Name = "ladderselectBox";
             this.ladderselectBox.Size = new System.Drawing.Size(388, 21);
             this.ladderselectBox.TabIndex = 151;
@@ -88,7 +87,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(496, 16);
+            this.checkBox1.Location = new System.Drawing.Point(487, 15);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(48, 17);
             this.checkBox1.TabIndex = 156;
@@ -110,6 +109,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LadderTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.LadderTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
+            this.LadderTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -127,16 +127,6 @@
             this.LadderTable.Size = new System.Drawing.Size(1084, 443);
             this.LadderTable.TabIndex = 149;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 485);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 160;
-            this.label2.Text = "Deaths:";
-            this.label2.Visible = false;
-            // 
             // DeathTable
             // 
             this.DeathTable.AllowUserToAddRows = false;
@@ -151,6 +141,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DeathTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.DeathTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllHeaders;
+            this.DeathTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.DeathTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.DeathTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -161,11 +152,10 @@
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DeathTable.DefaultCellStyle = dataGridViewCellStyle4;
-            this.DeathTable.Location = new System.Drawing.Point(10, 501);
+            this.DeathTable.Location = new System.Drawing.Point(0, 0);
             this.DeathTable.Name = "DeathTable";
-            this.DeathTable.Size = new System.Drawing.Size(1084, 133);
+            this.DeathTable.Size = new System.Drawing.Size(1080, 120);
             this.DeathTable.TabIndex = 150;
-            this.DeathTable.Visible = false;
             // 
             // timer1
             // 
@@ -181,7 +171,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(536, 16);
+            this.linkLabel1.Location = new System.Drawing.Point(527, 15);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(39, 13);
             this.linkLabel1.TabIndex = 167;
@@ -192,6 +182,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.seasonPoints);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.label5);
             this.tabPage1.Controls.Add(this.textBox1);
@@ -201,7 +192,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(1076, 120);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Filter";
+            this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
@@ -220,6 +211,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(123, 21);
             this.comboBox1.TabIndex = 3;
+            this.comboBox1.Text = "All";
             // 
             // label5
             // 
@@ -249,29 +241,19 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(10, 488);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1084, 146);
             this.tabControl1.TabIndex = 168;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.seasonPoints);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(0, 3, 3, 3);
-            this.tabPage2.Size = new System.Drawing.Size(1076, 120);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Details";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // seasonPoints
             // 
             this.seasonPoints.AllowUserToAddRows = false;
             this.seasonPoints.AllowUserToDeleteRows = false;
             this.seasonPoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.seasonPoints.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.seasonPoints.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.seasonPoints.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.seasonPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -279,7 +261,7 @@
             this.Rank,
             this.Account,
             this.Points});
-            this.seasonPoints.Location = new System.Drawing.Point(-4, 0);
+            this.seasonPoints.Location = new System.Drawing.Point(888, 0);
             this.seasonPoints.MultiSelect = false;
             this.seasonPoints.Name = "seasonPoints";
             this.seasonPoints.ReadOnly = true;
@@ -327,6 +309,16 @@
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.DeathTable);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(1076, 120);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Deaths";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AcceptButton = this.linkLabel1;
@@ -338,8 +330,6 @@
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.DeathTable);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.LadderTable);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.selectladderLabel);
@@ -354,8 +344,8 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).EndInit();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -367,7 +357,6 @@
         internal System.Windows.Forms.ComboBox ladderselectBox;
         private System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.DataGridView LadderTable;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView DeathTable;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
@@ -375,7 +364,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label5;
@@ -385,6 +373,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Account;
         private System.Windows.Forms.DataGridViewTextBoxColumn Points;
         private System.Windows.Forms.Label timerLabel;
+        private System.Windows.Forms.TabPage tabPage3;
 
     }
 }

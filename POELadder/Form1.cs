@@ -145,10 +145,10 @@ namespace POELadder
             LadderTable.Columns[6].HeaderText = "Experience:";
             LadderTable.Columns[7].HeaderText = "EXP To Level:";
             LadderTable.Columns[7].ToolTipText = "Experience required to level";
-            LadderTable.Columns[8].HeaderText = "EXP/update:";
-            LadderTable.Columns[8].ToolTipText = "Experience gained this update";
-            LadderTable.Columns[9].HeaderText = "EXP behind:";
-            LadderTable.Columns[9].ToolTipText = "Experience behind the leader";
+            LadderTable.Columns[8].HeaderText = "EXP/behind:";
+            LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
+            LadderTable.Columns[9].HeaderText = "EXP/update:";
+            LadderTable.Columns[9].ToolTipText = "Experience gained this update";
             LadderTable.Columns[10].HeaderText = "EXP/Minute:";
             LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].HeaderText = "Change:";

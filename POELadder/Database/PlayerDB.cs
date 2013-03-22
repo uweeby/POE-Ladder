@@ -224,6 +224,7 @@ namespace POELadder
             }
         }
 
+        //Calculating the Experience gained this update
         private void UpdateEXPThisUpdate()
         {
             if (this.Experience.Count > 1)
@@ -237,6 +238,7 @@ namespace POELadder
             }
         }
 
+        //Calculating the change in rank between two updates.
         private void UpdateRankChange(ushort _Rank)
         {
             ushort CurrentRank = _Rank;
@@ -255,6 +257,7 @@ namespace POELadder
             this.RankChange = CurrentRank - PreviousRank;
         }
 
+        //Calculating Experience per minute
         private void UpdateEXPMin()
         {
             //Calculate EXP over Time Updates
