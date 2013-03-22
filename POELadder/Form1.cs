@@ -16,6 +16,7 @@ namespace POELadder
         PathOfExileJSONLadderAll[] POELadderAll;
 
         public int SelectedLadderIndex;
+        public static uint LeaderEXP;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
@@ -177,6 +178,7 @@ namespace POELadder
 
                 for (int j = 0; j < playerDB.Count; j++)
                 {
+                    LeaderEXP = LadderData.entries[0].character.experience;
                     
 //This should be called when a player who was not part of the first download is now on the ladder.
 

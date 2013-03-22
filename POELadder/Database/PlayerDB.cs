@@ -25,7 +25,6 @@ namespace POELadder
         private List<ushort> Rank = new List<ushort>();
         private List<byte> Level = new List<byte>();
         private List<uint> Experience = new List<uint>();
-        
 
         #region EXP Array
         public uint[] ExpToLevelArray = new uint[101] {
@@ -144,6 +143,7 @@ namespace POELadder
         public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time, uint LeaderEXP)
         {
             this.Online = Online;
+            LeaderEXP = Form1.LeaderEXP;
             this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
             this.EXPBehindLeader = LeaderEXP - Experience;
 
@@ -232,10 +232,6 @@ namespace POELadder
                 this.EXPThisUpdate = (int)(this.Experience[0] - this.Experience[1]);
             }
 
-            else
-            {
-                this.EXPThisUpdate = 0;
-            }
         }
 
         //Calculating the change in rank between two updates.
@@ -271,7 +267,10 @@ namespace POELadder
                     TotalEXP += (int)(Experience[i] - Experience[i + 1]);
                 }
 
-//This should use the time gap instead
+            //This should use the time gap instead
+            // Maybe db the time of exp change alongside utcNow, then utcNow - utcThen = time gap, devide 60 by it and multiple by the remaining
+                // (TotalEXP / Experience.Count) * (60 / (utcNow - utcThen)) 
+                // Not sure if this would work, 7am tired.
                 TotalEXP = (TotalEXP / Experience.Count) * 60;
             }
 
