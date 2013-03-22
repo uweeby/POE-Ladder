@@ -269,8 +269,7 @@ namespace POELadder
 
             //This should use the time gap instead
             // Maybe db the time of exp change alongside utcNow, then utcNow - utcThen = time gap, devide 60 by it and multiple by the remaining
-                // (TotalEXP / Experience.Count) * (60 / (utcNow - utcThen)) 
-                // Not sure if this would work, 7am tired.
+            // (TotalEXP / Experience.Count) * (60 / (utcNow - utcThen)) 
                 TotalEXP = (TotalEXP / Experience.Count) * 60;
             }
 
