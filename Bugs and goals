@@ -1,0 +1,21 @@
+    */ Bugs
+
+          * Exp/update returning to zero due to everyone not updating at the same update
+          * Exp/minute calculation cleanup and make as accurate as possible
+          * Table sorting during live races, by rank, (When people die?) the rank is 'removed'.
+          * Exp/behind
+
+
+
+    */ Goals/plans
+
+          * Number formating, uint to strings, to ##,###,###,### etc.
+          * Color codding rows/cells by class
+          * Filtering the display by class
+          * Searching for an Account/character, (only work for the top 200)
+          * Season ladder if possible (I emailed the support about this just earlier)
+          * [Maybe] grabbing data from exilestats such as race records(?)
+          * Brainstorm a way to effectively display deaths without guessing too much
+          * Forum link for race events (Maybe not necesarry, mainly to show the brackets for reward points)
+          * Hyperlink accounts to their pathofexile.com account page
+          * [Maybe] Hard-coded list of people who are known to stream races (Nugi/Kripp/Rhox etc)
