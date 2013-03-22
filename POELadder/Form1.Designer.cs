@@ -152,9 +152,9 @@
             dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DeathTable.DefaultCellStyle = dataGridViewCellStyle4;
-            this.DeathTable.Location = new System.Drawing.Point(0, 0);
+            this.DeathTable.Location = new System.Drawing.Point(0, 3);
             this.DeathTable.Name = "DeathTable";
-            this.DeathTable.Size = new System.Drawing.Size(1080, 120);
+            this.DeathTable.Size = new System.Drawing.Size(1073, 115);
             this.DeathTable.TabIndex = 150;
             // 
             // timer1

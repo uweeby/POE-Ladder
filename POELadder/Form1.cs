@@ -224,12 +224,12 @@ namespace POELadder
             DateTime localTime = DateTime.UtcNow;
             DateTime localDate = DateTime.Today;
             String beforeRace = (StartTime - localTime).ToString();
-            String duringRace = (EndTime - localTime).Hours.ToString();
+            String duringRace = (EndTime - localTime).ToString();
 
             //If the race has started but has not ended. Currently running.
             if (localTime > StartTime && localTime < EndTime)
             {
-                //timerLabel.Text = String.Format(duringRace, "hh:mm:ss").Substring(0, duringRace.LastIndexOf("."));
+                timerLabel.Text = String.Format(duringRace, "hh:mm:ss").Substring(0, duringRace.LastIndexOf("."));
             }
 
             else
