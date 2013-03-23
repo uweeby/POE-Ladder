@@ -11,12 +11,10 @@ namespace POELadder
     {
         public String LadderAllURL = "http://api.pathofexile.com/leagues";
         public String LadderSingleURL;
-        public String selectedLadder;
 
         PathOfExileJSONLadderAll[] POELadderAll;
 
         public int SelectedLadderIndex;
-        public static uint LeaderEXP;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
@@ -161,6 +159,7 @@ namespace POELadder
         private void UpdateLadderData()
         {
             PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
+            uint LeaderEXP = LadderData.entries[0].character.experience;
 
             //Add the Ladder JSON Data to the PlayerDB
             for (int i = 0; i < LadderData.entries.Count; i++)
@@ -178,9 +177,7 @@ namespace POELadder
                 }
 
                 for (int j = 0; j < playerDB.Count; j++)
-                {
-                    LeaderEXP = LadderData.entries[0].character.experience;
-                    
+                {                  
 //This should be called when a player who was not part of the first download is now on the ladder.
 
 
@@ -208,7 +205,7 @@ namespace POELadder
                             LadderData.entries[i].character.level,
                             LadderData.entries[i].character.experience,
                             DateTime.UtcNow,
-                            LadderData.entries[i].character.experience);
+                            LeaderEXP);
                     }
                 }
             }

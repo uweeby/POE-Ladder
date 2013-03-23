@@ -145,9 +145,6 @@ namespace POELadder
         public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time, uint LeaderEXP)
         {
             this.Online = Online;
-            // You could do this part cleaner, gimmick way I did
-            LeaderEXP = Form1.LeaderEXP;
-
             this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
             this.EXPBehindLeader = LeaderEXP - Experience;
 
