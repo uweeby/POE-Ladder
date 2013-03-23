@@ -135,6 +135,14 @@ namespace POELadder
             }
 
             #region LadderTable Formatting
+            //Change formatting to display commas: 1,000
+            LadderTable.Columns[6].DefaultCellStyle.Format = "N0";
+            LadderTable.Columns[7].DefaultCellStyle.Format = "N0";
+            LadderTable.Columns[8].DefaultCellStyle.Format = "N0";
+            LadderTable.Columns[9].DefaultCellStyle.Format = "N0";
+            LadderTable.Columns[10].DefaultCellStyle.Format = "N0";
+
+            //Relabel Columns
             LadderTable.Columns[0].HeaderText = "Online:";
             LadderTable.Columns[1].HeaderText = "Rank:";
             LadderTable.Columns[2].HeaderText = "Account:";
@@ -143,14 +151,16 @@ namespace POELadder
             LadderTable.Columns[5].HeaderText = "Level:";
             LadderTable.Columns[6].HeaderText = "Experience:";
             LadderTable.Columns[7].HeaderText = "EXP To Level:";
-            LadderTable.Columns[7].ToolTipText = "Experience required to level";
             LadderTable.Columns[8].HeaderText = "EXP/behind:";
-            LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
             LadderTable.Columns[9].HeaderText = "EXP/update:";
-            LadderTable.Columns[9].ToolTipText = "Experience gained this update";
             LadderTable.Columns[10].HeaderText = "EXP/Minute:";
-            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].HeaderText = "Change:";
+            
+            //Tooltips
+            LadderTable.Columns[7].ToolTipText = "Experience required to level";
+            LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
+            LadderTable.Columns[9].ToolTipText = "Experience gained this update";
+            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
             #endregion
         }
