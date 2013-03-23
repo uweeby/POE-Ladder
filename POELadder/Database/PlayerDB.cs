@@ -263,7 +263,7 @@ namespace POELadder
         {
             //Calculate EXP over Time Updates
             int TotalEXP = 0;
-
+            int expMIN = 0;
             //More than one update has happened
             if (Experience.Count > 1)
             {
@@ -272,26 +272,13 @@ namespace POELadder
                     TotalEXP += (int)(Experience[i] - Experience[i + 1]);
                 }
 
-            //This will use the time gap instead, gap is 14 or 15 seconds per the timer2 auto-update
-            // You ONLY want this called if their experience has changed,
-
-                // This update they got 100 experience in the gap of 15 seconds
-                // This means per minute they're going to get 100 * (60/15) = 400exp
-
-                // This update they got 150 experience in the gap of 14 seconds
-                // This means per minute they're going to get 150 * (60/14) = 642.85
-
-                // This update they got 73484 experience in the gap of 15 seconds
-                // This means per minute they're going to get 73484 * (60/15) = 293936 exp
-
-                // This time it's the average, ((100 + 150 + 73484) / 3) *  (60/15) = 98312 exp average
-
+            //This will use the time gap instead, gap is 14 or 15 seconds as per the timer2 auto-update
                 int gap = (int)(DateTime.UtcNow - utcUpdate).TotalSeconds;
-                TotalEXP = (TotalEXP / Experience.Count) * (60 / gap);
+                expMIN = (TotalEXP / Experience.Count) * (60 / gap);
 
             }
 
-            this.EST_EXP_Minute = TotalEXP;
+            this.EST_EXP_Minute = expMIN;
         }
 
         public bool GetOnlineStatus()

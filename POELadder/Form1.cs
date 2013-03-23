@@ -169,6 +169,7 @@ namespace POELadder
                 if (playerDB.Count < LadderData.entries.Count)
                 {
                     PlayerDB NewPlayer = new PlayerDB(
+                        //Perhaps nest an if statement here to stop adding people who already have an account/character in the db
                         LadderData.entries[i].account.name,
                         LadderData.entries[i].character.name,
                         LadderData.entries[i].character.@class);
