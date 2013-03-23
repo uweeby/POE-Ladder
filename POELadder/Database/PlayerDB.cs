@@ -145,7 +145,9 @@ namespace POELadder
         public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time, uint LeaderEXP)
         {
             this.Online = Online;
+            // You could do this part cleaner, gimmick way I did
             LeaderEXP = Form1.LeaderEXP;
+
             this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
             this.EXPBehindLeader = LeaderEXP - Experience;
 
@@ -271,10 +273,22 @@ namespace POELadder
                 }
 
             //This will use the time gap instead, gap is 14 or 15 seconds per the timer2 auto-update
+            // You ONLY want this called if their experience has changed,
+
+                // This update they got 100 experience in the gap of 15 seconds
+                // This means per minute they're going to get 100 * (60/15) = 400exp
+
+                // This update they got 150 experience in the gap of 14 seconds
+                // This means per minute they're going to get 150 * (60/14) = 642.85
+
+                // This update they got 73484 experience in the gap of 15 seconds
+                // This means per minute they're going to get 73484 * (60/15) = 293936 exp
+
+                // This time it's the average, ((100 + 150 + 73484) / 3) *  (60/15) = 98312 exp average
+
                 int gap = (int)(DateTime.UtcNow - utcUpdate).TotalSeconds;
                 TotalEXP = (TotalEXP / Experience.Count) * (60 / gap);
-                System.Console.WriteLine("NOW - UPDATE = " + gap);
-                System.Console.WriteLine("TotalEXP * gap = " + TotalEXP);
+
             }
 
             this.EST_EXP_Minute = TotalEXP;
