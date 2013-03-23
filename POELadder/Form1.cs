@@ -4,6 +4,7 @@ using System.Linq;
 using PoELadder.JSON;
 using PoELadder;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace POELadder
 {
@@ -129,7 +130,17 @@ namespace POELadder
             {
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
                 {
-                    LadderTable.Rows[i].Cells[4].Value = "Hey";
+                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Red;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
+                {
+                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Green;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
+                {
+                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Blue;
                 }
 
             }

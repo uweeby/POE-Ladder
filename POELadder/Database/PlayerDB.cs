@@ -241,19 +241,29 @@ namespace POELadder
         private void UpdateRankChange(ushort _Rank)
         {
             ushort CurrentRank = _Rank;
-            ushort PreviousRank;
+            ushort PreviousRank = _Rank;
 
             if (this.Rank.Count > 1)
             {
                 PreviousRank = this.Rank[1];
             }
 
-            else
+            if (CurrentRank > PreviousRank)
             {
-                PreviousRank = _Rank;
+                this.RankChange = CurrentRank - PreviousRank;
             }
 
-            this.RankChange = CurrentRank - PreviousRank;
+            if (CurrentRank < PreviousRank)
+            {
+                this.RankChange = PreviousRank - CurrentRank;
+            }
+
+            if (CurrentRank == PreviousRank)
+            {
+                this.RankChange = 0;
+            }
+
+
         }
 
         //Calculating Experience per minute
