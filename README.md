@@ -9,9 +9,7 @@ POE-Ladder
           * Table sorting during live races, by rank, (When people die?) the rank is 'removed',
             and when the table is populating gradually (before races start) duplicate people are inserted.
 
-
-
-    */ Goals/plans
+*/ Goals/Plans
 
           * Number formating, uint to strings, to ##,###,###,### etc.
           * Color codding rows/cells by class
