@@ -26,6 +26,8 @@ namespace POELadder
         private List<byte> Level = new List<byte>();
         private List<uint> Experience = new List<uint>();
 
+        public DateTime utcUpdate;
+
         #region EXP Array
         public uint[] ExpToLevelArray = new uint[101] {
             0,
@@ -156,7 +158,8 @@ namespace POELadder
             this.Rank.Insert(0, Rank);
             this.Level.Insert(0, Level);
             this.Experience.Insert(0, Experience);
-
+            utcUpdate = DateTime.UtcNow;
+            
             //if (this.Rank.Count == 1)
             //{
             //    this.Rank.Insert(0, Rank);
@@ -267,10 +270,11 @@ namespace POELadder
                     TotalEXP += (int)(Experience[i] - Experience[i + 1]);
                 }
 
-            //This should use the time gap instead
-            // Maybe db the time of exp change alongside utcNow, then utcNow - utcThen = time gap, devide 60 by it and multiple by the remaining
-            // (TotalEXP / Experience.Count) * (60 / (utcNow - utcThen)) 
-                TotalEXP = (TotalEXP / Experience.Count) * 60;
+            //This will use the time gap instead, gap is 14 or 15 seconds per the timer2 auto-update
+                int gap = (int)(DateTime.UtcNow - utcUpdate).TotalSeconds;
+                TotalEXP = (TotalEXP / Experience.Count) * (60 / gap);
+                System.Console.WriteLine("NOW - UPDATE = " + gap);
+                System.Console.WriteLine("TotalEXP * gap = " + TotalEXP);
             }
 
             this.EST_EXP_Minute = TotalEXP;
