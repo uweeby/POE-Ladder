@@ -160,6 +160,7 @@ namespace POELadder
             this.Rank.Insert(0, Rank);
             this.Level.Insert(0, Level);
             this.Experience.Insert(0, Experience);
+
             utcUpdate = DateTime.UtcNow;
             
             //if (this.Rank.Count == 1)
@@ -273,7 +274,7 @@ namespace POELadder
                 }
 
             //This will use the time gap instead, gap is 14 or 15 seconds as per the timer2 auto-update
-                int gap = (int)(DateTime.UtcNow - utcUpdate).TotalSeconds;
+                int gap = (int)(UpdateTime[0] - UpdateTime[1]).TotalSeconds;
                 expMIN = (TotalEXP / Experience.Count) * (60 / gap);
 
             }

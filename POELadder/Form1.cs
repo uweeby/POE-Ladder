@@ -127,9 +127,9 @@ namespace POELadder
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = arrPlayers;
 
-            for (int i = 0; i < playerDB.Count; i++)
+            for (int i = 0; i < 10; i++)
             {
-                if (LadderTable.Rows[i].Cells[4].Equals("Marauder"))
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
                 {
                     LadderTable.Rows[i].Cells[4].Value = "Hey";
                 }
