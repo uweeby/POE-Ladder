@@ -25,7 +25,6 @@ POE-Ladder
 
 */ Bugs fixed 
 
-          * Exp/behind - Works, however it's using a public static uint LeaderEXP; from Form1.cs with 
-            LeaderEXP = LadderData.entries[0].character.experience; to feed it through to PlayerDB.cs
-            LeaderEXP = Form1.LeaderEXP;
+          * Exp/behind - Wrong data sent during update. Corrected
+          * UpdateEXPMin() - Not correctly using UpdateTime List. Corrected.
            
