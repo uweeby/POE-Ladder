@@ -25,7 +25,7 @@ namespace POELadder
         }
 
         #region GUI Code
-    //Form Driven Methods:
+        //Form Driven Methods:
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -52,6 +52,11 @@ namespace POELadder
                 playerDB.Clear();
             }
 
+            if (classBox.Enabled == false)
+            {
+                classBox.Enabled = true;
+                searchBox.Enabled = true;
+            }
             UpdateLadderData();
             UpdateLadderTable();
         }
@@ -97,7 +102,7 @@ namespace POELadder
             }
         }
 
-    //Custom Methods:
+        //Custom Methods:
 
         //Update Table
         private void UpdateLadderTable()
@@ -125,25 +130,41 @@ namespace POELadder
 
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = arrPlayers;
-
-            for (int i = 0; i < 10; i++)
+            #region ClassColoring
+            for (int i = 0; i < playerDB.Count; i++)
             {
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
                 {
-                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Red;
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.IndianRed;
                 }
 
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
                 {
-                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Green;
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.LightGreen;
                 }
 
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
                 {
-                    LadderTable.Rows[i].DefaultCellStyle.BackColor = Color.Blue;
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.RoyalBlue;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Shadow"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.BlueViolet;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Templar"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Gold;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
                 }
 
             }
+            #endregion
 
             #region LadderTable Formatting
             //Change formatting to display commas: 1,000
@@ -166,7 +187,7 @@ namespace POELadder
             LadderTable.Columns[9].HeaderText = "EXP/update:";
             LadderTable.Columns[10].HeaderText = "EXP/Minute:";
             LadderTable.Columns[11].HeaderText = "Change:";
-            
+
             //Tooltips
             LadderTable.Columns[7].ToolTipText = "Experience required to level";
             LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
@@ -198,23 +219,23 @@ namespace POELadder
                 }
 
                 for (int j = 0; j < playerDB.Count; j++)
-                {                  
-//This should be called when a player who was not part of the first download is now on the ladder.
+                {
+                    //This should be called when a player who was not part of the first download is now on the ladder.
 
 
-//                    //New Player found
-//                    if (!LadderData.entries[j].account.name.Equals(playerDB[j].GetAccount()) &&
-//                        !LadderData.entries[j].character.name.Equals(playerDB[j].GetCharacter()))
-//                    {
-////This for should probably be change from J J for I J. But it crashes when that happens.
+                    //                    //New Player found
+                    //                    if (!LadderData.entries[j].account.name.Equals(playerDB[j].GetAccount()) &&
+                    //                        !LadderData.entries[j].character.name.Equals(playerDB[j].GetCharacter()))
+                    //                    {
+                    ////This for should probably be change from J J for I J. But it crashes when that happens.
 
-//                        PlayerDB NewPlayer = new PlayerDB(
-//                            LadderData.entries[i].account.name, 
-//                            LadderData.entries[i].character.name, 
-//                            LadderData.entries[i].character.@class);
+                    //                        PlayerDB NewPlayer = new PlayerDB(
+                    //                            LadderData.entries[i].account.name, 
+                    //                            LadderData.entries[i].character.name, 
+                    //                            LadderData.entries[i].character.@class);
 
-//                        playerDB.Add(NewPlayer);
-//                    }
+                    //                        playerDB.Add(NewPlayer);
+                    //                    }
 
                     //Player already exist. Update with current information.
                     if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
@@ -238,7 +259,7 @@ namespace POELadder
         //Update the Race Timer with the Time Left before the End of the Race
         private void UpdateTimer()
         {
-            //If Time is past the start time and less than the end time
+
             DateTime StartTime = Clock.FormatPOEDate(POELadderAll[SelectedLadderIndex].startAt);
             DateTime EndTime = Clock.FormatPOEDate(POELadderAll[SelectedLadderIndex].endAt);
 
@@ -269,5 +290,41 @@ namespace POELadder
             }
         }
         #endregion
+
+        //Display only the selected class or all
+        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Search only the 200 displayed rows
+            for (int i = 0; i < 200; i++)
+            {
+                //Limit to only the selected class or All
+                if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
+                {
+                    LadderTable.CurrentCell = null;
+                    LadderTable.Rows[i].Visible = false;
+                }
+                else
+                {
+                    LadderTable.Rows[i].Visible = true;
+                }
+            }
+        }
+
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < LadderTable.RowCount; i++)
+            {
+                if (!LadderTable.Rows[i].Cells[3].Value.ToString().Contains(searchBox.Text) ||
+                    !LadderTable.Rows[i].Cells[2].Value.ToString().Contains(searchBox.Text))
+                {
+                    LadderTable.CurrentCell = null;
+                    LadderTable.Rows[i].Visible = false;
+                }
+                else
+                {
+                    LadderTable.Rows[i].Visible = true;
+                }
+            }
+        }
     }
 }

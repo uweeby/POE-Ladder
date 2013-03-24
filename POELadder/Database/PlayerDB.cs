@@ -280,7 +280,6 @@ namespace POELadder
                     TotalEXP += (int)(Experience[i] - Experience[i + 1]);
                 }
 
-            //This will use the time gap instead, gap is 14 or 15 seconds as per the timer2 auto-update
                 int gap = (int)(UpdateTime[0] - UpdateTime[1]).TotalSeconds;
                 expMIN = (TotalEXP / Experience.Count) * (60 / gap);
 
