@@ -202,53 +202,58 @@ namespace POELadder
         private void UpdateLadderData()
         {
             PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
-            uint LeaderEXP = LadderData.entries[0].character.experience;
+
+            if (LadderData.entries.Count > 1)
+            {
+                uint LeaderEXP = LadderData.entries[0].character.experience;
+            
 
             //Add the Ladder JSON Data to the PlayerDB
-            for (int i = 0; i < LadderData.entries.Count; i++)
-            {
-                //First setup. Not all players added
-                if (playerDB.Count < LadderData.entries.Count)
+                for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                    PlayerDB NewPlayer = new PlayerDB(
-                        //Perhaps nest an if statement here to stop adding people who already have an account/character in the db
-                        LadderData.entries[i].account.name,
-                        LadderData.entries[i].character.name,
-                        LadderData.entries[i].character.@class);
-
-                    playerDB.Add(NewPlayer);
-                }
-
-                for (int j = 0; j < playerDB.Count; j++)
-                {
-                    //This should be called when a player who was not part of the first download is now on the ladder.
-
-
-                    //                    //New Player found
-                    //                    if (!LadderData.entries[j].account.name.Equals(playerDB[j].GetAccount()) &&
-                    //                        !LadderData.entries[j].character.name.Equals(playerDB[j].GetCharacter()))
-                    //                    {
-                    ////This for should probably be change from J J for I J. But it crashes when that happens.
-
-                    //                        PlayerDB NewPlayer = new PlayerDB(
-                    //                            LadderData.entries[i].account.name, 
-                    //                            LadderData.entries[i].character.name, 
-                    //                            LadderData.entries[i].character.@class);
-
-                    //                        playerDB.Add(NewPlayer);
-                    //                    }
-
-                    //Player already exist. Update with current information.
-                    if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
-                        LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                    //First setup. Not all players added
+                    if (playerDB.Count < LadderData.entries.Count)
                     {
-                        playerDB[j].Update(
-                            LadderData.entries[i].online,
-                            LadderData.entries[i].rank,
-                            LadderData.entries[i].character.level,
-                            LadderData.entries[i].character.experience,
-                            DateTime.UtcNow,
-                            LeaderEXP);
+                        PlayerDB NewPlayer = new PlayerDB(
+                            //Perhaps nest an if statement here to stop adding people who already have an account/character in the db
+                            LadderData.entries[i].account.name,
+                            LadderData.entries[i].character.name,
+                            LadderData.entries[i].character.@class);
+
+                        playerDB.Add(NewPlayer);
+                    }
+
+                    for (int j = 0; j < playerDB.Count; j++)
+                    {
+                        //This should be called when a player who was not part of the first download is now on the ladder.
+
+
+                        //                    //New Player found
+                        //                    if (!LadderData.entries[j].account.name.Equals(playerDB[j].GetAccount()) &&
+                        //                        !LadderData.entries[j].character.name.Equals(playerDB[j].GetCharacter()))
+                        //                    {
+                        ////This for should probably be change from J J for I J. But it crashes when that happens.
+
+                        //                        PlayerDB NewPlayer = new PlayerDB(
+                        //                            LadderData.entries[i].account.name, 
+                        //                            LadderData.entries[i].character.name, 
+                        //                            LadderData.entries[i].character.@class);
+
+                        //                        playerDB.Add(NewPlayer);
+                        //                    }
+
+                        //Player already exist. Update with current information.
+                        if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                            LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                        {
+                            playerDB[j].Update(
+                                LadderData.entries[i].online,
+                                LadderData.entries[i].rank,
+                                LadderData.entries[i].character.level,
+                                LadderData.entries[i].character.experience,
+                                DateTime.UtcNow,
+                                LeaderEXP);
+                        }
                     }
                 }
             }
