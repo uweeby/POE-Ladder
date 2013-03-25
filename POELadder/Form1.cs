@@ -68,7 +68,7 @@ namespace POELadder
             if (checkBox1.Checked == true)
             {
                 UpdateLadderData();
-                UpdateLadderTable();
+                UpdateLadderTable();               
             }
         }
 
@@ -87,6 +87,7 @@ namespace POELadder
 
         private void timer2_Tick(object sender, EventArgs e)
         {
+
             if (ladderselectBox.SelectedItem != null)
             {
                 UpdateTimer();
@@ -314,15 +315,15 @@ namespace POELadder
         {
             for (int i = 0; i < LadderTable.RowCount; i++)
             {
-                if (!LadderTable.Rows[i].Cells[3].Value.ToString().Contains(searchBox.Text) ||
-                    !LadderTable.Rows[i].Cells[2].Value.ToString().Contains(searchBox.Text))
+                if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
+                    LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
                 {
-                    LadderTable.CurrentCell = null;
-                    LadderTable.Rows[i].Visible = false;
+                    LadderTable.Rows[i].Visible = true;
                 }
                 else
                 {
-                    LadderTable.Rows[i].Visible = true;
+                    LadderTable.CurrentCell = null;
+                    LadderTable.Rows[i].Visible = false;
                 }
             }
         }
