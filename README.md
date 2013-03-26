@@ -1,5 +1,26 @@
 POE-Ladder
 ==========
+
+Overview
+--------
+Track Path of Exile Ladders with expanded race details in real time.
+
+Screenshot
+----------
+[![](http://i.imgur.com/ltOXV8V.png)](http://i.imgur.com/ltOXV8V.png)
+
+
+Tools
+-----
+* .Net 3.5 / Visual Studio 2010
+
+Bugs/Suggestions: 
+uweenukr@gmail.com
+Ministry@live.com.au
+
+
+Version 1.0
+-----------
 */ Bugs
 
           * Exp/update returning to zero due to everyone not updating at the same update
@@ -27,4 +48,3 @@ POE-Ladder
 
           * Exp/behind - Wrong data sent during update. Corrected
           * UpdateEXPMin() - Not correctly using UpdateTime List. Corrected.
-           
