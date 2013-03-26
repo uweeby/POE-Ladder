@@ -62,6 +62,15 @@ namespace POELadder
                 classBox.Enabled = true;
                 searchBox.Enabled = true;
             }
+
+            if (!ladderselectBox.SelectedText.Equals("Default") || !ladderselectBox.SelectedText.Equals("Hardcore"))
+            {
+                seasonPoints.Visible = true;
+            }
+            else
+            {
+                seasonPoints.Visible = false;
+            }
             UpdateLadderData();
             UpdateLadderTable();
         }
@@ -184,11 +193,11 @@ namespace POELadder
             LadderTable.Columns[0].HeaderText = "Online:";
             LadderTable.Columns[1].HeaderText = "Rank:";
             LadderTable.Columns[2].HeaderText = "Account:";
-            LadderTable.Columns[3].HeaderText = "Chracter:";
+            LadderTable.Columns[3].HeaderText = "Character:";
             LadderTable.Columns[4].HeaderText = "Class:";
             LadderTable.Columns[5].HeaderText = "Level:";
             LadderTable.Columns[6].HeaderText = "Experience:";
-            LadderTable.Columns[7].HeaderText = "EXP To Level:";
+            LadderTable.Columns[7].HeaderText = "EXP/Level:";
             LadderTable.Columns[8].HeaderText = "EXP/behind:";
             LadderTable.Columns[9].HeaderText = "EXP/update:";
             LadderTable.Columns[10].HeaderText = "EXP/Minute:";
@@ -311,6 +320,7 @@ namespace POELadder
                 if (localTime < StartTime)
                 {
                     timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+                    LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
 
                 //The current ladder has no ending (Perminate leagues)
