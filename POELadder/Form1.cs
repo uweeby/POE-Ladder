@@ -19,6 +19,8 @@ namespace POELadder
 
         public int SelectedLadderIndex;
 
+        private int maxLadderTableSize = 50;
+
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
         public Form1()
@@ -112,8 +114,8 @@ namespace POELadder
         private void UpdateLadderTable()
         {
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
-            var arrPlayers = new PlayerTable[playerDB.Count];
-            for (int i = 0; i < playerDB.Count; i++)
+            var arrPlayers = new PlayerTable[maxLadderTableSize];
+            for (int i = 0; i < maxLadderTableSize; i++)
             {
                 arrPlayers[i] = new PlayerTable
                 {
@@ -135,7 +137,7 @@ namespace POELadder
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = arrPlayers;
             #region ClassColoring
-            for (int i = 0; i < playerDB.Count; i++)
+            for (int i = 0; i < maxLadderTableSize; i++)
             {
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
                 {
@@ -231,7 +233,7 @@ namespace POELadder
             
 
             //Add the Ladder JSON Data to the PlayerDB
-                for (int i = 0; i < LadderData.entries.Count; i++)
+                for (int i = 0; i < maxLadderTableSize; i++)
                 {
                     //First setup. Not all players added
                     if (playerDB.Count < LadderData.entries.Count)
@@ -324,7 +326,7 @@ namespace POELadder
         private void classBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Search only the 200 displayed rows
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < maxLadderTableSize; i++)
             {
                 //Limit to only the selected class or All
                 if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
