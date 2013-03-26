@@ -45,6 +45,8 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.displayAmount = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
             this.classBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,9 +55,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timerLabel = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.displayAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -181,6 +185,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.displayAmount);
+            this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.seasonPoints);
             this.tabPage1.Controls.Add(this.classBox);
             this.tabPage1.Controls.Add(this.label5);
@@ -194,6 +201,39 @@
             this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // displayAmount
+            // 
+            this.displayAmount.Location = new System.Drawing.Point(56, 63);
+            this.displayAmount.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.displayAmount.Minimum = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.displayAmount.Name = "displayAmount";
+            this.displayAmount.Size = new System.Drawing.Size(58, 20);
+            this.displayAmount.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.displayAmount, "Minium: 30 Maximum: 200");
+            this.displayAmount.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.displayAmount.ValueChanged += new System.EventHandler(this.displayAmount_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 65);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Display:";
             // 
             // seasonPoints
             // 
@@ -294,7 +334,7 @@
             this.tabPage3.Controls.Add(this.DeathTable);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(1076, 120);
+            this.tabPage3.Size = new System.Drawing.Size(1058, 120);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Deaths";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -311,6 +351,15 @@
             this.timerLabel.TabIndex = 169;
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(120, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "entries in the table.";
             // 
             // Form1
             // 
@@ -336,6 +385,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.displayAmount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
@@ -364,6 +414,9 @@
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.TabPage tabPage3;
         public System.Windows.Forms.DataGridView seasonPoints;
+        private System.Windows.Forms.NumericUpDown displayAmount;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
 
     }
 }

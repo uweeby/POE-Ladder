@@ -17,9 +17,7 @@ namespace POELadder
 
         PathOfExileJSONLadderAll[] POELadderAll;
 
-        public int SelectedLadderIndex;
-
-        private int maxLadderTableSize = 50;
+        public int SelectedLadderIndex, maxLadderTableSize;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
@@ -42,6 +40,7 @@ namespace POELadder
             }
             timer2.Enabled = true;
             FillSeasonData();
+            maxLadderTableSize = (int)displayAmount.Value;
         }
 
         //A new Ladder has been Selected from the Select Box.
@@ -50,7 +49,8 @@ namespace POELadder
             SelectedLadderIndex = ladderselectBox.SelectedIndex;
 
             //Sets the URL to populate the table
-            LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=200";
+            System.Console.WriteLine("Using this value: " + maxLadderTableSize);
+            LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + (int)maxLadderTableSize;
 
             if (playerDB.Count > 2)
             {
@@ -63,14 +63,7 @@ namespace POELadder
                 searchBox.Enabled = true;
             }
 
-            if (!ladderselectBox.SelectedText.Equals("Default") || !ladderselectBox.SelectedText.Equals("Hardcore"))
-            {
-                seasonPoints.Visible = true;
-            }
-            else
-            {
-                seasonPoints.Visible = false;
-            }
+            seasonPoints.Visible = true;
             UpdateLadderData();
             UpdateLadderTable();
         }
@@ -81,8 +74,9 @@ namespace POELadder
             //Auto-refresh
             if (checkBox1.Checked == true)
             {
+                maxLadderTableSize = (int)displayAmount.Value;
                 UpdateLadderData();
-                UpdateLadderTable();               
+                UpdateLadderTable();
             }
         }
 
@@ -112,6 +106,7 @@ namespace POELadder
         {
             if (ladderselectBox.SelectedItem != null)
             {
+                maxLadderTableSize = (int)displayAmount.Value;
                 UpdateLadderData();
                 UpdateLadderTable();
             }
@@ -209,6 +204,9 @@ namespace POELadder
             LadderTable.Columns[9].ToolTipText = "Experience gained this update";
             LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
+
+            //Sizes
+            LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             #endregion
         }
 
@@ -248,7 +246,6 @@ namespace POELadder
                     if (playerDB.Count < LadderData.entries.Count)
                     {
                         PlayerDB NewPlayer = new PlayerDB(
-                            //Perhaps nest an if statement here to stop adding people who already have an account/character in the db
                             LadderData.entries[i].account.name,
                             LadderData.entries[i].character.name,
                             LadderData.entries[i].character.@class);
@@ -258,7 +255,7 @@ namespace POELadder
 
                     for (int j = 0; j < playerDB.Count; j++)
                     {
-                        //This should be called when a player who was not part of the first download is now on the ladder.
+                        //This should be called when a player who was not part of the first download and is now on the ladder.
 
 
                         //                    //New Player found
@@ -366,6 +363,11 @@ namespace POELadder
                     LadderTable.Rows[i].Visible = false;
                 }
             }
+        }
+
+        private void displayAmount_ValueChanged(object sender, EventArgs e)
+        {
+            maxLadderTableSize = (int)displayAmount.Value;
         }
     }
 }
