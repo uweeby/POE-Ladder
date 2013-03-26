@@ -28,6 +28,16 @@ namespace POELadder
             return POELadderSingle;
         }
 
+        //Current season
+        public static PathOfExileJSONLadderSeason ParseLadderSeason(String JSON)
+        {
+            String WebPage = DownloadFile(JSON);
+
+            PathOfExileJSONLadderSeason POELadderSeason = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSeason>(WebPage);
+
+            return POELadderSeason;
+        }
+
         //Download provided URL and return as String
         private static String DownloadFile(String _URL)
         {

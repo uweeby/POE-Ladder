@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.selectladderLabel = new System.Windows.Forms.Label();
             this.ladderselectBox = new System.Windows.Forms.ComboBox();
@@ -45,9 +46,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
-            this.Rank = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Account = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Points = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.classBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.searchBox = new System.Windows.Forms.TextBox();
@@ -100,7 +98,7 @@
             // 
             this.LadderTable.AllowUserToAddRows = false;
             this.LadderTable.AllowUserToDeleteRows = false;
-            this.LadderTable.AllowUserToOrderColumns = true;
+            this.LadderTable.AllowUserToResizeColumns = false;
             this.LadderTable.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.LadderTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
@@ -111,7 +109,7 @@
             this.LadderTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             this.LadderTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -120,11 +118,12 @@
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.LadderTable.DefaultCellStyle = dataGridViewCellStyle2;
+            this.LadderTable.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
             this.LadderTable.Location = new System.Drawing.Point(10, 39);
             this.LadderTable.MultiSelect = false;
             this.LadderTable.Name = "LadderTable";
             this.LadderTable.RowHeadersVisible = false;
-            this.LadderTable.Size = new System.Drawing.Size(1084, 443);
+            this.LadderTable.Size = new System.Drawing.Size(1063, 443);
             this.LadderTable.TabIndex = 149;
             // 
             // DeathTable
@@ -190,7 +189,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1076, 120);
+            this.tabPage1.Size = new System.Drawing.Size(1058, 120);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
@@ -200,51 +199,38 @@
             // 
             this.seasonPoints.AllowUserToAddRows = false;
             this.seasonPoints.AllowUserToDeleteRows = false;
+            this.seasonPoints.AllowUserToResizeColumns = false;
+            this.seasonPoints.AllowUserToResizeRows = false;
+            this.seasonPoints.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.seasonPoints.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.seasonPoints.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.seasonPoints.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.seasonPoints.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.seasonPoints.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.seasonPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.seasonPoints.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Rank,
-            this.Account,
-            this.Points});
-            this.seasonPoints.Location = new System.Drawing.Point(888, 0);
+            this.seasonPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.seasonPoints.ColumnHeadersVisible = false;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.seasonPoints.DefaultCellStyle = dataGridViewCellStyle5;
+            this.seasonPoints.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.seasonPoints.Location = new System.Drawing.Point(884, 0);
             this.seasonPoints.MultiSelect = false;
             this.seasonPoints.Name = "seasonPoints";
             this.seasonPoints.ReadOnly = true;
             this.seasonPoints.RowHeadersVisible = false;
             this.seasonPoints.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.seasonPoints.Size = new System.Drawing.Size(188, 120);
+            this.seasonPoints.Size = new System.Drawing.Size(174, 120);
+            this.seasonPoints.StandardTab = true;
             this.seasonPoints.TabIndex = 0;
             this.seasonPoints.TabStop = false;
-            // 
-            // Rank
-            // 
-            this.Rank.FillWeight = 102.9156F;
-            this.Rank.HeaderText = "Rank";
-            this.Rank.MaxInputLength = 4;
-            this.Rank.Name = "Rank";
-            this.Rank.ReadOnly = true;
-            this.Rank.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // Account
-            // 
-            this.Account.FillWeight = 121.8274F;
-            this.Account.HeaderText = "Account";
-            this.Account.MaxInputLength = 30;
-            this.Account.Name = "Account";
-            this.Account.ReadOnly = true;
-            this.Account.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // Points
-            // 
-            this.Points.FillWeight = 75.25701F;
-            this.Points.HeaderText = "Points";
-            this.Points.MaxInputLength = 4;
-            this.Points.Name = "Points";
-            this.Points.ReadOnly = true;
-            this.Points.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.toolTip1.SetToolTip(this.seasonPoints, "Season race ladder");
             // 
             // classBox
             // 
@@ -299,7 +285,7 @@
             this.tabControl1.Location = new System.Drawing.Point(10, 488);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1084, 146);
+            this.tabControl1.Size = new System.Drawing.Size(1066, 146);
             this.tabControl1.TabIndex = 168;
             // 
             // tabPage3
@@ -314,11 +300,13 @@
             // 
             // timerLabel
             // 
-            this.timerLabel.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.timerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timerLabel.Location = new System.Drawing.Point(815, 15);
+            this.timerLabel.Location = new System.Drawing.Point(808, 14);
             this.timerLabel.Name = "timerLabel";
-            this.timerLabel.Size = new System.Drawing.Size(282, 18);
+            this.timerLabel.Size = new System.Drawing.Size(268, 18);
             this.timerLabel.TabIndex = 169;
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -330,7 +318,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1113, 646);
+            this.ClientSize = new System.Drawing.Size(1092, 646);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.linkLabel1);
@@ -372,12 +360,9 @@
         private System.Windows.Forms.ComboBox classBox;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox searchBox;
-        private System.Windows.Forms.DataGridView seasonPoints;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Account;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Points;
         private System.Windows.Forms.Label timerLabel;
         private System.Windows.Forms.TabPage tabPage3;
+        public System.Windows.Forms.DataGridView seasonPoints;
 
     }
 }
