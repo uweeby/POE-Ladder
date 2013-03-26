@@ -231,6 +231,7 @@
             this.seasonPoints.TabIndex = 0;
             this.seasonPoints.TabStop = false;
             this.toolTip1.SetToolTip(this.seasonPoints, "Season race ladder");
+            this.seasonPoints.Visible = false;
             // 
             // classBox
             // 
