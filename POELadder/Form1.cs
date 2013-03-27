@@ -112,6 +112,47 @@ namespace POELadder
             }
         }
 
+        //Display only the selected class or all
+        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //Search only the 200 displayed rows
+            for (int i = 0; i < maxLadderTableSize; i++)
+            {
+                //Limit to only the selected class or All
+                if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
+                {
+                    LadderTable.CurrentCell = null;
+                    LadderTable.Rows[i].Visible = false;
+                }
+                else
+                {
+                    LadderTable.Rows[i].Visible = true;
+                }
+            }
+        }
+
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < LadderTable.RowCount; i++)
+            {
+                if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
+                    LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
+                {
+                    LadderTable.Rows[i].Visible = true;
+                }
+                else
+                {
+                    LadderTable.CurrentCell = null;
+                    LadderTable.Rows[i].Visible = false;
+                }
+            }
+        }
+
+        private void displayAmount_ValueChanged(object sender, EventArgs e)
+        {
+            maxLadderTableSize = (int)displayAmount.Value;
+        }
+
         //Custom Methods:
 
         //Update Table
@@ -327,47 +368,75 @@ namespace POELadder
                 }
             }
         }
+
+        private void UpdateByDB()
+        {
+            //Initial setup. Download JSON
+            PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
+            uint LeaderEXP = 0;
+
+            //Save leader EXP for table data
+            if (LadderData.entries.Count > 1)
+            {
+                LeaderEXP = LadderData.entries[0].character.experience;
+            }
+
+            //Find new accounts
+            //Account is listed on the JSON but not in the DB
+            for (int i = 0; i < LadderData.entries.Count; i++)
+            {
+                for (int j = 0; j < playerDB.Count; i++)
+                {
+                    //if player found.
+                }
+            }
+
+            List<int> NewAccount = new List<int>();
+
+            //Update all accounts
+            for (int i = 0; i < playerDB.Count; i++)
+            {
+                for (int j = 0; j < LadderData.entries.Count; j++)
+                {
+                    if (!LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                            !LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                    {
+                        //Player not found in DB. Flag to add
+                        NewAccount.Add(j);
+                    }
+
+                    if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                            LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                    {
+                        playerDB[j].Update(
+                            LadderData.entries[i].online,
+                            LadderData.entries[i].rank,
+                            LadderData.entries[i].character.level,
+                            LadderData.entries[i].character.experience,
+                            DateTime.UtcNow,
+                            LeaderEXP);
+                    }
+                }
+
+                //No match was found. This player is not on the database
+                playerDB[i].SetFlagForRemoval(true);
+            }
+
+            //Remove unlisted accounts
+            //Account is listed in the DB but not on the JSON
+            for (int i = playerDB.Count; i > 0; i--)
+            {
+                if (playerDB[i].GetFlagForRemoval())
+                {
+                    playerDB.RemoveAt(i);
+                }
+            }
+
+            //Resort list by rank
+            playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
+        }
         #endregion
 
-        //Display only the selected class or all
-        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //Search only the 200 displayed rows
-            for (int i = 0; i < maxLadderTableSize; i++)
-            {
-                //Limit to only the selected class or All
-                if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
-                {
-                    LadderTable.CurrentCell = null;
-                    LadderTable.Rows[i].Visible = false;
-                }
-                else
-                {
-                    LadderTable.Rows[i].Visible = true;
-                }
-            }
-        }
 
-        private void searchBox_TextChanged(object sender, EventArgs e)
-        {
-            for (int i = 0; i < LadderTable.RowCount; i++)
-            {
-                if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
-                    LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
-                {
-                    LadderTable.Rows[i].Visible = true;
-                }
-                else
-                {
-                    LadderTable.CurrentCell = null;
-                    LadderTable.Rows[i].Visible = false;
-                }
-            }
-        }
-
-        private void displayAmount_ValueChanged(object sender, EventArgs e)
-        {
-            maxLadderTableSize = (int)displayAmount.Value;
-        }
     }
 }

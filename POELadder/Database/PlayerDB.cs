@@ -28,6 +28,8 @@ namespace POELadder
 
         public DateTime utcUpdate;
 
+        private bool FlagForRemoval;
+
         #region EXP Array
         public uint[] ExpToLevelArray = new uint[101] {
             0,
@@ -345,6 +347,16 @@ namespace POELadder
         public int GetEST_EXP_Minute()
         {
             return this.EST_EXP_Minute;
+        }
+
+        public bool GetFlagForRemoval()
+        {
+            return this.FlagForRemoval;
+        }
+
+        public void SetFlagForRemoval(bool FlagForRemoval)
+        {
+            this.FlagForRemoval = FlagForRemoval;
         }
     }
 }
