@@ -8,22 +8,42 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace POELadder.Properties
-{
-
-
+namespace POELadder.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://api.pathofexile.com/leagues")]
+        public string SeasonEventListURL {
+            get {
+                return ((string)(this["SeasonEventListURL"]));
+            }
+            set {
+                this["SeasonEventListURL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+One")]
+        public string SeasonOneStandingsURL {
+            get {
+                return ((string)(this["SeasonOneStandingsURL"]));
+            }
+            set {
+                this["SeasonOneStandingsURL"] = value;
             }
         }
     }

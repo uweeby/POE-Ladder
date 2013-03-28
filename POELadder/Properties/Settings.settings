@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="POELadder.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SeasonEventListURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://api.pathofexile.com/leagues</Value>
+    </Setting>
+    <Setting Name="SeasonOneStandingsURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://www.pathofexile.com/api/season-ladders?&amp;limit=50&amp;id=Race+Season+One</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

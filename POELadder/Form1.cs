@@ -11,13 +11,7 @@ namespace POELadder
 {
     public partial class Form1 : Form
     {
-        // How to make this so we don't have to hardcode the Season number (one) each time a new season comes around? Another drop down maybe? IDK.
-        public String SeasonLadderURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+One";
-        public String LadderAllURL = "http://api.pathofexile.com/leagues";
-
         PathOfExileJSONLadderAll[] POELadderAll;
-
-        DataView classFilter = new DataView();
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
@@ -31,7 +25,7 @@ namespace POELadder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            POELadderAll = DownloadJSON.ParseLadderAll(LadderAllURL);
+            POELadderAll = DownloadJSON.ParseLadderAll(Properties.Settings.Default.SeasonEventListURL);
 
             //Populate the Ladder Drop Down
             for (int i = 0; i < POELadderAll.Length; i++)
@@ -257,7 +251,7 @@ namespace POELadder
         //Season ladder Table
         private void UpdateSeasonTable()
         {
-            PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(SeasonLadderURL);
+            PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(Properties.Settings.Default.SeasonOneStandingsURL);
             var seaLadder = new SeasonTable[SeasonData.entries.Count];
 
             for (int i = 0; i < SeasonData.entries.Count; i++)
