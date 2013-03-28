@@ -21,24 +21,23 @@ Ministry@live.com.au
 
 Version 1.0
 -----------
-*/ Bugs
+Bugs -
 
-          * Exp/update returning to zero due to everyone not updating in the same update
-          * Table sorting during live races, by rank, (When people die?) the rank is 'removed',
-            and when the table is populating gradually (before races start) duplicate people are inserted.
-          * Table refreshing after filtering by class/search.
+          * Update methods in playerDB.cs aren't being called.
+          * Redo filtering and search - current is sloppy and slow
 
-*/ Goals/Plans
+Goals -
 
-          * Season ladder if possible (Next build)
           * [Maybe] grabbing data from exilestats such as race records(?)
           * Death tracking
           * Forum link for race events (Maybe not necesarry, mainly to show the brackets for reward points)
-          * Hyperlink accounts to their pathofexile.com account page (Not necesarry/useful really)
+          * Log area to log events (Race start/finish) at a later date potentially server global messages.
           * [Maybe] Hard-coded list of people who are known to stream races (Nugi/Kripp/Rhox etc)
 
-*/ Bugs fixed 
+Bugs fixed/features added - 
 
-          * Exp/behind - Wrong data sent during update. Corrected
+          * Exp/behind - Wrong data sent during update. Corrected.
           * UpdateEXPMin() - Not correctly using UpdateTime List. Corrected.
-          * Exp/minute calculation done (Commit 20)
+          * Exp/minute calculation done (Commit 20).
+          * Table size added (30-200) and further fixed in a later build.
+          * Season ladder added - URL is currently hard coded and will need changing next season.
