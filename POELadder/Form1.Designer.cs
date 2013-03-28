@@ -37,14 +37,15 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.selectladderLabel = new System.Windows.Forms.Label();
             this.ladderselectBox = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.autoRefreshCheckBox = new System.Windows.Forms.CheckBox();
             this.LadderTable = new System.Windows.Forms.DataGridView();
             this.DeathTable = new System.Windows.Forms.DataGridView();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer2 = new System.Windows.Forms.Timer(this.components);
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.displayAmount = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
@@ -55,7 +56,6 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timerLabel = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -68,7 +68,7 @@
             // selectladderLabel
             // 
             this.selectladderLabel.AutoSize = true;
-            this.selectladderLabel.Location = new System.Drawing.Point(11, 15);
+            this.selectladderLabel.Location = new System.Drawing.Point(12, 15);
             this.selectladderLabel.Name = "selectladderLabel";
             this.selectladderLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.selectladderLabel.Size = new System.Drawing.Size(76, 13);
@@ -86,17 +86,17 @@
             this.toolTip1.SetToolTip(this.ladderselectBox, "Select the ladder or race you\'re interested in.");
             this.ladderselectBox.SelectedIndexChanged += new System.EventHandler(this.ladderselectBox_SelectedIndexChanged);
             // 
-            // checkBox1
+            // autoRefreshCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(487, 15);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(48, 17);
-            this.checkBox1.TabIndex = 156;
-            this.checkBox1.Text = "Auto";
-            this.toolTip1.SetToolTip(this.checkBox1, "Enable auto-refreshing of table every 15 seconds");
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.autoRefreshCheckBox.AutoSize = true;
+            this.autoRefreshCheckBox.Location = new System.Drawing.Point(487, 14);
+            this.autoRefreshCheckBox.Name = "autoRefreshCheckBox";
+            this.autoRefreshCheckBox.Size = new System.Drawing.Size(48, 17);
+            this.autoRefreshCheckBox.TabIndex = 156;
+            this.autoRefreshCheckBox.Text = "Auto";
+            this.toolTip1.SetToolTip(this.autoRefreshCheckBox, "Enable auto-refreshing of table every 15 seconds");
+            this.autoRefreshCheckBox.UseVisualStyleBackColor = true;
+            this.autoRefreshCheckBox.CheckedChanged += new System.EventHandler(this.autoRefreshCheckBox_CheckedChanged);
             // 
             // LadderTable
             // 
@@ -171,17 +171,17 @@
             this.timer2.Interval = 1000;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
-            // linkLabel1
+            // refreshButton
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(527, 15);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(39, 13);
-            this.linkLabel1.TabIndex = 167;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "refresh";
-            this.toolTip1.SetToolTip(this.linkLabel1, "Manually refresh the table");
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.refreshButton.AutoSize = true;
+            this.refreshButton.Location = new System.Drawing.Point(541, 15);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(44, 13);
+            this.refreshButton.TabIndex = 167;
+            this.refreshButton.TabStop = true;
+            this.refreshButton.Text = "Refresh";
+            this.toolTip1.SetToolTip(this.refreshButton, "Manually refresh the table");
+            this.refreshButton.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.refreshButton_LinkClicked_1);
             // 
             // tabPage1
             // 
@@ -201,6 +201,15 @@
             this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(120, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "entries in the table.";
             // 
             // displayAmount
             // 
@@ -224,7 +233,6 @@
             0,
             0,
             0});
-            this.displayAmount.ValueChanged += new System.EventHandler(this.displayAmount_ValueChanged);
             // 
             // label2
             // 
@@ -345,25 +353,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timerLabel.Location = new System.Drawing.Point(808, 14);
+            this.timerLabel.Location = new System.Drawing.Point(804, 14);
             this.timerLabel.Name = "timerLabel";
             this.timerLabel.Size = new System.Drawing.Size(268, 18);
             this.timerLabel.TabIndex = 169;
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(120, 65);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "entries in the table.";
-            // 
             // Form1
             // 
-            this.AcceptButton = this.linkLabel1;
+            this.AcceptButton = this.refreshButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
@@ -371,9 +370,9 @@
             this.ClientSize = new System.Drawing.Size(1092, 646);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.LadderTable);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.autoRefreshCheckBox);
             this.Controls.Add(this.selectladderLabel);
             this.Controls.Add(this.ladderselectBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -398,12 +397,12 @@
 
         internal System.Windows.Forms.Label selectladderLabel;
         internal System.Windows.Forms.ComboBox ladderselectBox;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox autoRefreshCheckBox;
         public System.Windows.Forms.DataGridView LadderTable;
         private System.Windows.Forms.DataGridView DeathTable;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer timer2;
-        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel refreshButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;

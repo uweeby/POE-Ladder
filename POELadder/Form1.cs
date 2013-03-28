@@ -38,9 +38,11 @@ namespace POELadder
             {
                 ladderselectBox.Items.Add(POELadderAll[i].id);
             }
-            timer2.Enabled = true;
-            FillSeasonData();
+
+            timer2.Enabled = true;            
             maxLadderTableSize = (int)displayAmount.Value;
+
+            UpdateSeasonTable();
         }
 
         //A new Ladder has been Selected from the Select Box.
@@ -48,6 +50,11 @@ namespace POELadder
         {
             SelectedLadderIndex = ladderselectBox.SelectedIndex;
 
+            DownloadSelectedLadder();
+        }
+
+        private void DownloadSelectedLadder()
+        {
             //Sets the URL to populate the table
             System.Console.WriteLine("Using this value: " + maxLadderTableSize);
             LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + (int)maxLadderTableSize;
@@ -64,32 +71,17 @@ namespace POELadder
             }
 
             seasonPoints.Visible = true;
-            UpdateLadderData();
-            UpdateLadderTable();
+
+            UpdateAll();
         }
 
         //Ladder-auto Refresh - 15 seconds currently
         private void timer1_Tick(object sender, EventArgs e)
         {
             //Auto-refresh
-            if (checkBox1.Checked == true)
+            if (autoRefreshCheckBox.Checked == true)
             {
-                maxLadderTableSize = (int)displayAmount.Value;
-                UpdateLadderData();
-                UpdateLadderTable();
-            }
-        }
-
-        //Enable or disable the timer on checkbox change
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked == true)
-            {
-                timer1.Enabled = true;
-            }
-            else
-            {
-                timer1.Enabled = false;
+                DownloadSelectedLadder();
             }
         }
 
@@ -102,35 +94,34 @@ namespace POELadder
             }
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void refreshButton_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (ladderselectBox.SelectedItem != null)
             {
-                maxLadderTableSize = (int)displayAmount.Value;
-                UpdateLadderData();
-                UpdateLadderTable();
+                DownloadSelectedLadder();
             }
         }
 
-        //Display only the selected class or all
+        //Enable or disable the timer on checkbox change
+        private void autoRefreshCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (autoRefreshCheckBox.Checked == true)
+            {
+                timer1.Enabled = true;
+            }
+            else
+            {
+                timer1.Enabled = false;
+            }
+        }
+
+        //Display All or Selected Filter
         private void classBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Search only the 200 displayed rows
-            for (int i = 0; i < maxLadderTableSize; i++)
-            {
-                //Limit to only the selected class or All
-                if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
-                {
-                    LadderTable.CurrentCell = null;
-                    LadderTable.Rows[i].Visible = false;
-                }
-                else
-                {
-                    LadderTable.Rows[i].Visible = true;
-                }
-            }
+            
         }
 
+        //New Search Parameters have been selected in the UI
         private void searchBox_TextChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < LadderTable.RowCount; i++)
@@ -148,110 +139,135 @@ namespace POELadder
             }
         }
 
-        private void displayAmount_ValueChanged(object sender, EventArgs e)
+        //Custom Methods:
+        private void UpdateAll()
         {
             maxLadderTableSize = (int)displayAmount.Value;
+            UpdateLadderData();
+            UpdateLadderTable();
         }
-
-        //Custom Methods:
 
         //Update Table
         private void UpdateLadderTable()
         {
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
-            var arrPlayers = new PlayerTable[maxLadderTableSize];
-            for (int i = 0; i < maxLadderTableSize; i++)
+            if (playerDB.Count > 1)
             {
-                arrPlayers[i] = new PlayerTable
+                var arrPlayers = new PlayerTable[playerDB.Count];
+                for (int i = 0; i < playerDB.Count; i++)
                 {
-                    Online = playerDB[i].GetOnlineStatus(),
-                    Rank = playerDB[i].GetRank(),
-                    Account = playerDB[i].GetAccount(),
-                    Chracter = playerDB[i].GetCharacter(),
-                    CharacterClass = playerDB[i].GetClass(),
-                    Level = playerDB[i].GetLevel(),
-                    EXP = playerDB[i].GetExperience(),
-                    EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
-                    EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
-                    EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
-                    EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
-                    RankChange = playerDB[i].GetRankChange()
+                    arrPlayers[i] = new PlayerTable
+                    {
+                        Online = playerDB[i].GetOnlineStatus(),
+                        Rank = playerDB[i].GetRank(),
+                        Account = playerDB[i].GetAccount(),
+                        Chracter = playerDB[i].GetCharacter(),
+                        CharacterClass = playerDB[i].GetClass(),
+                        Level = playerDB[i].GetLevel(),
+                        EXP = playerDB[i].GetExperience(),
+                        EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
+                        EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
+                        EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
+                        EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
+                        RankChange = playerDB[i].GetRankChange()
+                    };
                 };
-            };
 
-            //Apply the ladder data to the Data Grid View
-            LadderTable.DataSource = arrPlayers;
-            #region ClassColoring
-            for (int i = 0; i < maxLadderTableSize; i++)
-            {
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
+                //Apply the ladder data to the Data Grid View
+                LadderTable.DataSource = arrPlayers;
+
+                for (int i = 0; i < playerDB.Count; i++)
                 {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.IndianRed;
+                    //Limit to only the selected class or All
+                    if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
+                    {
+                        LadderTable.CurrentCell = null;
+                        LadderTable.Rows[i].Visible = false;
+                    }
+                    else
+                    {
+                        LadderTable.Rows[i].Visible = true;
+                    }
                 }
 
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
+                #region ClassColoring
+                for (int i = 0; i < playerDB.Count; i++)
                 {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.LightGreen;
-                }
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.IndianRed;
+                    }
 
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.RoyalBlue;
-                }
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.LightGreen;
+                    }
 
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Shadow"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.BlueViolet;
-                }
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.RoyalBlue;
+                    }
 
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Templar"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Gold;
-                }
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Shadow"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.BlueViolet;
+                    }
 
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
-                }
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Templar"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Gold;
+                    }
 
+                    if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
+                    {
+                        LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
+                    }
+
+                }
+                #endregion
+
+                #region LadderTable Formatting
+                //Change formatting to display commas: 1,000
+                LadderTable.Columns[6].DefaultCellStyle.Format = "N0";
+                LadderTable.Columns[7].DefaultCellStyle.Format = "N0";
+                LadderTable.Columns[8].DefaultCellStyle.Format = "N0";
+                LadderTable.Columns[9].DefaultCellStyle.Format = "N0";
+                LadderTable.Columns[10].DefaultCellStyle.Format = "N0";
+
+                //Relabel Columns
+                LadderTable.Columns[0].HeaderText = "Online:";
+                LadderTable.Columns[1].HeaderText = "Rank:";
+                LadderTable.Columns[2].HeaderText = "Account:";
+                LadderTable.Columns[3].HeaderText = "Character:";
+                LadderTable.Columns[4].HeaderText = "Class:";
+                LadderTable.Columns[5].HeaderText = "Level:";
+                LadderTable.Columns[6].HeaderText = "Experience:";
+                LadderTable.Columns[7].HeaderText = "EXP/Level:";
+                LadderTable.Columns[8].HeaderText = "EXP/behind:";
+                LadderTable.Columns[9].HeaderText = "EXP/update:";
+                LadderTable.Columns[10].HeaderText = "EXP/Minute:";
+                LadderTable.Columns[11].HeaderText = "Change:";
+
+                //Tooltips
+                LadderTable.Columns[7].ToolTipText = "Experience required to level";
+                LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
+                LadderTable.Columns[9].ToolTipText = "Experience gained this update";
+                LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
+                LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
+
+                //Sizes
+                LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
-            #endregion
 
-            #region LadderTable Formatting
-            //Change formatting to display commas: 1,000
-            LadderTable.Columns[6].DefaultCellStyle.Format = "N0";
-            LadderTable.Columns[7].DefaultCellStyle.Format = "N0";
-            LadderTable.Columns[8].DefaultCellStyle.Format = "N0";
-            LadderTable.Columns[9].DefaultCellStyle.Format = "N0";
-            LadderTable.Columns[10].DefaultCellStyle.Format = "N0";
+            if (playerDB.Count < 2)
+            {
+                LadderTable.DataSource = null;
+            }
 
-            //Relabel Columns
-            LadderTable.Columns[0].HeaderText = "Online:";
-            LadderTable.Columns[1].HeaderText = "Rank:";
-            LadderTable.Columns[2].HeaderText = "Account:";
-            LadderTable.Columns[3].HeaderText = "Character:";
-            LadderTable.Columns[4].HeaderText = "Class:";
-            LadderTable.Columns[5].HeaderText = "Level:";
-            LadderTable.Columns[6].HeaderText = "Experience:";
-            LadderTable.Columns[7].HeaderText = "EXP/Level:";
-            LadderTable.Columns[8].HeaderText = "EXP/behind:";
-            LadderTable.Columns[9].HeaderText = "EXP/update:";
-            LadderTable.Columns[10].HeaderText = "EXP/Minute:";
-            LadderTable.Columns[11].HeaderText = "Change:";
-
-            //Tooltips
-            LadderTable.Columns[7].ToolTipText = "Experience required to level";
-            LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
-            LadderTable.Columns[9].ToolTipText = "Experience gained this update";
-            LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
-            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
-
-            //Sizes
-            LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             #endregion
         }
 
-        private void FillSeasonData()
+        private void UpdateSeasonTable()
         {
             PathOfExileJSONLadderSeason SeasonData = JSON.ParseLadderSeason(SeasonLadderURL);
             var seaLadder = new SeasonTable[SeasonData.entries.Count];
@@ -281,7 +297,7 @@ namespace POELadder
             
 
             //Add the Ladder JSON Data to the PlayerDB
-                for (int i = 0; i < maxLadderTableSize; i++)
+                for (int i = 0; i < LadderData.entries.Count; i++)
                 {
                     //First setup. Not all players added
                     if (playerDB.Count < LadderData.entries.Count)
@@ -296,23 +312,6 @@ namespace POELadder
 
                     for (int j = 0; j < playerDB.Count; j++)
                     {
-                        //This should be called when a player who was not part of the first download and is now on the ladder.
-
-
-                        //                    //New Player found
-                        //                    if (!LadderData.entries[j].account.name.Equals(playerDB[j].GetAccount()) &&
-                        //                        !LadderData.entries[j].character.name.Equals(playerDB[j].GetCharacter()))
-                        //                    {
-                        ////This for should probably be change from J J for I J. But it crashes when that happens.
-
-                        //                        PlayerDB NewPlayer = new PlayerDB(
-                        //                            LadderData.entries[i].account.name, 
-                        //                            LadderData.entries[i].character.name, 
-                        //                            LadderData.entries[i].character.@class);
-
-                        //                        playerDB.Add(NewPlayer);
-                        //                    }
-
                         //Player already exist. Update with current information.
                         if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
                             LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
@@ -327,7 +326,13 @@ namespace POELadder
                         }
                     }
                 }
+
                 LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            }
+
+            if (LadderData.entries.Count < 2)
+            {
+                playerDB.Clear();
             }
 
             //Sort the list:
@@ -375,6 +380,13 @@ namespace POELadder
             PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
             uint LeaderEXP = 0;
 
+            List<PathOfExileJSONLadderSingle> LadderDataList = new List<PathOfExileJSONLadderSingle>();
+            
+            for (int i = 0; i < LadderData.entries.Count; i++)
+            {
+                LadderDataList.Add(LadderData);
+            }
+
             //Save leader EXP for table data
             if (LadderData.entries.Count > 1)
             {
@@ -396,7 +408,7 @@ namespace POELadder
             //Update all accounts
             for (int i = 0; i < playerDB.Count; i++)
             {
-                for (int j = 0; j < LadderData.entries.Count; j++)
+                for (int j = 0; j < LadderDataList.Count; j++)
                 {
                     if (!LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
                             !LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
@@ -436,7 +448,5 @@ namespace POELadder
             playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
         }
         #endregion
-
-
     }
 }
