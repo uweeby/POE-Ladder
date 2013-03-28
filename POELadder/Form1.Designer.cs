@@ -112,7 +112,7 @@
             this.LadderTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.LadderTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             this.LadderTable.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -174,7 +174,7 @@
             // refreshButton
             // 
             this.refreshButton.AutoSize = true;
-            this.refreshButton.Location = new System.Drawing.Point(541, 15);
+            this.refreshButton.Location = new System.Drawing.Point(529, 15);
             this.refreshButton.Name = "refreshButton";
             this.refreshButton.Size = new System.Drawing.Size(44, 13);
             this.refreshButton.TabIndex = 167;
@@ -298,7 +298,6 @@
             this.classBox.Size = new System.Drawing.Size(123, 21);
             this.classBox.TabIndex = 3;
             this.classBox.Text = "All";
-            this.classBox.SelectedIndexChanged += new System.EventHandler(this.classBox_SelectedIndexChanged);
             // 
             // label5
             // 

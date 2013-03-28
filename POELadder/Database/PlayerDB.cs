@@ -162,45 +162,6 @@ namespace POELadder
 
             utcUpdate = DateTime.UtcNow;
             
-            //if (this.Rank.Count == 1)
-            //{
-            //    this.Rank.Insert(0, Rank);
-            //}
-
-            //if (this.Rank.Count > 1)
-            //{
-            //    if (this.Rank[0] != Rank)
-            //    {
-            //        this.Rank.Insert(0, Rank);
-            //    }
-            //}
-
-            //if (this.Level.Count == 1)
-            //{
-            //    this.Level.Insert(0, Level);
-            //}
-
-            //if (this.Level.Count > 1)
-            //{
-            //    if (this.Level[0] != Level)
-            //    {
-            //        this.Level.Insert(0, Level);
-            //    }
-            //}
-
-            //if (this.Experience.Count == 1)
-            //{
-            //    this.Experience.Insert(0, Experience);
-            //}
-
-            //if (this.Experience.Count > 1)
-            //{
-            //    if (this.Experience[0] != Experience)
-            //    {
-            //        this.Experience.Insert(0, Experience);
-            //    }
-            //}
-
             ShrinkCollections();
         }
 
@@ -249,16 +210,8 @@ namespace POELadder
             {
                 PreviousRank = this.Rank[1];
             }
-
-            if (CurrentRank > PreviousRank)
-            {
-                this.RankChange = CurrentRank - PreviousRank;
-            }
-
-            if (CurrentRank < PreviousRank)
-            {
-                this.RankChange = PreviousRank - CurrentRank;
-            }
+            
+            this.RankChange = PreviousRank - CurrentRank;
 
             if (CurrentRank == PreviousRank)
             {
@@ -284,7 +237,8 @@ namespace POELadder
 
                 int gap = (int)(UpdateTime[0] - UpdateTime[1]).TotalSeconds;
                 expMIN = (TotalEXP / Experience.Count) * (60 / gap);
-
+                System.Console.WriteLine("TotalEXP : " + TotalEXP);
+                System.Console.WriteLine("expMIN : " + expMIN);
             }
 
             this.EST_EXP_Minute = expMIN;
