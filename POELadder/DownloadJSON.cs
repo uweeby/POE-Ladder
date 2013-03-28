@@ -6,7 +6,7 @@ using System.Web.Script.Serialization;
 namespace POELadder
 {
     //Download JSON pages from the Path of Exile site
-    public class JSON
+    public class DownloadJSON
     {        
         //All Ladders currently running
         public static PathOfExileJSONLadderAll[] ParseLadderAll(String JSON)

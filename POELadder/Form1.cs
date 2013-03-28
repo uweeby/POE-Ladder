@@ -14,13 +14,10 @@ namespace POELadder
         // How to make this so we don't have to hardcode the Season number (one) each time a new season comes around? Another drop down maybe? IDK.
         public String SeasonLadderURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+One";
         public String LadderAllURL = "http://api.pathofexile.com/leagues";
-        public String LadderSingleURL;
 
         PathOfExileJSONLadderAll[] POELadderAll;
 
         DataView classFilter = new DataView();
-
-        public int SelectedLadderIndex, maxLadderTableSize;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
@@ -34,7 +31,7 @@ namespace POELadder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            POELadderAll = JSON.ParseLadderAll(LadderAllURL);
+            POELadderAll = DownloadJSON.ParseLadderAll(LadderAllURL);
 
             //Populate the Ladder Drop Down
             for (int i = 0; i < POELadderAll.Length; i++)
@@ -43,22 +40,20 @@ namespace POELadder
             }
 
             timer2.Enabled = true;
-            maxLadderTableSize = (int)displayAmount.Value;
             UpdateSeasonTable();
         }
 
         //A new Ladder has been Selected from the Select Box.
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedLadderIndex = ladderselectBox.SelectedIndex;
-            DownloadSelectedLadder();
+//SelectedLadderIndex = ladderselectBox.SelectedIndex;
+            DownloadSelectedLadder((int)displayAmount.Value);
         }
 
-        private void DownloadSelectedLadder()
+        private void DownloadSelectedLadder(int LimitResults)
         {
             //Sets the URL to populate the table
-            maxLadderTableSize = (int)displayAmount.Value;
-            LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + (int)maxLadderTableSize;
+            String LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + LimitResults;
 
             if (playerDB.Count > 2)
             {
@@ -72,7 +67,7 @@ namespace POELadder
             }
 
             seasonPoints.Visible = true;
-            UpdateAll();
+            UpdateAll(LadderSingleURL);
         }
 
         //Ladder-auto Refresh - 15 seconds
@@ -80,7 +75,7 @@ namespace POELadder
         {
             if (autoRefreshCheckBox.Checked == true)
             {
-                DownloadSelectedLadder();
+                DownloadSelectedLadder((int)displayAmount.Value);
             }
         }
 
@@ -89,7 +84,7 @@ namespace POELadder
         {
             if (ladderselectBox.SelectedItem != null)
             {
-                UpdateTimer();
+                UpdateTimer(ladderselectBox.SelectedIndex);
             }
         }
 
@@ -98,7 +93,7 @@ namespace POELadder
         {
             if (ladderselectBox.SelectedItem != null)
             {
-                DownloadSelectedLadder();
+                DownloadSelectedLadder((int)displayAmount.Value);
             }
         }
 
@@ -135,10 +130,9 @@ namespace POELadder
         #endregion
 
         //Custom Methods:
-        private void UpdateAll()
+        private void UpdateAll(String RaceURL)
         {
-            maxLadderTableSize = (int)displayAmount.Value;
-            UpdateLadderData();
+            PopulatePlayerDB(RaceURL);
             UpdateLadderTable();
         }
 
@@ -263,7 +257,7 @@ namespace POELadder
         //Season ladder Table
         private void UpdateSeasonTable()
         {
-            PathOfExileJSONLadderSeason SeasonData = JSON.ParseLadderSeason(SeasonLadderURL);
+            PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(SeasonLadderURL);
             var seaLadder = new SeasonTable[SeasonData.entries.Count];
 
             for (int i = 0; i < SeasonData.entries.Count; i++)
@@ -281,9 +275,9 @@ namespace POELadder
         }
 
         //Update Ladder Table with the current DB data
-        private void UpdateLadderData()
+        private void PopulatePlayerDB(String RaceURL)
         {
-            PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
+            PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
 
             if (LadderData.entries.Count > 1)
             {
@@ -333,11 +327,11 @@ namespace POELadder
         }
 
         //Update the Race Timer with the Time Left before the End of the Race
-        private void UpdateTimer()
+        private void UpdateTimer(int LadderSelectIndex)
         {
 
-            DateTime StartTime = Clock.FormatPOEDate(POELadderAll[SelectedLadderIndex].startAt);
-            DateTime EndTime = Clock.FormatPOEDate(POELadderAll[SelectedLadderIndex].endAt);
+            DateTime StartTime = Clock.FormatPOEDate(POELadderAll[LadderSelectIndex].startAt);
+            DateTime EndTime = Clock.FormatPOEDate(POELadderAll[LadderSelectIndex].endAt);
 
             DateTime localTime = DateTime.UtcNow;
             DateTime localDate = DateTime.Today;
@@ -367,10 +361,10 @@ namespace POELadder
             }
         }
 
-        private void UpdateByDB()
+        private void UpdateByDB(String RaceURL)
         {
             //Initial setup. Download JSON
-            PathOfExileJSONLadderSingle LadderData = JSON.ParseLadderSingle(LadderSingleURL);
+            PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
             uint LeaderEXP = 0;
 
             List<PathOfExileJSONLadderSingle> LadderDataList = new List<PathOfExileJSONLadderSingle>();
