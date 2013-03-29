@@ -230,7 +230,7 @@ namespace POELadder
             //More than one update has happened
             if (Experience.Count > 1)
             {
-                for(int i = 1; i < Experience.Count - 1; i++)
+                for (int i = 1; i < Experience.Count - 1; i++)
                 {
                     TotalEXP += (int)(Experience[i] - Experience[i + 1]);
                 }

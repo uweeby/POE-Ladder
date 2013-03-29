@@ -6,6 +6,7 @@ using PoELadder;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 
 namespace POELadder
 {
@@ -133,25 +134,53 @@ namespace POELadder
         //Update Table
         private void UpdateLadderTable()
         {
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
             var arrPlayers = new PlayerTable[playerDB.Count];
             for (int i = 0; i < playerDB.Count; i++)
             {
-                arrPlayers[i] = new PlayerTable
+                if (classBox.Text.Equals("All"))
                 {
-                    Online = playerDB[i].GetOnlineStatus(),
-                    Rank = playerDB[i].GetRank(),
-                    Account = playerDB[i].GetAccount(),
-                    Chracter = playerDB[i].GetCharacter(),
-                    CharacterClass = playerDB[i].GetClass(),
-                    Level = playerDB[i].GetLevel(),
-                    EXP = playerDB[i].GetExperience(),
-                    EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
-                    EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
-                    EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
-                    EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
-                    RankChange = playerDB[i].GetRankChange()
-                };
+                    arrPlayers[i] = new PlayerTable
+                    {
+                        Online = playerDB[i].GetOnlineStatus(),
+                        Rank = playerDB[i].GetRank(),
+                        Account = playerDB[i].GetAccount(),
+                        Chracter = playerDB[i].GetCharacter(),
+                        CharacterClass = playerDB[i].GetClass(),
+                        Level = playerDB[i].GetLevel(),
+                        EXP = playerDB[i].GetExperience(),
+                        EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
+                        EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
+                        EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
+                        EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
+                        RankChange = playerDB[i].GetRankChange()
+                    };
+                }
+
+                else
+                {
+                    if (playerDB[i].GetClass().Equals(classBox.Text))
+                    {
+                        arrPlayers[i] = new PlayerTable
+                        {
+                            Online = playerDB[i].GetOnlineStatus(),
+                            Rank = playerDB[i].GetRank(),
+                            Account = playerDB[i].GetAccount(),
+                            Chracter = playerDB[i].GetCharacter(),
+                            CharacterClass = playerDB[i].GetClass(),
+                            Level = playerDB[i].GetLevel(),
+                            EXP = playerDB[i].GetExperience(),
+                            EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
+                            EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
+                            EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
+                            EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
+                            RankChange = playerDB[i].GetRankChange()
+                        };
+                    }
+                }
             };
 
             //Apply the ladder data to the Data Grid View
@@ -160,53 +189,29 @@ namespace POELadder
             //Class filtering, needs to be redone at a later date
             //for (int i = 0; i < playerDB.Count; i++)
             //{
-            //Limit to only the selected class or All
-            //if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
-            //{
-            //    LadderTable.CurrentCell = null;
-            //    LadderTable.Rows[i].Visible = false;
+            ////Limit to only the selected class or All
+            //    if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
+            //    {
+            //        LadderTable.CurrentCell = null;
+            //        LadderTable.Rows[i].Visible = false;
+            //    }
+            //    else
+            //    {
+            //        LadderTable.Rows[i].Visible = true;
+            //    }
             //}
-            //else
-            //{
-            //    LadderTable.Rows[i].Visible = true;
-            //}
-            //}
+
+            System.Console.WriteLine("populate: " + stopWatch.ElapsedMilliseconds);
 
             #region ClassColoring
             for (int i = 0; i < playerDB.Count; i++)
             {
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.IndianRed;
-                }
-
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.LightGreen;
-                }
-
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.RoyalBlue;
-                }
-
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Shadow"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.BlueViolet;
-                }
-
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Templar"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Gold;
-                }
-
-                if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
-                {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
-                }
+                
 
             }
             #endregion
+
+            System.Console.WriteLine("recolor: " + stopWatch.ElapsedMilliseconds);
 
             #region LadderTable Formatting
             //Change formatting to display commas: 1,000
@@ -246,6 +251,10 @@ namespace POELadder
             }
 
             #endregion
+
+            stopWatch.Stop();
+            System.Console.WriteLine(stopWatch.ElapsedMilliseconds);
+            stopWatch.Reset();
         }
 
         //Season ladder Table
@@ -273,6 +282,8 @@ namespace POELadder
         {
             PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
 
+            List<int> AccountUpdated = new List<int>();
+
             if (LadderData.entries.Count > 1)
             {
                 uint LeaderEXP = LadderData.entries[0].character.experience;
@@ -280,32 +291,37 @@ namespace POELadder
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                    //First setup. Not all players added
-                    if (playerDB.Count < LadderData.entries.Count)
-                    {
-                        PlayerDB NewPlayer = new PlayerDB(
-                            LadderData.entries[i].account.name,
-                            LadderData.entries[i].character.name,
-                            LadderData.entries[i].character.@class);
-
-                        playerDB.Add(NewPlayer);
-                    }
-
-                    for (int j = 0; j < playerDB.Count; j++)
-                    {
-                        //Player already exist. Update with current information.
-                        if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
-                            LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                    //if (!AccountUpdated.Contains(i))
+                    //{
+                        //First setup. Not all players added
+                        if (playerDB.Count < LadderData.entries.Count)
                         {
-                            playerDB[j].Update(
-                                LadderData.entries[i].online,
-                                LadderData.entries[i].rank,
-                                LadderData.entries[i].character.level,
-                                LadderData.entries[i].character.experience,
-                                DateTime.UtcNow,
-                                LeaderEXP);
+                            PlayerDB NewPlayer = new PlayerDB(
+                                LadderData.entries[i].account.name,
+                                LadderData.entries[i].character.name,
+                                LadderData.entries[i].character.@class);
+
+                            playerDB.Add(NewPlayer);
                         }
-                    }
+
+                        for (int j = 0; j < playerDB.Count; j++)
+                        {
+                            //Player already exist. Update with current information.
+                            if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                                LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                            {
+                                playerDB[j].Update(
+                                    LadderData.entries[i].online,
+                                    LadderData.entries[i].rank,
+                                    LadderData.entries[i].character.level,
+                                    LadderData.entries[i].character.experience,
+                                    DateTime.UtcNow,
+                                    LeaderEXP);
+
+                                AccountUpdated.Add(i);
+                            }
+                        }
+                    //}
                 }
 
                 LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -359,70 +375,87 @@ namespace POELadder
         {
             //Initial setup. Download JSON
             PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
-            uint LeaderEXP = 0;
 
-            List<PathOfExileJSONLadderSingle> LadderDataList = new List<PathOfExileJSONLadderSingle>();
             List<String> NewAccountList = new List<String>();
+            List<int> AccountUpdated = new List<int>();
+
+            uint LeaderEXP = 0;
 
             //JSON has valid Ladder Data
             if (LadderData.entries.Count > 1)
             {
                 LeaderEXP = LadderData.entries[0].character.experience;
 
-                for (int i = 0; i < LadderData.entries.Count; i++)
+                //First setup. Not all players added
+                if (playerDB.Count < 2)
                 {
-                    LadderDataList.Add(LadderData);
+                    for (int i = 0; i < LadderData.entries.Count; i++)
+                    {
+                        PlayerDB NewPlayer = new PlayerDB(
+                            LadderData.entries[i].account.name,
+                            LadderData.entries[i].character.name,
+                            LadderData.entries[i].character.@class);
+
+                        playerDB.Add(NewPlayer);
+
+                        System.Console.WriteLine("Player not found in DB. Adding: " + i);
+                    }
                 }
 
                 //Update all accounts
                 for (int i = 0; i < playerDB.Count; i++)
                 {
-                    for (int j = 0; j < LadderDataList.Count; j++)
+                    for (int j = 0; j < LadderData.entries.Count; j++)
                     {
-                        //Player not found in DB. Flag to add
-                        if (!LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
+                        if(!AccountUpdated.Contains(j))
+                        {
+                            //Player not found in DB. Flag to add
+                            if (!LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
                                 !LadderData.entries[j].character.name.Equals(playerDB[i].GetCharacter()))
-                        {
+                            {
+                                NewAccountList.Add(LadderData.entries[j].character.name);
 
-                            NewAccountList.Add(LadderData.entries[j].character.name);
-                        }
+                                //System.Console.WriteLine("Player not found in DB. Flag to add: " + j);
+                            }
 
-                        //Player found in DB. Update data
-                        if (LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
+                            //Player found in DB. Update data
+                            if (LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
                                 LadderData.entries[j].character.name.Equals(playerDB[i].GetCharacter()))
-                        {
-                            playerDB[j].Update(
-                                LadderData.entries[i].online,
-                                LadderData.entries[i].rank,
-                                LadderData.entries[i].character.level,
-                                LadderData.entries[i].character.experience,
-                                DateTime.UtcNow,
-                                LeaderEXP);
+                            {
+                                playerDB[j].Update(
+                                    LadderData.entries[i].online,
+                                    LadderData.entries[i].rank,
+                                    LadderData.entries[i].character.level,
+                                    LadderData.entries[i].character.experience,
+                                    DateTime.UtcNow,
+                                    LeaderEXP);
+
+                                AccountUpdated.Add(j);
+                            }
                         }
                     }
 
                     //DB account was not listed in update. Remove from ladder.
-                    playerDB[i].SetFlagForRemoval(true);
+                    //if (!AccountUpdated)
+                    //{
+                    //    playerDB[i].SetFlagForRemoval(true);
+                    //}
+
+                    //AccountUpdated = false;
                 }
 
                 //Remove unlisted accounts
                 //Account is listed in the DB but not on the JSON
-                for (int i = playerDB.Count; i > 0; i--)
-                {
-                    if (playerDB[i].GetFlagForRemoval())
-                    {
-                        playerDB.RemoveAt(i);
-                    }
-                }
+                //for (int i = playerDB.Count; i > 0; i--)
+                //{
+                //    if (playerDB[i].GetFlagForRemoval())
+                //    {
+                //        playerDB.RemoveAt(i);
+                //    }
+                //}
 
                 //Resort list by rank
                 playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
-            }
-
-            //JSON data is empty
-            if (LadderData.entries.Count < 2)
-            {
-
             }
         }
     }
