@@ -138,76 +138,78 @@ namespace POELadder
             stopWatch.Start();
 
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
-            var arrPlayers = new PlayerTable[playerDB.Count];
+            List<PlayerTable> PlayerList = new List<PlayerTable>();
+
             for (int i = 0; i < playerDB.Count; i++)
             {
-                if (classBox.Text.Equals("All"))
-                {
-                    arrPlayers[i] = new PlayerTable
-                    {
-                        Online = playerDB[i].GetOnlineStatus(),
-                        Rank = playerDB[i].GetRank(),
-                        Account = playerDB[i].GetAccount(),
-                        Chracter = playerDB[i].GetCharacter(),
-                        CharacterClass = playerDB[i].GetClass(),
-                        Level = playerDB[i].GetLevel(),
-                        EXP = playerDB[i].GetExperience(),
-                        EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
-                        EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
-                        EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
-                        EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
-                        RankChange = playerDB[i].GetRankChange()
-                    };
-                }
+                PlayerTable Entry = new PlayerTable();
+                Entry.Online = playerDB[i].GetOnlineStatus();
+                Entry.Rank = playerDB[i].GetRank();
+                Entry.Account = playerDB[i].GetAccount();
+                Entry.Chracter = playerDB[i].GetCharacter();
+                Entry.CharacterClass = playerDB[i].GetClass();
+                Entry.Level = playerDB[i].GetLevel();
+                Entry.EXP = playerDB[i].GetExperience();
+                Entry.EXPToNextLevel = playerDB[i].GetEXPToNextLevel();
+                Entry.EXPBehindLeader = playerDB[i].GetEXPBehindLeader();
+                Entry.EXPThisUpdate = playerDB[i].GetEXPThisUpdate();
+                Entry.EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute();
+                Entry.RankChange = playerDB[i].GetRankChange();
 
-                else
+                PlayerList.Add(Entry);
+            }
+
+            System.Console.WriteLine("Count: " + PlayerList.Count);
+
+            if (!classBox.Text.Equals("All"))
+            {
+                for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    if (playerDB[i].GetClass().Equals(classBox.Text))
+                    if (!PlayerList[i].CharacterClass.Equals(classBox.Text))
                     {
-                        arrPlayers[i] = new PlayerTable
-                        {
-                            Online = playerDB[i].GetOnlineStatus(),
-                            Rank = playerDB[i].GetRank(),
-                            Account = playerDB[i].GetAccount(),
-                            Chracter = playerDB[i].GetCharacter(),
-                            CharacterClass = playerDB[i].GetClass(),
-                            Level = playerDB[i].GetLevel(),
-                            EXP = playerDB[i].GetExperience(),
-                            EXPToNextLevel = playerDB[i].GetEXPToNextLevel(),
-                            EXPBehindLeader = playerDB[i].GetEXPBehindLeader(),
-                            EXPThisUpdate = playerDB[i].GetEXPThisUpdate(),
-                            EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute(),
-                            RankChange = playerDB[i].GetRankChange()
-                        };
+                        PlayerList.RemoveAt(i);
+                        i--;
                     }
                 }
-            };
+            }
 
             //Apply the ladder data to the Data Grid View
-            LadderTable.DataSource = arrPlayers;
-
-            //Class filtering, needs to be redone at a later date
-            //for (int i = 0; i < playerDB.Count; i++)
-            //{
-            ////Limit to only the selected class or All
-            //    if (!LadderTable.Rows[i].Cells[4].Value.Equals(classBox.Text) && !classBox.Text.Equals("All"))
-            //    {
-            //        LadderTable.CurrentCell = null;
-            //        LadderTable.Rows[i].Visible = false;
-            //    }
-            //    else
-            //    {
-            //        LadderTable.Rows[i].Visible = true;
-            //    }
-            //}
+            LadderTable.DataSource = PlayerList;
 
             System.Console.WriteLine("populate: " + stopWatch.ElapsedMilliseconds);
 
             #region ClassColoring
-            for (int i = 0; i < playerDB.Count; i++)
+            for (int i = 0; i < PlayerList.Count; i++)
             {
-                
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder") && !LadderTable.Rows[i].Cells[4].Value.Equals(""))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.IndianRed;
+                }
 
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Ranger"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.LightGreen;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Witch"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.RoyalBlue;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Shadow"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.BlueViolet;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Templar"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Gold;
+                }
+
+                if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
+                {
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
+                }
             }
             #endregion
 
