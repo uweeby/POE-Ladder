@@ -45,7 +45,6 @@
             this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
             this.displayAmount = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
@@ -56,6 +55,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timerLabel = new System.Windows.Forms.Label();
+            this.resetButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -183,7 +183,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.resetButton);
             this.tabPage1.Controls.Add(this.displayAmount);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.seasonPoints);
@@ -200,18 +200,9 @@
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(120, 65);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 13);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "entries in the table.";
-            // 
             // displayAmount
             // 
-            this.displayAmount.Location = new System.Drawing.Point(56, 63);
+            this.displayAmount.Location = new System.Drawing.Point(148, 63);
             this.displayAmount.Maximum = new decimal(new int[] {
             200,
             0,
@@ -237,9 +228,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
+            this.label2.Size = new System.Drawing.Size(140, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "Display:";
+            this.label2.Text = "Number of entries to display:";
             // 
             // seasonPoints
             // 
@@ -296,6 +287,7 @@
             this.classBox.Size = new System.Drawing.Size(123, 21);
             this.classBox.TabIndex = 3;
             this.classBox.Text = "All";
+            this.classBox.SelectedIndexChanged += new System.EventHandler(this.classBox_SelectedIndexChanged);
             // 
             // label5
             // 
@@ -320,9 +312,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 13);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(136, 13);
+            this.label1.Size = new System.Drawing.Size(86, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Search character/account:";
+            this.label1.Text = "Search account:";
             // 
             // tabControl1
             // 
@@ -356,6 +348,16 @@
             this.timerLabel.TabIndex = 169;
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(148, 89);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(75, 23);
+            this.resetButton.TabIndex = 7;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // Form1
             // 
@@ -412,7 +414,7 @@
         public System.Windows.Forms.DataGridView seasonPoints;
         private System.Windows.Forms.NumericUpDown displayAmount;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button resetButton;
 
     }
 }

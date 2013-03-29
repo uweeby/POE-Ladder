@@ -20,11 +20,13 @@ namespace POELadder
         private int EXPThisUpdate;
         private int RankChange;
         private int EST_EXP_Minute;
+        public int TotalEXP;
+        public int expMIN;
 
-        private List<DateTime> UpdateTime = new List<DateTime>();
-        private List<ushort> Rank = new List<ushort>();
-        private List<byte> Level = new List<byte>();
-        private List<uint> Experience = new List<uint>();
+        public List<DateTime> UpdateTime = new List<DateTime>();
+        public List<ushort> Rank = new List<ushort>();
+        public List<byte> Level = new List<byte>();
+        public List<uint> Experience = new List<uint>();
 
         public DateTime utcUpdate;
 
@@ -143,24 +145,22 @@ namespace POELadder
             this.Class = Class;
         }
 
-
         public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time, uint LeaderEXP)
         {
             this.Online = Online;
             this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
             this.EXPBehindLeader = LeaderEXP - Experience;
 
-            UpdateEXPThisUpdate();
-            UpdateRankChange(Rank);
-            UpdateEXPMin();
-
+            //Insert the most recent update to index 0 of each list
             this.UpdateTime.Insert(0, Time);
-
             this.Rank.Insert(0, Rank);
             this.Level.Insert(0, Level);
             this.Experience.Insert(0, Experience);
 
             utcUpdate = DateTime.UtcNow;
+            UpdateEXPThisUpdate();
+            UpdateRankChange(Rank);
+            UpdateEXPMin();
             
             ShrinkCollections();
         }
@@ -193,11 +193,10 @@ namespace POELadder
         //Calculating the Experience gained this update
         private void UpdateEXPThisUpdate()
         {
-            if (this.Experience.Count > 1)
+            if (Experience.Count > 1)
             {
-                this.EXPThisUpdate = (int)(this.Experience[0] - this.Experience[1]);
+                this.EXPThisUpdate = (int)(Experience[0] - Experience[1]);
             }
-
         }
 
         //Calculating the change in rank between two updates.
@@ -206,9 +205,9 @@ namespace POELadder
             ushort CurrentRank = _Rank;
             ushort PreviousRank = _Rank;
 
-            if (this.Rank.Count > 1)
+            if (Rank.Count > 1)
             {
-                PreviousRank = this.Rank[1];
+                PreviousRank = Rank[1];
             }
             
             this.RankChange = PreviousRank - CurrentRank;
@@ -224,21 +223,16 @@ namespace POELadder
         //Calculating Experience per minute
         private void UpdateEXPMin()
         {
-            //Calculate EXP over Time Updates
-            int TotalEXP = 0;
-            int expMIN = 0;
             //More than one update has happened
             if (Experience.Count > 1)
             {
                 for (int i = 1; i < Experience.Count - 1; i++)
                 {
-                    TotalEXP += (int)(Experience[i] - Experience[i + 1]);
+                    TotalEXP += (int)(Experience[i] - Experience[(i + 1)]);
                 }
 
                 int gap = (int)(UpdateTime[0] - UpdateTime[1]).TotalSeconds;
-                expMIN = (TotalEXP / Experience.Count) * (60 / gap);
-                System.Console.WriteLine("TotalEXP : " + TotalEXP);
-                System.Console.WriteLine("expMIN : " + expMIN);
+                if (gap > 2)expMIN = (TotalEXP / Experience.Count) * (60 / gap);
             }
 
             this.EST_EXP_Minute = expMIN;
@@ -260,7 +254,7 @@ namespace POELadder
 
         public ushort GetRank()
         {
-            return this.Rank[0];
+            return Rank[0];
         }
 
         public String GetClass()
@@ -270,12 +264,12 @@ namespace POELadder
 
         public byte GetLevel()
         {
-            return this.Level[0];
+            return Level[0];
         }
 
         public uint GetExperience()
         {
-            return this.Experience[0];
+            return Experience[0];
         }
 
         public uint GetEXPToNextLevel()

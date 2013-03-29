@@ -42,6 +42,7 @@ namespace POELadder
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
 //SelectedLadderIndex = ladderselectBox.SelectedIndex;
+            playerDB.Clear();
             DownloadSelectedLadder((int)displayAmount.Value);
         }
 
@@ -49,11 +50,13 @@ namespace POELadder
         {
             //Sets the URL to populate the table
             String LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + LimitResults;
+            System.Console.WriteLine(" LimitResults : " + LimitResults);
 
-            if (playerDB.Count > 2)
-            {
-                playerDB.Clear();
-            }
+            // I don't know why this was here but it was causing the db to empty every update
+            //if (playerDB.Count > 2)
+            //{
+            //    playerDB.Clear();
+            //}
 
             if (classBox.Enabled == false)
             {
@@ -106,22 +109,22 @@ namespace POELadder
         }
 
         //New Search Parameters have been selected in the UI
-        private void searchBox_TextChanged(object sender, EventArgs e)
-        {
-            for (int i = 0; i < LadderTable.RowCount; i++)
-            {
-                if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
-                    LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
-                {
-                    LadderTable.Rows[i].Visible = true;
-                }
-                else
-                {
-                    LadderTable.CurrentCell = null;
-                    LadderTable.Rows[i].Visible = false;
-                }
-            }
-        }
+        //private void searchBox_TextChanged(object sender, EventArgs e)
+        //{
+        //    for (int i = 0; i < LadderTable.RowCount; i++)
+        //    {
+        //        if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
+        //            LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
+        //        {
+        //            LadderTable.Rows[i].Visible = true;
+        //        }
+        //        else
+        //        {
+        //            LadderTable.CurrentCell = null;
+        //            LadderTable.Rows[i].Visible = false;
+        //        }
+        //    }
+        //}
         #endregion
 
         //Custom Methods:
@@ -134,6 +137,7 @@ namespace POELadder
         //Update Table
         private void UpdateLadderTable()
         {
+
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
@@ -159,8 +163,6 @@ namespace POELadder
                 PlayerList.Add(Entry);
             }
 
-            System.Console.WriteLine("Count: " + PlayerList.Count);
-
             if (!classBox.Text.Equals("All"))
             {
                 for (int i = 0; i < PlayerList.Count; i++)
@@ -172,6 +174,19 @@ namespace POELadder
                     }
                 }
             }
+            if (!searchBox.Text.Equals(""))
+            {
+                for (int i = 0; i < PlayerList.Count; i++)
+                {
+                    if (!PlayerList[i].Account.Contains(searchBox.Text))
+                    {
+                        PlayerList.RemoveAt(i);
+                        i--;
+                    }
+                }
+            }
+
+            System.Console.WriteLine("Count: " + PlayerList.Count);
 
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = PlayerList;
@@ -459,6 +474,23 @@ namespace POELadder
                 //Resort list by rank
                 playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
             }
+        }
+
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateLadderTable();
+        }
+
+        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateLadderTable();
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            classBox.SelectedItem = "All";
+            searchBox.Text = "";
+            displayAmount.Value = 50;
         }
     }
 }
