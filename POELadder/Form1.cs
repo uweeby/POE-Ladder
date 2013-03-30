@@ -5,8 +5,6 @@ using PoELadder.JSON;
 using PoELadder;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Data;
-using System.Diagnostics;
 
 namespace POELadder
 {
@@ -41,7 +39,6 @@ namespace POELadder
         //A new Ladder has been Selected from the Select Box.
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-//SelectedLadderIndex = ladderselectBox.SelectedIndex;
             playerDB.Clear();
             DownloadSelectedLadder((int)displayAmount.Value);
         }
@@ -51,12 +48,6 @@ namespace POELadder
             //Sets the URL to populate the table
             String LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + LimitResults;
             System.Console.WriteLine(" LimitResults : " + LimitResults);
-
-            // I don't know why this was here but it was causing the db to empty every update
-            //if (playerDB.Count > 2)
-            //{
-            //    playerDB.Clear();
-            //}
 
             if (classBox.Enabled == false)
             {
@@ -108,23 +99,22 @@ namespace POELadder
             }
         }
 
-        //New Search Parameters have been selected in the UI
-        //private void searchBox_TextChanged(object sender, EventArgs e)
-        //{
-        //    for (int i = 0; i < LadderTable.RowCount; i++)
-        //    {
-        //        if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Contains(searchBox.Text.ToLower()) ||
-        //            LadderTable.Rows[i].Cells[2].Value.ToString().ToLower().Contains(searchBox.Text))
-        //        {
-        //            LadderTable.Rows[i].Visible = true;
-        //        }
-        //        else
-        //        {
-        //            LadderTable.CurrentCell = null;
-        //            LadderTable.Rows[i].Visible = false;
-        //        }
-        //    }
-        //}
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateLadderTable();
+        }
+
+        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateLadderTable();
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            classBox.SelectedItem = "All";
+            searchBox.Text = "";
+            displayAmount.Value = 50;
+        }
         #endregion
 
         //Custom Methods:
@@ -137,16 +127,12 @@ namespace POELadder
         //Update Table
         private void UpdateLadderTable()
         {
-
-            Stopwatch stopWatch = new Stopwatch();
-            stopWatch.Start();
-
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
-            List<PlayerTable> PlayerList = new List<PlayerTable>();
+            List<RaceTable> PlayerList = new List<RaceTable>();
 
             for (int i = 0; i < playerDB.Count; i++)
             {
-                PlayerTable Entry = new PlayerTable();
+                RaceTable Entry = new RaceTable();
                 Entry.Online = playerDB[i].GetOnlineStatus();
                 Entry.Rank = playerDB[i].GetRank();
                 Entry.Account = playerDB[i].GetAccount();
@@ -163,6 +149,7 @@ namespace POELadder
                 PlayerList.Add(Entry);
             }
 
+            //Class Sorting
             if (!classBox.Text.Equals("All"))
             {
                 for (int i = 0; i < PlayerList.Count; i++)
@@ -174,6 +161,7 @@ namespace POELadder
                     }
                 }
             }
+
             if (!searchBox.Text.Equals(""))
             {
                 for (int i = 0; i < PlayerList.Count; i++)
@@ -186,12 +174,8 @@ namespace POELadder
                 }
             }
 
-            System.Console.WriteLine("Count: " + PlayerList.Count);
-
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = PlayerList;
-
-            System.Console.WriteLine("populate: " + stopWatch.ElapsedMilliseconds);
 
             #region ClassColoring
             for (int i = 0; i < PlayerList.Count; i++)
@@ -227,8 +211,6 @@ namespace POELadder
                 }
             }
             #endregion
-
-            System.Console.WriteLine("recolor: " + stopWatch.ElapsedMilliseconds);
 
             #region LadderTable Formatting
             //Change formatting to display commas: 1,000
@@ -268,13 +250,9 @@ namespace POELadder
             }
 
             #endregion
-
-            stopWatch.Stop();
-            System.Console.WriteLine(stopWatch.ElapsedMilliseconds);
-            stopWatch.Reset();
         }
 
-        //Season ladder Table
+        //Season Ladder Table
         private void UpdateSeasonTable()
         {
             PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(Properties.Settings.Default.SeasonOneStandingsURL);
@@ -288,13 +266,14 @@ namespace POELadder
                     Name = SeasonData.entries[i].account.name,
                     Points = SeasonData.entries[i].points
                 };
+
                 seasonPoints.DataSource = seaLadder;
                 seasonPoints.Columns[0].Width = 30;
                 seasonPoints.Columns[1].Width = 80;
             }
         }
 
-        //Update Ladder Table with the current DB data
+        //Update DB with current JSON data
         private void PopulatePlayerDB(String RaceURL)
         {
             PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
@@ -308,8 +287,6 @@ namespace POELadder
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                    //if (!AccountUpdated.Contains(i))
-                    //{
                         //First setup. Not all players added
                         if (playerDB.Count < LadderData.entries.Count)
                         {
@@ -338,7 +315,6 @@ namespace POELadder
                                 AccountUpdated.Add(i);
                             }
                         }
-                    //}
                 }
 
                 LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
@@ -474,23 +450,6 @@ namespace POELadder
                 //Resort list by rank
                 playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
             }
-        }
-
-        private void searchBox_TextChanged(object sender, EventArgs e)
-        {
-            UpdateLadderTable();
-        }
-
-        private void classBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateLadderTable();
-        }
-
-        private void resetButton_Click(object sender, EventArgs e)
-        {
-            classBox.SelectedItem = "All";
-            searchBox.Text = "";
-            displayAmount.Value = 50;
         }
     }
 }

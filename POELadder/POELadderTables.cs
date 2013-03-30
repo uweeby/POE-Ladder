@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace POELadder
 {
-    class PlayerTable
+    class RaceTable
     {
         public bool Online { get; set; }
         public int Rank { get; set; }
@@ -20,4 +17,11 @@ namespace POELadder
         public int EST_EXP_Minute { get; set; }
         public int RankChange { get; set; }
     }
+
+    class SeasonTable
+    {
+        public int Rank { get; set; }
+        public string Name { get; set; }
+        public int Points { get; set; }
+    }  
 }
