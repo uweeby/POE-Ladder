@@ -13,9 +13,26 @@ namespace POELadder
         {
             String WebPage = DownloadFile(JSON);
 
-            PathOfExileJSONLadderAll[] POELadderAll = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderAll[]>(WebPage);
+            if (WebPage != null)
+            {
+                try
+                {
+                    PathOfExileJSONLadderAll[] POELadderAll = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderAll[]>(WebPage);
 
-            return POELadderAll;
+                    return POELadderAll;
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e);
+
+                    return null;
+                }
+            }
+
+            else
+            {
+                return null;
+            }
         }
 
         //Currently selected Ladder
@@ -23,9 +40,26 @@ namespace POELadder
         {
             String WebPage = DownloadFile(JSON);
 
-            PathOfExileJSONLadderSingle POELadderSingle = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSingle>(WebPage);
+            if (WebPage != null)
+            {
+                try
+                {
+                    PathOfExileJSONLadderSingle POELadderSingle = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSingle>(WebPage);
 
-            return POELadderSingle;
+                    return POELadderSingle;
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e);
+
+                    return null;
+                }
+            }
+
+            else
+            {
+                return null;
+            }
         }
 
         //Current season
@@ -33,17 +67,47 @@ namespace POELadder
         {
             String WebPage = DownloadFile(JSON);
 
-            PathOfExileJSONLadderSeason POELadderSeason = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSeason>(WebPage);
+            if (WebPage != null)
+            {
+                try
+                {
+                    PathOfExileJSONLadderSeason POELadderSeason = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSeason>(WebPage);
 
-            return POELadderSeason;
+                    return POELadderSeason;
+
+                }
+                catch (Exception e)
+                {
+                    System.Console.WriteLine(e);
+
+                    return null;
+                }
+            }
+
+            else
+            {
+                return null;
+            }
         }
 
         //Download provided URL and return as String
-        private static String DownloadFile(String _URL)
+        private static String DownloadFile(String URL)
         {
             WebClient WebReqeust = new WebClient();
-            String WebPage = WebReqeust.DownloadString(_URL);
-            return WebPage;
+
+            try
+            {
+                String WebPage = WebReqeust.DownloadString(URL);
+
+                return WebPage;
+            }
+
+            catch (Exception e)
+            {
+                System.Console.WriteLine(e);
+
+                return null;
+            }
         }
     }
 }

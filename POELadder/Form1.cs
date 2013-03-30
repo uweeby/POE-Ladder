@@ -256,20 +256,28 @@ namespace POELadder
         private void UpdateSeasonTable()
         {
             PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(Properties.Settings.Default.SeasonOneStandingsURL);
-            var seaLadder = new SeasonTable[SeasonData.entries.Count];
-
-            for (int i = 0; i < SeasonData.entries.Count; i++)
+            if (SeasonData != null)
             {
-                seaLadder[i] = new SeasonTable
-                {
-                    Rank = SeasonData.entries[i].rank,
-                    Name = SeasonData.entries[i].account.name,
-                    Points = SeasonData.entries[i].points
-                };
+                var seaLadder = new SeasonTable[SeasonData.entries.Count];
 
-                seasonPoints.DataSource = seaLadder;
-                seasonPoints.Columns[0].Width = 30;
-                seasonPoints.Columns[1].Width = 80;
+                for (int i = 0; i < SeasonData.entries.Count; i++)
+                {
+                    seaLadder[i] = new SeasonTable
+                    {
+                        Rank = SeasonData.entries[i].rank,
+                        Name = SeasonData.entries[i].account.name,
+                        Points = SeasonData.entries[i].points
+                    };
+
+                    seasonPoints.DataSource = seaLadder;
+                    seasonPoints.Columns[0].Width = 30;
+                    seasonPoints.Columns[1].Width = 80;
+                }
+            }
+
+            if (SeasonData == null)
+            {
+                MessageBox.Show("An error occoured while trying to retrieve the Season Ladder");
             }
         }
 
@@ -278,15 +286,17 @@ namespace POELadder
         {
             PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
 
-            List<int> AccountUpdated = new List<int>();
-
-            if (LadderData.entries.Count > 1)
+            if (LadderData != null)
             {
-                uint LeaderEXP = LadderData.entries[0].character.experience;
+                List<int> AccountUpdated = new List<int>();
 
-                //Add the Ladder JSON Data to the PlayerDB
-                for (int i = 0; i < LadderData.entries.Count; i++)
+                if (LadderData.entries.Count > 1)
                 {
+                    uint LeaderEXP = LadderData.entries[0].character.experience;
+
+                    //Add the Ladder JSON Data to the PlayerDB
+                    for (int i = 0; i < LadderData.entries.Count; i++)
+                    {
                         //First setup. Not all players added
                         if (playerDB.Count < LadderData.entries.Count)
                         {
@@ -315,18 +325,24 @@ namespace POELadder
                                 AccountUpdated.Add(i);
                             }
                         }
+                    }
+
+                    LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
 
-                LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                if (LadderData.entries.Count < 2)
+                {
+                    playerDB.Clear();
+                }
+
+                //Sort the list:
+                playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
             }
 
-            if (LadderData.entries.Count < 2)
+            if (LadderData == null)
             {
-                playerDB.Clear();
+                MessageBox.Show("An error occoured while trying to retrieve the Race Ladder");
             }
-
-            //Sort the list:
-            playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
         }
 
         //Update the Race Timer with the Time Left before the End of the Race
