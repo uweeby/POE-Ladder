@@ -242,7 +242,10 @@ namespace POELadder
             LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
 
             //Sizes
-            LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            for (int i = 0; i < 11; i++)
+            {
+                LadderTable.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            }
 
             if (playerDB.Count < 2)
             {
@@ -317,7 +320,7 @@ namespace POELadder
                         }
                 }
 
-                LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                //LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
 
             if (LadderData.entries.Count < 2)
@@ -353,13 +356,22 @@ namespace POELadder
                 if (localTime < StartTime)
                 {
                     timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
-                    LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
-
-                //The current ladder has no ending (Perminate leagues)
-                else if (EndTime == DateTime.MinValue)
+                else
                 {
-                    timerLabel.Text = "00:00:00";
+                    if (localTime == StartTime)
+                    {
+                        playerDB.Clear();
+                        UpdateLadderTable();
+                    }
+                    //The current ladder has no ending (Perminate leagues)
+                    else
+                    {
+                        if (EndTime == DateTime.MinValue)
+                        {
+                            timerLabel.Text = "00:00:00";
+                        }
+                    }
                 }
             }
         }
