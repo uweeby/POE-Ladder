@@ -43,22 +43,6 @@ namespace POELadder
             DownloadSelectedLadder((int)displayAmount.Value);
         }
 
-        private void DownloadSelectedLadder(int LimitResults)
-        {
-            //Sets the URL to populate the table
-            String LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + LimitResults;
-            System.Console.WriteLine(" LimitResults : " + LimitResults);
-
-            if (classBox.Enabled == false)
-            {
-                classBox.Enabled = true;
-                searchBox.Enabled = true;
-            }
-
-            seasonPoints.Visible = true;
-            UpdateAll(LadderSingleURL);
-        }
-
         //Ladder-auto Refresh - 15 seconds
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -124,6 +108,21 @@ namespace POELadder
             UpdateLadderTable();
         }
 
+        private void DownloadSelectedLadder(int LimitResults)
+        {
+            //Sets the URL to populate the table
+            String LadderSingleURL = "http://api.pathofexile.com/ladders/" + ladderselectBox.Text.Replace(" ", "%20") + "?limit=" + LimitResults;
+
+            if (classBox.Enabled == false)
+            {
+                classBox.Enabled = true;
+                searchBox.Enabled = true;
+            }
+
+            seasonPoints.Visible = true;
+            UpdateAll(LadderSingleURL);
+        }
+
         //Update Table
         private void UpdateLadderTable()
         {
@@ -162,6 +161,7 @@ namespace POELadder
                 }
             }
 
+            //Account Name Sorting
             if (!searchBox.Text.Equals(""))
             {
                 for (int i = 0; i < PlayerList.Count; i++)
@@ -178,6 +178,7 @@ namespace POELadder
             LadderTable.DataSource = PlayerList;
 
             #region ClassColoring
+            //Color cells by Class
             for (int i = 0; i < PlayerList.Count; i++)
             {
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Marauder") && !LadderTable.Rows[i].Cells[4].Value.Equals(""))
@@ -241,7 +242,7 @@ namespace POELadder
             LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
             LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
 
-            //Sizes
+            //Auto Size Columns
             for (int i = 0; i < 11; i++)
             {
                 LadderTable.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
@@ -290,37 +291,35 @@ namespace POELadder
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                        //First setup. Not all players added
-                        if (playerDB.Count < LadderData.entries.Count)
+                    //First setup. Not all players added
+                    if (playerDB.Count < LadderData.entries.Count)
+                    {
+                        PlayerDB NewPlayer = new PlayerDB(
+                            LadderData.entries[i].account.name,
+                            LadderData.entries[i].character.name,
+                            LadderData.entries[i].character.@class);
+
+                        playerDB.Add(NewPlayer);
+                    }
+
+                    for (int j = 0; j < playerDB.Count; j++)
+                    {
+                        //Player already exist. Update with current information.
+                        if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                            LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
                         {
-                            PlayerDB NewPlayer = new PlayerDB(
-                                LadderData.entries[i].account.name,
-                                LadderData.entries[i].character.name,
-                                LadderData.entries[i].character.@class);
+                            playerDB[j].Update(
+                                LadderData.entries[i].online,
+                                LadderData.entries[i].rank,
+                                LadderData.entries[i].character.level,
+                                LadderData.entries[i].character.experience,
+                                DateTime.UtcNow,
+                                LeaderEXP);
 
-                            playerDB.Add(NewPlayer);
+                            AccountUpdated.Add(i);
                         }
-
-                        for (int j = 0; j < playerDB.Count; j++)
-                        {
-                            //Player already exist. Update with current information.
-                            if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
-                                LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
-                            {
-                                playerDB[j].Update(
-                                    LadderData.entries[i].online,
-                                    LadderData.entries[i].rank,
-                                    LadderData.entries[i].character.level,
-                                    LadderData.entries[i].character.experience,
-                                    DateTime.UtcNow,
-                                    LeaderEXP);
-
-                                AccountUpdated.Add(i);
-                            }
-                        }
+                    }
                 }
-
-                //LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
 
             if (LadderData.entries.Count < 2)
@@ -357,6 +356,7 @@ namespace POELadder
                 {
                     timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
                 }
+
                 else
                 {
                     if (localTime == StartTime)
@@ -364,6 +364,7 @@ namespace POELadder
                         playerDB.Clear();
                         UpdateLadderTable();
                     }
+
                     //The current ladder has no ending (Perminate leagues)
                     else
                     {
