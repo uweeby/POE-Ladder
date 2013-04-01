@@ -242,7 +242,10 @@ namespace POELadder
             LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
 
             //Sizes
-            LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            for (int i = 0; i < 11; i++)
+            {
+                LadderTable.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            }
 
             if (playerDB.Count < 2)
             {
@@ -256,28 +259,20 @@ namespace POELadder
         private void UpdateSeasonTable()
         {
             PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(Properties.Settings.Default.SeasonOneStandingsURL);
-            if (SeasonData != null)
-            {
-                var seaLadder = new SeasonTable[SeasonData.entries.Count];
+            var seaLadder = new SeasonTable[SeasonData.entries.Count];
 
-                for (int i = 0; i < SeasonData.entries.Count; i++)
+            for (int i = 0; i < SeasonData.entries.Count; i++)
+            {
+                seaLadder[i] = new SeasonTable
                 {
-                    seaLadder[i] = new SeasonTable
-                    {
-                        Rank = SeasonData.entries[i].rank,
-                        Name = SeasonData.entries[i].account.name,
-                        Points = SeasonData.entries[i].points
-                    };
+                    Rank = SeasonData.entries[i].rank,
+                    Name = SeasonData.entries[i].account.name,
+                    Points = SeasonData.entries[i].points
+                };
 
-                    seasonPoints.DataSource = seaLadder;
-                    seasonPoints.Columns[0].Width = 30;
-                    seasonPoints.Columns[1].Width = 80;
-                }
-            }
-
-            if (SeasonData == null)
-            {
-                MessageBox.Show("An error occoured while trying to retrieve the Season Ladder");
+                seasonPoints.DataSource = seaLadder;
+                seasonPoints.Columns[0].Width = 30;
+                seasonPoints.Columns[1].Width = 80;
             }
         }
 
@@ -286,17 +281,15 @@ namespace POELadder
         {
             PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
 
-            if (LadderData != null)
+            List<int> AccountUpdated = new List<int>();
+
+            if (LadderData.entries.Count > 1)
             {
-                List<int> AccountUpdated = new List<int>();
+                uint LeaderEXP = LadderData.entries[0].character.experience;
 
-                if (LadderData.entries.Count > 1)
+                //Add the Ladder JSON Data to the PlayerDB
+                for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                    uint LeaderEXP = LadderData.entries[0].character.experience;
-
-                    //Add the Ladder JSON Data to the PlayerDB
-                    for (int i = 0; i < LadderData.entries.Count; i++)
-                    {
                         //First setup. Not all players added
                         if (playerDB.Count < LadderData.entries.Count)
                         {
@@ -325,24 +318,18 @@ namespace POELadder
                                 AccountUpdated.Add(i);
                             }
                         }
-                    }
-
-                    LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 }
 
-                if (LadderData.entries.Count < 2)
-                {
-                    playerDB.Clear();
-                }
-
-                //Sort the list:
-                playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
+                //LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             }
 
-            if (LadderData == null)
+            if (LadderData.entries.Count < 2)
             {
-                MessageBox.Show("An error occoured while trying to retrieve the Race Ladder");
+                playerDB.Clear();
             }
+
+            //Sort the list:
+            playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
         }
 
         //Update the Race Timer with the Time Left before the End of the Race
@@ -369,13 +356,22 @@ namespace POELadder
                 if (localTime < StartTime)
                 {
                     timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
-                    LadderTable.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 }
-
-                //The current ladder has no ending (Perminate leagues)
-                else if (EndTime == DateTime.MinValue)
+                else
                 {
-                    timerLabel.Text = "00:00:00";
+                    if (localTime == StartTime)
+                    {
+                        playerDB.Clear();
+                        UpdateLadderTable();
+                    }
+                    //The current ladder has no ending (Perminate leagues)
+                    else
+                    {
+                        if (EndTime == DateTime.MinValue)
+                        {
+                            timerLabel.Text = "00:00:00";
+                        }
+                    }
                 }
             }
         }
