@@ -166,7 +166,8 @@ namespace POELadder
             //Account Name Sorting
             if (!searchBox.Text.Equals(""))
             {
-                for (int i = 0; i < PlayerList.Count; i++)
+                //Index at 1 to include the race leader
+                for (int i = 1; i < PlayerList.Count; i++)
                 {
                     if (!PlayerList[i].Account.Contains(searchBox.Text))
                     {
@@ -176,8 +177,17 @@ namespace POELadder
                 }
             }
 
+            //Save the cell position
+            int saveRow = 0;
+            if (LadderTable.Rows.Count > 0)
+                saveRow = LadderTable.FirstDisplayedCell.RowIndex;
+
             //Apply the ladder data to the Data Grid View
             LadderTable.DataSource = PlayerList;
+
+            //Reapply the cell position
+            if (saveRow != 0 && saveRow < LadderTable.Rows.Count)
+                LadderTable.FirstDisplayedScrollingRowIndex = saveRow;
 
             #region ClassColoring
             //Color cells by Class
@@ -436,94 +446,6 @@ namespace POELadder
                         }
                     }
                 }
-            }
-        }
-
-        private void UpdateByDB(String RaceURL)
-        {
-            //Initial setup. Download JSON
-            PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
-
-            List<String> NewAccountList = new List<String>();
-            List<int> AccountUpdated = new List<int>();
-
-            uint LeaderEXP = 0;
-
-            //JSON has valid Ladder Data
-            if (LadderData.entries.Count > 1)
-            {
-                LeaderEXP = LadderData.entries[0].character.experience;
-
-                //First setup. Not all players added
-                if (playerDB.Count < 2)
-                {
-                    for (int i = 0; i < LadderData.entries.Count; i++)
-                    {
-                        PlayerDB NewPlayer = new PlayerDB(
-                            LadderData.entries[i].account.name,
-                            LadderData.entries[i].character.name,
-                            LadderData.entries[i].character.@class);
-
-                        playerDB.Add(NewPlayer);
-
-                        System.Console.WriteLine("Player not found in DB. Adding: " + i);
-                    }
-                }
-
-                //Update all accounts
-                for (int i = 0; i < playerDB.Count; i++)
-                {
-                    for (int j = 0; j < LadderData.entries.Count; j++)
-                    {
-                        if(!AccountUpdated.Contains(j))
-                        {
-                            //Player not found in DB. Flag to add
-                            if (!LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
-                                !LadderData.entries[j].character.name.Equals(playerDB[i].GetCharacter()))
-                            {
-                                NewAccountList.Add(LadderData.entries[j].character.name);
-
-                                //System.Console.WriteLine("Player not found in DB. Flag to add: " + j);
-                            }
-
-                            //Player found in DB. Update data
-                            if (LadderData.entries[j].account.name.Equals(playerDB[i].GetAccount()) &&
-                                LadderData.entries[j].character.name.Equals(playerDB[i].GetCharacter()))
-                            {
-                                playerDB[j].Update(
-                                    LadderData.entries[i].online,
-                                    LadderData.entries[i].rank,
-                                    LadderData.entries[i].character.level,
-                                    LadderData.entries[i].character.experience,
-                                    DateTime.UtcNow,
-                                    LeaderEXP);
-
-                                AccountUpdated.Add(j);
-                            }
-                        }
-                    }
-
-                    //DB account was not listed in update. Remove from ladder.
-                    //if (!AccountUpdated)
-                    //{
-                    //    playerDB[i].SetFlagForRemoval(true);
-                    //}
-
-                    //AccountUpdated = false;
-                }
-
-                //Remove unlisted accounts
-                //Account is listed in the DB but not on the JSON
-                //for (int i = playerDB.Count; i > 0; i--)
-                //{
-                //    if (playerDB[i].GetFlagForRemoval())
-                //    {
-                //        playerDB.RemoveAt(i);
-                //    }
-                //}
-
-                //Resort list by rank
-                playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
             }
         }
     }

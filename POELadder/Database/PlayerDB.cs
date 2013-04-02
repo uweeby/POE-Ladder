@@ -167,22 +167,23 @@ namespace POELadder
         //Remove Extra data from lists. Only need to store the last 10 updates
         private void ShrinkCollections()
         {
-            if (UpdateTime.Count > 10)
+            int maxsize = 1000;
+            if (UpdateTime.Count > maxsize)
             {
                 UpdateTime.RemoveAt(UpdateTime.Count - 1);
             }
 
-            if (Rank.Count > 10)
+            if (Rank.Count > maxsize)
             {
                 Rank.RemoveAt(Rank.Count - 1);
             }
 
-            if (Level.Count > 10)
+            if (Level.Count > maxsize)
             {
                 Level.RemoveAt(Level.Count - 1);
             }
 
-            if (Experience.Count > 10)
+            if (Experience.Count > maxsize)
             {
                 Experience.RemoveAt(Experience.Count - 1);
             }
@@ -214,8 +215,6 @@ namespace POELadder
             {
                 this.RankChange = 0;
             }
-
-
         }
 
         //Calculating Experience per minute
@@ -240,6 +239,7 @@ namespace POELadder
         {
             return this.Online;
         }
+
         public String GetAccount()
         {
             return this.Account;
