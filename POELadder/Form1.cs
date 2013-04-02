@@ -14,6 +14,8 @@ namespace POELadder
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
+        DateTime LastUpdateCache = DateTime.UtcNow;
+
         public Form1()
         {
             InitializeComponent();
@@ -284,6 +286,56 @@ namespace POELadder
 
             List<int> AccountUpdated = new List<int>();
 
+            int deletedadd = 0;
+            int acccreated = 0;
+            int accupdated = 0;
+
+            #region Add
+            if (LadderData.entries.Count > 1)
+            {
+                uint LeaderEXP = LadderData.entries[0].character.experience;
+
+                bool matchfound = false;
+
+                for (int i = 0; i < LadderData.entries.Count; i++)
+                {
+                    for (int j = 0; j < playerDB.Count; j++)
+                    {
+                        //This account from the JSON was not found in the DB. Add to pending list.
+                        if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
+                            LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
+                        {
+                            matchfound = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!matchfound)
+                    {
+                        //add here?
+                        PlayerDB NewPlayer = new PlayerDB(
+                            LadderData.entries[i].account.name,
+                            LadderData.entries[i].character.name,
+                            LadderData.entries[i].character.@class);
+
+                        playerDB.Add(NewPlayer);
+
+                        acccreated++;
+
+                        System.Console.WriteLine("Added Account: " + LadderData.entries[i].account);
+                    }
+
+                    if (matchfound)
+                    {
+                        matchfound = false;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Update
+            //Update all accounts in the DB.
             if (LadderData.entries.Count > 1)
             {
                 uint LeaderEXP = LadderData.entries[0].character.experience;
@@ -291,17 +343,6 @@ namespace POELadder
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
-                    //First setup. Not all players added
-                    if (playerDB.Count < LadderData.entries.Count)
-                    {
-                        PlayerDB NewPlayer = new PlayerDB(
-                            LadderData.entries[i].account.name,
-                            LadderData.entries[i].character.name,
-                            LadderData.entries[i].character.@class);
-
-                        playerDB.Add(NewPlayer);
-                    }
-
                     for (int j = 0; j < playerDB.Count; j++)
                     {
                         //Player already exist. Update with current information.
@@ -316,16 +357,37 @@ namespace POELadder
                                 DateTime.UtcNow,
                                 LeaderEXP);
 
-                            AccountUpdated.Add(i);
+                            accupdated++;
                         }
                     }
                 }
-            }
 
-            if (LadderData.entries.Count < 2)
-            {
-                playerDB.Clear();
+                LastUpdateCache = DateTime.UtcNow;
             }
+            #endregion
+
+            #region Delete
+            //Remove accounts from the DB that are no longer in the JSON
+            for (int i = 0; i < playerDB.Count; i++)
+            {
+                //Account was not updated in the last 15 seconds.
+                if (playerDB[i].GetLastUpdateTime() < LastUpdateCache.AddSeconds(-0.9))
+                {
+                    System.Console.WriteLine("Deleted Account: " + playerDB[i].GetAccount());
+
+                    playerDB.RemoveAt(i);
+                    i--;
+                    deletedadd++;
+                }
+            }
+            #endregion
+
+            System.Console.WriteLine("Summary:");
+            System.Console.WriteLine("playerDB count: " + playerDB.Count);
+            System.Console.WriteLine("acccreated: " + acccreated);
+            System.Console.WriteLine("updated: " + accupdated);
+            System.Console.WriteLine("deleted accounts: " + deletedadd);
+            System.Console.WriteLine("============================");
 
             //Sort the list:
             playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();

@@ -18,15 +18,15 @@ namespace POELadder
         private int EXPThisUpdate;
         private int RankChange;
         private int EST_EXP_Minute;
-        public int TotalEXP;
-        public int expMIN;
+        private int TotalEXP;
+        private int expMIN;
 
-        public List<DateTime> UpdateTime = new List<DateTime>();
-        public List<ushort> Rank = new List<ushort>();
-        public List<byte> Level = new List<byte>();
-        public List<uint> Experience = new List<uint>();
+        private List<DateTime> UpdateTime = new List<DateTime>();
+        private List<ushort> Rank = new List<ushort>();
+        private List<byte> Level = new List<byte>();
+        private List<uint> Experience = new List<uint>();
 
-        public DateTime utcUpdate;
+        private DateTime utcUpdate;
 
         private bool FlagForRemoval;
 
@@ -303,6 +303,11 @@ namespace POELadder
         public void SetFlagForRemoval(bool FlagForRemoval)
         {
             this.FlagForRemoval = FlagForRemoval;
+        }
+
+        public DateTime GetLastUpdateTime()
+        {
+            return this.UpdateTime[0];
         }
     }
 }

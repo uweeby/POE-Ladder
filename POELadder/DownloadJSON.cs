@@ -62,6 +62,14 @@ namespace POELadder
             }
         }
 
+        //Currently selected Ladder
+        public static PathOfExileJSONLadderSingle ParseJSONFromFile(String JSON)
+        {
+            PathOfExileJSONLadderSingle POELadderSingle = new JavaScriptSerializer().Deserialize<PathOfExileJSONLadderSingle>(JSON);
+
+            return POELadderSingle;
+        }
+
         //Current season
         public static PathOfExileJSONLadderSeason ParseLadderSeason(String JSON)
         {
