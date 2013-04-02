@@ -232,7 +232,9 @@ namespace POELadder
                 if (gap > 2)expMIN = (TotalEXP / Experience.Count) * (60 / gap);
             }
 
-            this.EST_EXP_Minute = expMIN;
+            //this.EST_EXP_Minute = expMIN;
+            //Currently not working right. Commenting out.
+            this.EST_EXP_Minute = 0;
         }
 
         public bool GetOnlineStatus()
