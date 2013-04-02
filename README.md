@@ -7,7 +7,7 @@ Track Path of Exile Ladders with expanded race details in real time.
 
 Screenshot
 ----------
-[![](http://i.imgur.com/cbv23UE.png)](http://i.imgur.com/cbv23UE.png)
+[![](http://i.imgur.com/4ehM9CM.png)](http://i.imgur.com/4ehM9CM.png)
 
 Demo Link
 ---------
@@ -32,6 +32,6 @@ Goals -
 
           * [Maybe] grabbing data from exilestats such as race records(?)
           * Death tracking
-          * Forum link for race events (Maybe not necesarry, mainly to show the brackets for reward points)
-          * Log area to log events (Race start/finish) at a later date potentially server global messages.
+          * Additional race specific details tab- point brackets, records, description etc.
+          * Log area to log events (Race start/finish) and at a later date potentially server global messages.
           * [Maybe] Hard-coded list of people who are known to stream races (Nugi/Kripp/Rhox etc)
