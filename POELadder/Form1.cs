@@ -158,13 +158,13 @@ namespace POELadder
             if (!pointBox.Text.Equals("1 Week"))
             {
                 topPrizeBox.Text = "#1 player by experience       : 3 Reward Points\n" +
-                    "#1 player of each class        :Demigod's Triumph & 10 Reward Points\n" +
-                    "#2 player of each class        : 6 Reward Points\n" +
-                    "#3 player of each class        : 5 Reward Points\n" +
-                    "#4 player of each class        : 4 Reward Points\n" +
-                    "#5 player of each class        : 3 Reward Points\n" +
-                    "#6-10 player of each class   : 2 Reward Points\n" +
-                    "#11-20 player of each class : 1 Reward Point";
+                                   "#1 player of each class        :Demigod's Triumph & 10 Reward Points\n" +
+                                   "#2 player of each class        : 6 Reward Points\n" +
+                                   "#3 player of each class        : 5 Reward Points\n" +
+                                   "#4 player of each class        : 4 Reward Points\n" +
+                                   "#5 player of each class        : 3 Reward Points\n" +
+                                   "#6-10 player of each class   : 2 Reward Points\n" +
+                                   "#11-20 player of each class : 1 Reward Point";
 
                 questBox.Text = "Normal - Hillock              : 2 Reward Points\n" +
                                 "Normal - Medicine Chest: 2 Reward Points\n" +
