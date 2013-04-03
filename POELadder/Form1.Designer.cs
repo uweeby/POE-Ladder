@@ -55,13 +55,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.timerLabel = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.topPrizeBox = new System.Windows.Forms.RichTextBox();
-            this.levelBracket = new System.Windows.Forms.RichTextBox();
-            this.pointBox = new System.Windows.Forms.ComboBox();
-            this.questBox = new System.Windows.Forms.RichTextBox();
             this.clearBox = new System.Windows.Forms.RichTextBox();
+            this.questBox = new System.Windows.Forms.RichTextBox();
+            this.pointBox = new System.Windows.Forms.ComboBox();
+            this.levelBracket = new System.Windows.Forms.RichTextBox();
+            this.topPrizeBox = new System.Windows.Forms.RichTextBox();
+            this.timerLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -354,19 +354,6 @@
             this.tabPage3.Text = "Deaths";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // timerLabel
-            // 
-            this.timerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timerLabel.Location = new System.Drawing.Point(804, 14);
-            this.timerLabel.Name = "timerLabel";
-            this.timerLabel.Size = new System.Drawing.Size(268, 18);
-            this.timerLabel.TabIndex = 169;
-            this.timerLabel.Text = "00:00:00";
-            this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.clearBox);
@@ -381,21 +368,25 @@
             this.tabPage2.Text = "Race Information";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // topPrizeBox
+            // clearBox
             // 
-            this.topPrizeBox.Location = new System.Drawing.Point(4, 3);
-            this.topPrizeBox.Name = "topPrizeBox";
-            this.topPrizeBox.Size = new System.Drawing.Size(348, 114);
-            this.topPrizeBox.TabIndex = 0;
-            this.topPrizeBox.Text = "";
+            this.clearBox.Location = new System.Drawing.Point(827, 3);
+            this.clearBox.MaxLength = 2147;
+            this.clearBox.Name = "clearBox";
+            this.clearBox.ReadOnly = true;
+            this.clearBox.Size = new System.Drawing.Size(226, 114);
+            this.clearBox.TabIndex = 4;
+            this.clearBox.Text = "";
             // 
-            // levelBracket
+            // questBox
             // 
-            this.levelBracket.Location = new System.Drawing.Point(358, 27);
-            this.levelBracket.Name = "levelBracket";
-            this.levelBracket.Size = new System.Drawing.Size(229, 90);
-            this.levelBracket.TabIndex = 1;
-            this.levelBracket.Text = "";
+            this.questBox.Location = new System.Drawing.Point(593, 3);
+            this.questBox.MaxLength = 2147;
+            this.questBox.Name = "questBox";
+            this.questBox.ReadOnly = true;
+            this.questBox.Size = new System.Drawing.Size(228, 114);
+            this.questBox.TabIndex = 3;
+            this.questBox.Text = "";
             // 
             // pointBox
             // 
@@ -413,21 +404,38 @@
             this.pointBox.Text = "Select race type";
             this.pointBox.SelectedIndexChanged += new System.EventHandler(this.pointBox_SelectedIndexChanged);
             // 
-            // questBox
+            // levelBracket
             // 
-            this.questBox.Location = new System.Drawing.Point(593, 3);
-            this.questBox.Name = "questBox";
-            this.questBox.Size = new System.Drawing.Size(228, 114);
-            this.questBox.TabIndex = 3;
-            this.questBox.Text = "";
+            this.levelBracket.Location = new System.Drawing.Point(358, 27);
+            this.levelBracket.MaxLength = 2147;
+            this.levelBracket.Name = "levelBracket";
+            this.levelBracket.ReadOnly = true;
+            this.levelBracket.Size = new System.Drawing.Size(229, 90);
+            this.levelBracket.TabIndex = 1;
+            this.levelBracket.Text = "";
             // 
-            // clearBox
+            // topPrizeBox
             // 
-            this.clearBox.Location = new System.Drawing.Point(827, 3);
-            this.clearBox.Name = "clearBox";
-            this.clearBox.Size = new System.Drawing.Size(226, 114);
-            this.clearBox.TabIndex = 4;
-            this.clearBox.Text = "";
+            this.topPrizeBox.Location = new System.Drawing.Point(4, 3);
+            this.topPrizeBox.MaxLength = 2147;
+            this.topPrizeBox.Name = "topPrizeBox";
+            this.topPrizeBox.ReadOnly = true;
+            this.topPrizeBox.Size = new System.Drawing.Size(348, 114);
+            this.topPrizeBox.TabIndex = 0;
+            this.topPrizeBox.Text = "";
+            // 
+            // timerLabel
+            // 
+            this.timerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.timerLabel.Location = new System.Drawing.Point(804, 14);
+            this.timerLabel.Name = "timerLabel";
+            this.timerLabel.Size = new System.Drawing.Size(268, 18);
+            this.timerLabel.TabIndex = 169;
+            this.timerLabel.Text = "00:00:00";
+            this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Form1
             // 
