@@ -9,7 +9,7 @@ Note: .Net Framework 4.0 is required for this application to properly run, get i
 
 Screenshot
 ----------
-[![](http://i.imgur.com/4ehM9CM.png)](http://i.imgur.com/4ehM9CM.png)
+[![](http://i.imgur.com/He1hEEn.png)](http://i.imgur.com/He1hEEn.png)
 
 Demo Link
 ---------
@@ -28,6 +28,7 @@ Ministry@live.com.au
 Version 1.2
 -----------
 Changes -
+
          * Race Information tab: Point breakdown for each type of race
          * Efficient and effective Exp/Min
          * Table column widths adjusted
@@ -35,11 +36,14 @@ Changes -
 Version 1.1
 -----------
 Changes -
+
          * Initial public release, too many to mention!
          
          
-
+Additional
+----------
 Current Bugs -
+
           * No known bugs (Deaths table is intentionally blank for now)
 
 Current Goals -
