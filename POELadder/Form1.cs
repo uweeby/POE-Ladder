@@ -16,6 +16,8 @@ namespace POELadder
 
         DateTime LastUpdateCache = DateTime.UtcNow;
 
+        private int caseNo;
+
         public Form1()
         {
             InitializeComponent();
@@ -125,6 +127,113 @@ namespace POELadder
             UpdateAll(LadderSingleURL);
         }
 
+        #region RaceInformation
+        private void pointBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (pointBox.Text == "1 Hour")
+            {
+                caseNo = 0;
+            }
+            if (pointBox.Text == "2 Hour")
+            {
+                caseNo = 1;
+            }
+            if (pointBox.Text == "3 Hour")
+            {
+                caseNo = 2;
+            }
+            if (pointBox.Text == "4 Hour")
+            {
+                caseNo = 3;
+            }
+            if (pointBox.Text == "1 Week")
+            {
+                caseNo = 4;
+            }
+            PopulateInformation();
+        }
+
+        private void PopulateInformation()
+        {
+            if (!pointBox.Text.Equals("1 Week"))
+            {
+                topPrizeBox.Text = "#1 player by experience       : 3 Reward Points\n" +
+                    "#1 player of each class        :Demigod's Triumph & 10 Reward Points\n" +
+                    "#2 player of each class        : 6 Reward Points\n" +
+                    "#3 player of each class        : 5 Reward Points\n" +
+                    "#4 player of each class        : 4 Reward Points\n" +
+                    "#5 player of each class        : 3 Reward Points\n" +
+                    "#6-10 player of each class   : 2 Reward Points\n" +
+                    "#11-20 player of each class : 1 Reward Point";
+
+                questBox.Text = "Normal - Hillock              : 2 Reward Points\n" +
+                                "Normal - Medicine Chest: 2 Reward Points\n" +
+                                "Normal - Fairgraves        : 2 Reward Points\n" +
+                                "Normal - Deep Dweller   : 2 Reward Points\n" +
+                                "Cruel - Hillock                 : 2 Reward Points\n" +
+                                "Cruel - Medicine Chest   : 2 Reward Points\n" +
+                                "Cruel - Fairgraves           : 2 Reward Points\n" +
+                                "Cruel - Deep Dweller      : 2 Reward Points";
+
+                clearBox.Text = "Normal - Fetid Pool          : 2 Reward Points\n" +
+                                "Normal - Old Fields Cave : 2 Reward Points\n" +
+                                "Normal - Dread Thicket   : 2 Reward Points\n" +
+                                "Normal - Catacombs        : 2 Reward Points\n" +
+                                "Cruel - Fetid Pool             : 2 Reward Points\n" +
+                                "Cruel - Old Fields Cave    : 2 Reward Points\n" +
+                                "Cruel - Dread Thicket      : 2 Reward Points\n" +
+                                "Cruel - Catacombs           : 2 Reward Points";
+
+            }
+            else
+                if (pointBox.Text.Equals("1 Week") || ladderselectBox.Text.Contains("Week"))
+            {
+                topPrizeBox.Text = "#1 player              : 60 Reward Points\n" +
+                                   "#2 player              : 40 Reward Points\n" +
+                                   "#3 player              : 35 Reward Points\n" +
+                                   "#4 player              : 32 Reward Points\n" +
+                                   "#5 player              : 30 Reward Points\n" +
+                                   "#6 player              : 28 Reward Points\n" +
+                                   "#7 player              : 26 Reward Points\n" +
+                                   "#8 player              : 24 Reward Points\n" +
+                                   "#9 player              : 22 Reward Points\n" +
+                                   "#10 player            : 20 Reward Points\n" +
+                                   "#11-20 players     : 15 Reward Points\n" +
+                                   "#21-50 players     : 10 Reward Points\n" +
+                                   "#51-200 players   : 5 Reward Points\n" +
+                                   "#201-500 players : 2 Reward Points\n";
+                questBox.Text = "";
+                clearBox.Text = "";
+            }
+            switch(caseNo)
+            {
+                case 0:
+                    //1 hour
+                    levelBracket.Text = "Level 20      : 7 Reward Points\nLevel 17-19 : 6 Reward Points\nLevel 15-16 : 5 Reward Points\nLevel 13-14 : 4 Reward Points\nLevel 11-12 : 3 Reward Points\nLevel 8-10   : 1 Reward Point";
+                    break;
+                case 1:
+                    //2 hour
+                    levelBracket.Text = "Level 28      : 7 Reward Points\nLevel 26-27 : 6 Reward Points\nLevel 23-25 : 5 Reward Points\nLevel 21-22 : 4 Reward Points\nLevel 16-20 : 3 Reward Points\nLevel 10-15 : 1 Reward Point";
+                    break;
+                case 2:
+                    //3 hour
+                    levelBracket.Text = "Level 33      : 7 Reward Points\nLevel 30-32 : 6 Reward Points\nLevel 27-29 : 5 Reward Points\nLevel 24-26 : 4 Reward Points\nLevel 20-23 : 3 Reward Points\nLevel 11-19 : 1 Reward Point";
+                    break;
+                case 3:
+                    //4 hour
+                    levelBracket.Text = "Level 37      : 7 Reward Points\nLevel 34-36 : 6 Reward Points\nLevel 29-33 : 5 Reward Points\nLevel 26-28 : 4 Reward Points\nLevel 21-25 : 3 Reward Points\nLevel 12-20 : 1 Reward Point";
+                    break;
+                case 4:
+                    //One week
+                    levelBracket.Text = "Level 86      : 20 Reward Points\nLevel 85      : 18 Reward Points\nLevel 84      : 17 Reward Points\nLevel 83      : 16 Reward Points\nLevel 82      : 15 Reward Points\nLevel 80-81 : 14 Reward Points\nLevel 75-79 : 10 Reward Points\nLevel 70-74 :   8 Reward Points\nLevel 60-69 :   4 Reward Points";
+                    break;
+                default:
+                    levelBracket.Text = "";
+                    break;
+            }
+        }
+        #endregion
+
         //Update Table
         private void UpdateLadderTable()
         {
@@ -212,6 +321,19 @@ namespace POELadder
                 {
                     LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
                 }
+
+                if (!LadderTable.Rows[i].Cells[11].Value.Equals("0")) 
+                {
+                    if (playerDB[0].GetRankChange() > 0)
+                    {
+                        LadderTable.Rows[i].Cells[11].Style.ForeColor = Color.Green;
+                    }
+                    else
+                    if (playerDB[0].GetRankChange() < 0)
+                    {
+                        LadderTable.Rows[i].Cells[11].Style.ForeColor = Color.Red;
+                    }
+                }
             }
             #endregion
 
@@ -247,7 +369,16 @@ namespace POELadder
             //Auto Size Columns
             for (int i = 0; i < 11; i++)
             {
-                LadderTable.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                //LadderTable.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                LadderTable.Columns[0].Width = 45;
+                LadderTable.Columns[1].Width = 45;
+                LadderTable.Columns[2].Width = 105;
+                LadderTable.Columns[3].Width = 125;
+                LadderTable.Columns[4].Width = 90;
+                LadderTable.Columns[5].Width = 90;
+                LadderTable.Columns[6].Width = 90;
+                LadderTable.Columns[11].Width = 55;
+                //LadderTable.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             }
 
             if (playerDB.Count < 2)
@@ -291,10 +422,9 @@ namespace POELadder
             int accupdated = 0;
 
             #region Add
-            if (LadderData.entries.Count > 1)
+            if (LadderData.entries.Count > 1 && !LadderData.entries.Count.Equals(null))
             {
                 uint LeaderEXP = LadderData.entries[0].character.experience;
-
                 bool matchfound = false;
 
                 for (int i = 0; i < LadderData.entries.Count; i++)
@@ -526,5 +656,6 @@ namespace POELadder
                 playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
             }
         }
+
     }
 }

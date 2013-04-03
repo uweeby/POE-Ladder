@@ -45,6 +45,7 @@
             this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.resetButton = new System.Windows.Forms.Button();
             this.displayAmount = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.seasonPoints = new System.Windows.Forms.DataGridView();
@@ -55,7 +56,12 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.timerLabel = new System.Windows.Forms.Label();
-            this.resetButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.topPrizeBox = new System.Windows.Forms.RichTextBox();
+            this.levelBracket = new System.Windows.Forms.RichTextBox();
+            this.pointBox = new System.Windows.Forms.ComboBox();
+            this.questBox = new System.Windows.Forms.RichTextBox();
+            this.clearBox = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -63,6 +69,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // selectladderLabel
@@ -200,6 +207,16 @@
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(148, 89);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(75, 23);
+            this.resetButton.TabIndex = 7;
+            this.resetButton.Text = "Reset";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
             // displayAmount
             // 
             this.displayAmount.Location = new System.Drawing.Point(148, 63);
@@ -320,6 +337,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(10, 488);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -349,15 +367,67 @@
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // resetButton
+            // tabPage2
             // 
-            this.resetButton.Location = new System.Drawing.Point(148, 89);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(75, 23);
-            this.resetButton.TabIndex = 7;
-            this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            this.tabPage2.Controls.Add(this.clearBox);
+            this.tabPage2.Controls.Add(this.questBox);
+            this.tabPage2.Controls.Add(this.pointBox);
+            this.tabPage2.Controls.Add(this.levelBracket);
+            this.tabPage2.Controls.Add(this.topPrizeBox);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Size = new System.Drawing.Size(1058, 120);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "Race Information";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // topPrizeBox
+            // 
+            this.topPrizeBox.Location = new System.Drawing.Point(4, 3);
+            this.topPrizeBox.Name = "topPrizeBox";
+            this.topPrizeBox.Size = new System.Drawing.Size(348, 114);
+            this.topPrizeBox.TabIndex = 0;
+            this.topPrizeBox.Text = "";
+            // 
+            // levelBracket
+            // 
+            this.levelBracket.Location = new System.Drawing.Point(358, 27);
+            this.levelBracket.Name = "levelBracket";
+            this.levelBracket.Size = new System.Drawing.Size(229, 90);
+            this.levelBracket.TabIndex = 1;
+            this.levelBracket.Text = "";
+            // 
+            // pointBox
+            // 
+            this.pointBox.FormattingEnabled = true;
+            this.pointBox.Items.AddRange(new object[] {
+            "1 Hour",
+            "2 Hour",
+            "3 Hour",
+            "4 Hour",
+            "1 Week"});
+            this.pointBox.Location = new System.Drawing.Point(358, 3);
+            this.pointBox.Name = "pointBox";
+            this.pointBox.Size = new System.Drawing.Size(229, 21);
+            this.pointBox.TabIndex = 2;
+            this.pointBox.Text = "Select race type";
+            this.pointBox.SelectedIndexChanged += new System.EventHandler(this.pointBox_SelectedIndexChanged);
+            // 
+            // questBox
+            // 
+            this.questBox.Location = new System.Drawing.Point(593, 3);
+            this.questBox.Name = "questBox";
+            this.questBox.Size = new System.Drawing.Size(228, 114);
+            this.questBox.TabIndex = 3;
+            this.questBox.Text = "";
+            // 
+            // clearBox
+            // 
+            this.clearBox.Location = new System.Drawing.Point(827, 3);
+            this.clearBox.Name = "clearBox";
+            this.clearBox.Size = new System.Drawing.Size(226, 114);
+            this.clearBox.TabIndex = 4;
+            this.clearBox.Text = "";
             // 
             // Form1
             // 
@@ -387,6 +457,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,6 +486,12 @@
         private System.Windows.Forms.NumericUpDown displayAmount;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.RichTextBox topPrizeBox;
+        private System.Windows.Forms.ComboBox pointBox;
+        private System.Windows.Forms.RichTextBox levelBracket;
+        private System.Windows.Forms.RichTextBox clearBox;
+        private System.Windows.Forms.RichTextBox questBox;
 
     }
 }

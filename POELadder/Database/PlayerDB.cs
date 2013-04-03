@@ -17,9 +17,10 @@ namespace POELadder
         private uint EXPBehindLeader;
         private int EXPThisUpdate;
         private int RankChange;
-        private int EST_EXP_Minute;
-        private int TotalEXP;
-        private int expMIN;
+        private double EST_EXP_Minute;
+        private int expDifference;
+
+        TimeSpan timeGap;
 
         private List<DateTime> UpdateTime = new List<DateTime>();
         private List<ushort> Rank = new List<ushort>();
@@ -159,8 +160,6 @@ namespace POELadder
             UpdateEXPThisUpdate();
             UpdateRankChange(Rank);
             UpdateEXPMin();
-            
-            ShrinkCollections();
         }
 
 
@@ -191,10 +190,12 @@ namespace POELadder
         //Calculating the Experience gained this update
         private void UpdateEXPThisUpdate()
         {
-            if (Experience.Count > 1)
             {
-                this.EXPThisUpdate = (int)(Experience[0] - Experience[1]);
-            }
+                if (Experience.Count > 1)
+                {
+                    this.EXPThisUpdate = (int)(Experience[0] - Experience[1]);
+                }
+            }          
         }
 
         //Calculating the change in rank between two updates.
@@ -224,16 +225,35 @@ namespace POELadder
             //More than one update has happened
             if (Experience.Count > 1)
             {
-                for (int i = 1; i < Experience.Count - 1; i++)
+                if (Experience[0] > Experience[1])
                 {
-                    TotalEXP += (int)(Experience[i] - Experience[(i + 1)]);
+                    expDifference = (int)(Experience[0] - Experience[1]);
+                    timeGap = UpdateTime[0] - UpdateTime[1];
                 }
-
-                int gap = (int)(UpdateTime[0] - UpdateTime[1]).TotalSeconds;
-                if (gap > 2)expMIN = (TotalEXP / Experience.Count) * (60 / gap);
+                else
+                {
+                    for (int i = 0; i < UpdateTime.Count; i++)
+                    {
+                        if (UpdateTime[0].AddMinutes(-1) >= UpdateTime[i])
+                        {
+                            if (Experience[0] == Experience[i])
+                            {
+                                expDifference = 0;
+                                timeGap = UpdateTime[0] - UpdateTime[1];
+                            }
+                        }
+                    }
+                }
+                System.Console.WriteLine(" Math : " + expDifference + " / " + timeGap.TotalSeconds);
             }
-
-            this.EST_EXP_Minute = expMIN;
+            if (expDifference != 0)
+            {
+                this.EST_EXP_Minute = (int)(expDifference / timeGap.TotalSeconds) * 60;
+            }
+            else 
+            {
+                this.EST_EXP_Minute = 0;
+            }
         }
 
         public bool GetOnlineStatus()
@@ -290,7 +310,7 @@ namespace POELadder
             return this.EXPThisUpdate;
         }
 
-        public int GetEST_EXP_Minute()
+        public double GetEST_EXP_Minute()
         {
             return this.EST_EXP_Minute;
         }

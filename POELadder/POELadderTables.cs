@@ -14,7 +14,7 @@ namespace POELadder
         public uint EXPToNextLevel { get; set; }
         public uint EXPBehindLeader { get; set; }
         public int EXPThisUpdate { get; set; }
-        public int EST_EXP_Minute { get; set; }
+        public double EST_EXP_Minute { get; set; }
         public int RankChange { get; set; }
     }
 

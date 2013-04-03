@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace PoELadder
 {
@@ -35,8 +36,7 @@ namespace PoELadder
                 int POESecond = Int32.Parse(POEDate.Substring(17, 2));
 
                 //Combine to create the DateTime Object
-                DateTime result = new DateTime(POEYear, POEMonth, POEDay, POEHour, POEMinute, POESecond);
-
+                var result = DateTime.ParseExact(POEDate, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
                 return result;
 
             }
