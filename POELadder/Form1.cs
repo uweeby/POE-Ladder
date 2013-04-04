@@ -5,6 +5,7 @@ using PoELadder.JSON;
 using PoELadder;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 
 namespace POELadder
 {
@@ -28,7 +29,7 @@ namespace POELadder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            POELadderAll = DownloadJSON.ParseLadderAll(Properties.Settings.Default.SeasonEventListURL);
+            POELadderAll = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
 
             //Populate the Ladder Drop Down
             for (int i = 0; i < POELadderAll.Length; i++)
@@ -402,7 +403,7 @@ namespace POELadder
         //Season Ladder Table
         private void UpdateSeasonTable()
         {
-            PathOfExileJSONLadderSeason SeasonData = DownloadJSON.ParseLadderSeason(Properties.Settings.Default.SeasonOneStandingsURL);
+            PathOfExileJSONLadderSeason SeasonData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSeason>(Properties.Settings.Default.SeasonOneStandingsURL);
             var seaLadder = new SeasonTable[SeasonData.entries.Count];
 
             for (int i = 0; i < SeasonData.entries.Count; i++)
@@ -423,7 +424,7 @@ namespace POELadder
         //Update DB with current JSON data
         private void PopulatePlayerDB(String RaceURL)
         {
-            PathOfExileJSONLadderSingle LadderData = DownloadJSON.ParseLadderSingle(RaceURL);
+            PathOfExileJSONLadderSingle LadderData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSingle>(RaceURL);
 
             List<int> AccountUpdated = new List<int>();
 
@@ -536,9 +537,29 @@ namespace POELadder
         //Update the Race Timer with the Time Left before the End of the Race
         private void UpdateTimer(int LadderSelectIndex)
         {
+            DateTime StartTime, EndTime;
 
-            DateTime StartTime = Clock.FormatPOEDate(POELadderAll[LadderSelectIndex].startAt);
-            DateTime EndTime = Clock.FormatPOEDate(POELadderAll[LadderSelectIndex].endAt);
+            //Convert time from string to DateTime
+            if (!string.IsNullOrEmpty(POELadderAll[LadderSelectIndex].startAt))
+            {
+                StartTime = DateTime.ParseExact(POELadderAll[LadderSelectIndex].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
+            }
+
+            else
+            {
+                StartTime = DateTime.MinValue;
+            }
+
+            //Convert time from string to DateTime
+            if (!string.IsNullOrEmpty(POELadderAll[LadderSelectIndex].endAt))
+            {
+                EndTime = DateTime.ParseExact(POELadderAll[LadderSelectIndex].endAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
+            }
+
+            else
+            {
+                EndTime = DateTime.MinValue;
+            }
 
             DateTime localTime = DateTime.UtcNow;
             DateTime localDate = DateTime.Today;

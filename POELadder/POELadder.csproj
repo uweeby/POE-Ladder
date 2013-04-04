@@ -77,14 +77,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clock.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="DownloadJSON.cs" />
+    <Compile Include="JSONHandler.cs" />
     <Compile Include="JSON\PathOfExileJSONLadderAll.cs" />
     <Compile Include="JSON\PathOfExileJSONLadderSeason.cs" />
     <Compile Include="JSON\PathOfExileJSONLadderSingle.cs" />
