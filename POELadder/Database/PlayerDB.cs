@@ -14,7 +14,6 @@ namespace POELadder
 
         //Custom Data:
         private uint EXPToNextLevel;
-        private uint EXPBehindLeader;
         private int EXPThisUpdate;
         private int RankChange;
         private double EST_EXP_Minute;
@@ -144,11 +143,10 @@ namespace POELadder
             this.Class = Class;
         }
 
-        public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time, uint LeaderEXP)
+        public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time)
         {
             this.Online = Online;
             this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
-            this.EXPBehindLeader = LeaderEXP - Experience;
 
             //Insert the most recent update to index 0 of each list
             this.UpdateTime.Insert(0, Time);
@@ -292,11 +290,6 @@ namespace POELadder
         public uint GetEXPToNextLevel()
         {
             return this.EXPToNextLevel;
-        }
-
-        public uint GetEXPBehindLeader()
-        {
-            return this.EXPBehindLeader;
         }
 
         public int GetRankChange()

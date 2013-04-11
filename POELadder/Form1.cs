@@ -2,8 +2,6 @@
 using System.Windows.Forms;
 using System.Linq;
 using PoELadder.JSON;
-using PoELadder;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -15,13 +13,12 @@ namespace POELadder
     {
         PathOfExileJSONLadderAll[] POELadderAll, raceData;
 
-        public List<PlayerDB> playerDB = new List<PlayerDB>();
-
-        public List <string> URLs = new List<string>();
+        List<PlayerDB> playerDB = new List<PlayerDB>();
+        List<string> URLs = new List<string>();
 
         DateTime LastUpdateCache = DateTime.UtcNow;
 
-        private int caseNo;
+        int caseNo;
 
         public Form1()
         {
@@ -69,6 +66,14 @@ namespace POELadder
             if (autoRefreshCheckBox.Checked == true && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
+            }
+        }
+
+        private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex > 2)
+            {
+                System.Diagnostics.Process.Start(URLs[e.RowIndex]);
             }
         }
 
@@ -172,14 +177,6 @@ namespace POELadder
 
 
                     #endregion
-        }
-
-        private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-                if (e.RowIndex > -1 && e.ColumnIndex > 2)
-                {
-                    System.Diagnostics.Process.Start(URLs[e.RowIndex]);
-                }         
         }
 
         private void DownloadSelectedLadder(int LimitResults)
@@ -322,14 +319,13 @@ namespace POELadder
                 Entry.EXP = playerDB[i].GetExperience();
                 Entry.EXPToNextLevel = playerDB[i].GetEXPToNextLevel();
                 Entry.EXPThisUpdate = playerDB[i].GetEXPThisUpdate();
-                Entry.EXPBehindLeader = playerDB[i].GetEXPBehindLeader();            
+                Entry.EXPBehindLeader = 0; //Placeholder. Code to assign after sorting
                 Entry.EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute();
                 Entry.RankChange = playerDB[i].GetRankChange();
 
                 PlayerList.Add(Entry);
             }
             
-
             //Class Sorting
             if (!classBox.Text.Equals("All"))
             {
@@ -358,13 +354,11 @@ namespace POELadder
             }
 
             //Calculate Leader/Behind EXP
-            if (!classBox.Text.Equals("All")) 
-            {
             uint LeaderEXP = PlayerList[0].EXP;
+
             for (int i = 1; i < PlayerList.Count; i++)
-                {
-                    PlayerList[i].EXPBehindLeader = LeaderEXP - PlayerList[i].EXP;
-                }
+            {
+                PlayerList[i].EXPBehindLeader = LeaderEXP - PlayerList[i].EXP;
             }
 
             //Save the cell position
@@ -508,14 +502,9 @@ namespace POELadder
 
             List<int> AccountUpdated = new List<int>();
 
-            int deletedadd = 0;
-            int acccreated = 0;
-            int accupdated = 0;
-
             #region Add
             if (LadderData.entries.Count > 1 && !LadderData.entries.Count.Equals(null))
             {
-                uint LeaderEXP = LadderData.entries[0].character.experience;
                 bool matchfound = false;
 
                 for (int i = 0; i < LadderData.entries.Count; i++)
@@ -539,10 +528,6 @@ namespace POELadder
                             LadderData.entries[i].character.@class);
 
                         playerDB.Add(NewPlayer);
-
-                        acccreated++;
-
-                        System.Console.WriteLine("Added Account: " + LadderData.entries[i].account);
                     }
 
                     if (matchfound)
@@ -557,13 +542,7 @@ namespace POELadder
             #region Update
             //Update all accounts in the DB.
             if (LadderData.entries.Count > 1)
-            {
-                uint LeaderEXP = LadderData.entries[0].character.experience;
-                if (!classBox.Text.Equals("All"))
-                {
-                    LeaderEXP = LadderData.entries[0].character.experience;
-                }
-                
+            {                
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
@@ -578,10 +557,7 @@ namespace POELadder
                                 LadderData.entries[i].rank,
                                 LadderData.entries[i].character.level,
                                 LadderData.entries[i].character.experience,
-                                DateTime.UtcNow,
-                                LeaderEXP);
-
-                            accupdated++;
+                                DateTime.UtcNow);
                         }
                     }
                 }
@@ -597,21 +573,11 @@ namespace POELadder
                 //Account was not updated in the last 15 seconds.
                 if (playerDB[i].GetLastUpdateTime() < LastUpdateCache.AddSeconds(-0.9))
                 {
-                    System.Console.WriteLine("Deleted Account: " + playerDB[i].GetAccount());
-
                     playerDB.RemoveAt(i);
                     i--;
-                    deletedadd++;
                 }
             }
             #endregion
-
-            //System.Console.WriteLine("Summary:");
-            //System.Console.WriteLine("playerDB count: " + playerDB.Count);
-            //System.Console.WriteLine("acccreated: " + acccreated);
-            //System.Console.WriteLine("updated: " + accupdated);
-            //System.Console.WriteLine("deleted accounts: " + deletedadd);
-            //System.Console.WriteLine("============================");
 
             //Sort the list:
             playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
@@ -684,6 +650,5 @@ namespace POELadder
                 }
             }
         }
-
     }
 }
