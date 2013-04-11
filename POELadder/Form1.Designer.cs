@@ -34,6 +34,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.selectladderLabel = new System.Windows.Forms.Label();
             this.ladderselectBox = new System.Windows.Forms.ComboBox();
@@ -62,6 +64,7 @@
             this.levelBracket = new System.Windows.Forms.RichTextBox();
             this.topPrizeBox = new System.Windows.Forms.RichTextBox();
             this.timerLabel = new System.Windows.Forms.Label();
+            this.upcomingRaces = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -70,6 +73,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upcomingRaces)).BeginInit();
             this.SuspendLayout();
             // 
             // selectladderLabel
@@ -430,12 +434,44 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.timerLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timerLabel.Location = new System.Drawing.Point(804, 14);
+            this.timerLabel.Location = new System.Drawing.Point(812, 15);
             this.timerLabel.Name = "timerLabel";
             this.timerLabel.Size = new System.Drawing.Size(268, 18);
             this.timerLabel.TabIndex = 169;
             this.timerLabel.Text = "00:00:00";
             this.timerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // upcomingRaces
+            // 
+            this.upcomingRaces.AllowUserToAddRows = false;
+            this.upcomingRaces.AllowUserToDeleteRows = false;
+            this.upcomingRaces.AllowUserToResizeColumns = false;
+            this.upcomingRaces.AllowUserToResizeRows = false;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.upcomingRaces.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            this.upcomingRaces.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.upcomingRaces.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.upcomingRaces.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.upcomingRaces.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.upcomingRaces.DefaultCellStyle = dataGridViewCellStyle7;
+            this.upcomingRaces.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
+            this.upcomingRaces.GridColor = System.Drawing.SystemColors.Control;
+            this.upcomingRaces.Location = new System.Drawing.Point(10, 39);
+            this.upcomingRaces.MultiSelect = false;
+            this.upcomingRaces.Name = "upcomingRaces";
+            this.upcomingRaces.ReadOnly = true;
+            this.upcomingRaces.RowHeadersVisible = false;
+            this.upcomingRaces.Size = new System.Drawing.Size(1063, 443);
+            this.upcomingRaces.TabIndex = 170;
             // 
             // Form1
             // 
@@ -445,6 +481,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1092, 646);
+            this.Controls.Add(this.upcomingRaces);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.refreshButton);
@@ -466,6 +503,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.upcomingRaces)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -500,6 +538,7 @@
         private System.Windows.Forms.RichTextBox levelBracket;
         private System.Windows.Forms.RichTextBox clearBox;
         private System.Windows.Forms.RichTextBox questBox;
+        public System.Windows.Forms.DataGridView upcomingRaces;
 
     }
 }

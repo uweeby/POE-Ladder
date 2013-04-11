@@ -88,6 +88,7 @@
     <Compile Include="JSON\PathOfExileJSONLadderSeason.cs" />
     <Compile Include="JSON\PathOfExileJSONLadderSingle.cs" />
     <Compile Include="Database\PlayerDB.cs" />
+    <Compile Include="JSON\PathOfExileJSONLeagues.cs" />
     <Compile Include="POELadderTables.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -104,6 +105,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
     <None Include="POELadder_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

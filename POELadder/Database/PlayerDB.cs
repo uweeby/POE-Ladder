@@ -243,7 +243,6 @@ namespace POELadder
                         }
                     }
                 }
-                System.Console.WriteLine(" Math : " + expDifference + " / " + timeGap.TotalSeconds);
             }
             if (expDifference != 0)
             {

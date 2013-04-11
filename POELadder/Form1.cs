@@ -3,17 +3,21 @@ using System.Windows.Forms;
 using System.Linq;
 using PoELadder.JSON;
 using PoELadder;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+
 
 namespace POELadder
 {
     public partial class Form1 : Form
     {
-        PathOfExileJSONLadderAll[] POELadderAll;
+        PathOfExileJSONLadderAll[] POELadderAll, raceData;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
+
+        public List <string> URLs = new List<string>();
 
         DateTime LastUpdateCache = DateTime.UtcNow;
 
@@ -32,26 +36,37 @@ namespace POELadder
             POELadderAll = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
 
             //Populate the Ladder Drop Down
+            ladderselectBox.Items.Add("Upcoming Races");
             for (int i = 0; i < POELadderAll.Length; i++)
             {
                 ladderselectBox.Items.Add(POELadderAll[i].id);
             }
-
             timer2.Enabled = true;
             UpdateSeasonTable();
+
+            PopulateRaces();
+            ladderselectBox.Text = "Upcoming Races";
         }
 
         //A new Ladder has been Selected from the Select Box.
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            playerDB.Clear();
-            DownloadSelectedLadder((int)displayAmount.Value);
+            if (!ladderselectBox.SelectedItem.Equals("Upcoming Races"))
+            {
+                upcomingRaces.Visible = false;
+                playerDB.Clear();
+                DownloadSelectedLadder((int)displayAmount.Value);
+            }
+            else
+            {
+                upcomingRaces.Visible = true;
+            }
         }
 
         //Ladder-auto Refresh - 15 seconds
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (autoRefreshCheckBox.Checked == true)
+            if (autoRefreshCheckBox.Checked == true && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
@@ -60,16 +75,16 @@ namespace POELadder
         //Counter timer - 1 second intervals
         private void timer2_Tick(object sender, EventArgs e)
         {
-            if (ladderselectBox.SelectedItem != null)
+            if (ladderselectBox.SelectedItem != null && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
-                UpdateTimer(ladderselectBox.SelectedIndex);
+                UpdateTimer((ladderselectBox.SelectedIndex - 1));
             }
         }
 
         //Hyperlink manual refresh
         private void refreshButton_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (ladderselectBox.SelectedItem != null)
+            if (ladderselectBox.SelectedItem != null && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
@@ -111,6 +126,60 @@ namespace POELadder
         {
             PopulatePlayerDB(RaceURL);
             UpdateLadderTable();
+        }
+
+        private void PopulateRaces()
+        {
+            raceData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
+            DataGridViewLinkColumn links = new DataGridViewLinkColumn();
+            var leagueData = new UpcomingRaces[raceData.Length];
+            for (int i = 0; i < raceData.Length; i++)
+            {
+                DateTime StartTime = DateTime.ParseExact(raceData[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
+                string startAt = StartTime.ToLocalTime().ToString("hh:mm:ss tt - dd/MM/yy");
+                leagueData[i] = new UpcomingRaces
+                {
+                    ID = raceData[i].id,
+                    Description = raceData[i].description,
+                    StartAt = startAt,
+                };
+                upcomingRaces.DataSource = leagueData;
+                URLs.Insert(i, raceData[i].url);
+            }
+                    links.Text = "URL";
+                    links.UseColumnTextForLinkValue = true;
+                    links.ActiveLinkColor = Color.White;
+                    links.VisitedLinkColor = Color.Blue;
+                    links.LinkBehavior = LinkBehavior.SystemDefault;
+                    upcomingRaces.CellContentClick += new DataGridViewCellEventHandler(upcomingRaces_CellContentClick);
+
+                    upcomingRaces.Columns.Insert(3, links);
+                    upcomingRaces.Columns.RemoveAt(4);
+
+                    #region Table Formatting
+                    upcomingRaces.Columns[0].Width = 230;
+                    upcomingRaces.Columns[1].Width = 475;
+                    upcomingRaces.Columns[2].Width = 188;
+                    upcomingRaces.Columns[3].Width = 150;
+
+                    upcomingRaces.Columns[0].HeaderText = "Race Title";
+                    upcomingRaces.Columns[1].HeaderText = "Description";
+                    upcomingRaces.Columns[2].HeaderText = "Start time/date";
+                    upcomingRaces.Columns[3].HeaderText = "Forum event page";
+
+                    upcomingRaces.Rows[0].Cells[2].Value = "";
+                    upcomingRaces.Rows[1].Cells[2].Value = "";
+
+
+                    #endregion
+        }
+
+        private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+                if (e.RowIndex > -1 && e.ColumnIndex > 2)
+                {
+                    System.Diagnostics.Process.Start(URLs[e.RowIndex]);
+                }         
         }
 
         private void DownloadSelectedLadder(int LimitResults)
@@ -252,13 +321,14 @@ namespace POELadder
                 Entry.Level = playerDB[i].GetLevel();
                 Entry.EXP = playerDB[i].GetExperience();
                 Entry.EXPToNextLevel = playerDB[i].GetEXPToNextLevel();
-                Entry.EXPBehindLeader = playerDB[i].GetEXPBehindLeader();
                 Entry.EXPThisUpdate = playerDB[i].GetEXPThisUpdate();
+                Entry.EXPBehindLeader = playerDB[i].GetEXPBehindLeader();            
                 Entry.EST_EXP_Minute = playerDB[i].GetEST_EXP_Minute();
                 Entry.RankChange = playerDB[i].GetRankChange();
 
                 PlayerList.Add(Entry);
             }
+            
 
             //Class Sorting
             if (!classBox.Text.Equals("All"))
@@ -272,7 +342,7 @@ namespace POELadder
                     }
                 }
             }
-
+                   
             //Account Name Sorting
             if (!searchBox.Text.Equals(""))
             {
@@ -284,6 +354,16 @@ namespace POELadder
                         PlayerList.RemoveAt(i);
                         i--;
                     }
+                }
+            }
+
+            //Calculate Leader/Behind EXP
+            if (!classBox.Text.Equals("All")) 
+            {
+            uint LeaderEXP = PlayerList[0].EXP;
+            for (int i = 1; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].EXPBehindLeader = LeaderEXP - PlayerList[i].EXP;
                 }
             }
 
@@ -375,7 +455,7 @@ namespace POELadder
             LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
             LadderTable.Columns[9].ToolTipText = "Experience gained this update";
             LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
-            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
+            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";          
 
             //Auto Size Columns
             for (int i = 0; i < 11; i++)
@@ -453,7 +533,6 @@ namespace POELadder
                     
                     if (!matchfound)
                     {
-                        //add here?
                         PlayerDB NewPlayer = new PlayerDB(
                             LadderData.entries[i].account.name,
                             LadderData.entries[i].character.name,
@@ -480,7 +559,11 @@ namespace POELadder
             if (LadderData.entries.Count > 1)
             {
                 uint LeaderEXP = LadderData.entries[0].character.experience;
-
+                if (!classBox.Text.Equals("All"))
+                {
+                    LeaderEXP = LadderData.entries[0].character.experience;
+                }
+                
                 //Add the Ladder JSON Data to the PlayerDB
                 for (int i = 0; i < LadderData.entries.Count; i++)
                 {
@@ -523,12 +606,12 @@ namespace POELadder
             }
             #endregion
 
-            System.Console.WriteLine("Summary:");
-            System.Console.WriteLine("playerDB count: " + playerDB.Count);
-            System.Console.WriteLine("acccreated: " + acccreated);
-            System.Console.WriteLine("updated: " + accupdated);
-            System.Console.WriteLine("deleted accounts: " + deletedadd);
-            System.Console.WriteLine("============================");
+            //System.Console.WriteLine("Summary:");
+            //System.Console.WriteLine("playerDB count: " + playerDB.Count);
+            //System.Console.WriteLine("acccreated: " + acccreated);
+            //System.Console.WriteLine("updated: " + accupdated);
+            //System.Console.WriteLine("deleted accounts: " + deletedadd);
+            //System.Console.WriteLine("============================");
 
             //Sort the list:
             playerDB = playerDB.OrderBy(q => q.GetRank()).ToList();
@@ -577,6 +660,8 @@ namespace POELadder
                 //The race has not started
                 if (localTime < StartTime)
                 {
+                    DateTime raceDate = StartTime.ToLocalTime();
+                    toolTip1.SetToolTip(timerLabel, raceDate.ToString());
                     timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
                 }
 
