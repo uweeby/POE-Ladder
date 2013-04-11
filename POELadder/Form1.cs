@@ -77,6 +77,14 @@ namespace POELadder
             }
         }
 
+        void upcoming_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.ColumnIndex == 3)
+            {
+                e.ToolTipText = string.Format("Click to view official forum event page.", e.RowIndex, e.ColumnIndex);
+            }
+        }
+
         //Counter timer - 1 second intervals
         private void timer2_Tick(object sender, EventArgs e)
         {
@@ -151,12 +159,13 @@ namespace POELadder
                 upcomingRaces.DataSource = leagueData;
                 URLs.Insert(i, raceData[i].url);
             }
-                    links.Text = "URL";
+                    links.Text = "Link";
                     links.UseColumnTextForLinkValue = true;
                     links.ActiveLinkColor = Color.White;
                     links.VisitedLinkColor = Color.Blue;
                     links.LinkBehavior = LinkBehavior.SystemDefault;
                     upcomingRaces.CellContentClick += new DataGridViewCellEventHandler(upcomingRaces_CellContentClick);
+                    upcomingRaces.CellToolTipTextNeeded += new DataGridViewCellToolTipTextNeededEventHandler(upcoming_CellToolTipTextNeeded);
 
                     upcomingRaces.Columns.Insert(3, links);
                     upcomingRaces.Columns.RemoveAt(4);
@@ -343,7 +352,7 @@ namespace POELadder
             if (!searchBox.Text.Equals(""))
             {
                 //Index at 1 to include the race leader
-                for (int i = 1; i < PlayerList.Count; i++)
+                for (int i = 0; i < PlayerList.Count; i++)
                 {
                     if (!PlayerList[i].Account.Contains(searchBox.Text))
                     {
@@ -354,11 +363,14 @@ namespace POELadder
             }
 
             //Calculate Leader/Behind EXP
-            uint LeaderEXP = PlayerList[0].EXP;
-
-            for (int i = 1; i < PlayerList.Count; i++)
+            if (LadderTable.DataSource != null && searchBox.Text.Equals("") && classBox.Text.Equals("All"))
             {
-                PlayerList[i].EXPBehindLeader = LeaderEXP - PlayerList[i].EXP;
+                uint LeaderEXP = PlayerList[0].EXP;
+
+                for (int i = 1; i < PlayerList.Count; i++)
+                {
+                    PlayerList[i].EXPBehindLeader = LeaderEXP - PlayerList[i].EXP;
+                }
             }
 
             //Save the cell position
@@ -404,7 +416,7 @@ namespace POELadder
 
                 if (LadderTable.Rows[i].Cells[4].Value.Equals("Duelist"))
                 {
-                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Orange;
+                    LadderTable.Rows[i].Cells[4].Style.BackColor = Color.Violet;
                 }
 
                 if (!LadderTable.Rows[i].Cells[11].Value.Equals("0")) 
@@ -449,7 +461,9 @@ namespace POELadder
             LadderTable.Columns[8].ToolTipText = "Experience behind the leader";
             LadderTable.Columns[9].ToolTipText = "Experience gained this update";
             LadderTable.Columns[10].ToolTipText = "Estimation of experience gained per minute";
-            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";          
+            LadderTable.Columns[11].ToolTipText = "Change in rank since the last update";
+
+            LadderTable.Columns[0].ReadOnly = true;
 
             //Auto Size Columns
             for (int i = 0; i < 11; i++)

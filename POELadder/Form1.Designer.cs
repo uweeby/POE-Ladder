@@ -65,6 +65,7 @@
             this.topPrizeBox = new System.Windows.Forms.RichTextBox();
             this.timerLabel = new System.Windows.Forms.Label();
             this.upcomingRaces = new System.Windows.Forms.DataGridView();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -166,7 +167,7 @@
             this.DeathTable.DefaultCellStyle = dataGridViewCellStyle4;
             this.DeathTable.Location = new System.Drawing.Point(0, 3);
             this.DeathTable.Name = "DeathTable";
-            this.DeathTable.Size = new System.Drawing.Size(1073, 115);
+            this.DeathTable.Size = new System.Drawing.Size(1055, 115);
             this.DeathTable.TabIndex = 150;
             // 
             // timer1
@@ -350,6 +351,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.label3);
             this.tabPage3.Controls.Add(this.DeathTable);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
@@ -374,6 +376,7 @@
             // 
             // clearBox
             // 
+            this.clearBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.clearBox.Location = new System.Drawing.Point(827, 3);
             this.clearBox.MaxLength = 2147;
             this.clearBox.Name = "clearBox";
@@ -384,6 +387,7 @@
             // 
             // questBox
             // 
+            this.questBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.questBox.Location = new System.Drawing.Point(593, 3);
             this.questBox.MaxLength = 2147;
             this.questBox.Name = "questBox";
@@ -410,6 +414,7 @@
             // 
             // levelBracket
             // 
+            this.levelBracket.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.levelBracket.Location = new System.Drawing.Point(358, 27);
             this.levelBracket.MaxLength = 2147;
             this.levelBracket.Name = "levelBracket";
@@ -420,6 +425,7 @@
             // 
             // topPrizeBox
             // 
+            this.topPrizeBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.topPrizeBox.Location = new System.Drawing.Point(4, 3);
             this.topPrizeBox.MaxLength = 2147;
             this.topPrizeBox.Name = "topPrizeBox";
@@ -473,6 +479,16 @@
             this.upcomingRaces.Size = new System.Drawing.Size(1063, 443);
             this.upcomingRaces.TabIndex = 170;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(14, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.TabIndex = 151;
+            this.label3.Text = "Not functioning yet";
+            // 
             // Form1
             // 
             this.AcceptButton = this.refreshButton;
@@ -502,6 +518,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.seasonPoints)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.upcomingRaces)).EndInit();
             this.ResumeLayout(false);
@@ -539,6 +556,7 @@
         private System.Windows.Forms.RichTextBox clearBox;
         private System.Windows.Forms.RichTextBox questBox;
         public System.Windows.Forms.DataGridView upcomingRaces;
+        private System.Windows.Forms.Label label3;
 
     }
 }
