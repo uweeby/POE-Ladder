@@ -6,7 +6,7 @@
       <Value Profile="(Default)">http://api.pathofexile.com/leagues</Value>
     </Setting>
     <Setting Name="SeasonOneStandingsURL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://www.pathofexile.com/api/season-ladders?&amp;limit=50&amp;id=Race+Season+One</Value>
+      <Value Profile="(Default)">http://www.pathofexile.com/api/season-ladders?&amp;limit=50&amp;id=Race+Season+Two</Value>
     </Setting>
     <Setting Name="Leagues" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://api.pathofexile.com/leagues</Value>

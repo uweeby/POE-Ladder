@@ -47,6 +47,10 @@
             this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lockButton = new System.Windows.Forms.Button();
+            this.trackBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.trackButton = new System.Windows.Forms.Button();
             this.resetButton = new System.Windows.Forms.Button();
             this.displayAmount = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
@@ -57,6 +61,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.clearBox = new System.Windows.Forms.RichTextBox();
             this.questBox = new System.Windows.Forms.RichTextBox();
@@ -65,7 +70,9 @@
             this.topPrizeBox = new System.Windows.Forms.RichTextBox();
             this.timerLabel = new System.Windows.Forms.Label();
             this.upcomingRaces = new System.Windows.Forms.DataGridView();
-            this.label3 = new System.Windows.Forms.Label();
+            this.returnButton = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.currentURL = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -195,6 +202,12 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.currentURL);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.lockButton);
+            this.tabPage1.Controls.Add(this.trackBox);
+            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.trackButton);
             this.tabPage1.Controls.Add(this.resetButton);
             this.tabPage1.Controls.Add(this.displayAmount);
             this.tabPage1.Controls.Add(this.label2);
@@ -211,6 +224,42 @@
             this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // lockButton
+            // 
+            this.lockButton.Location = new System.Drawing.Point(444, 36);
+            this.lockButton.Name = "lockButton";
+            this.lockButton.Size = new System.Drawing.Size(19, 23);
+            this.lockButton.TabIndex = 11;
+            this.lockButton.Text = "L";
+            this.lockButton.UseVisualStyleBackColor = true;
+            // 
+            // trackBox
+            // 
+            this.trackBox.Location = new System.Drawing.Point(363, 10);
+            this.trackBox.Name = "trackBox";
+            this.trackBox.Size = new System.Drawing.Size(100, 20);
+            this.trackBox.TabIndex = 10;
+            this.trackBox.TextChanged += new System.EventHandler(this.trackBox_TextChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(277, 13);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(80, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Track account:";
+            // 
+            // trackButton
+            // 
+            this.trackButton.Location = new System.Drawing.Point(363, 36);
+            this.trackButton.Name = "trackButton";
+            this.trackButton.Size = new System.Drawing.Size(75, 23);
+            this.trackButton.TabIndex = 8;
+            this.trackButton.Text = "Track";
+            this.trackButton.UseVisualStyleBackColor = true;
+            this.trackButton.Click += new System.EventHandler(this.trackButton_Click);
             // 
             // resetButton
             // 
@@ -360,6 +409,16 @@
             this.tabPage3.Text = "Deaths";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(14, 12);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(96, 13);
+            this.label3.TabIndex = 151;
+            this.label3.Text = "Not functioning yet";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.clearBox);
@@ -471,7 +530,7 @@
             this.upcomingRaces.DefaultCellStyle = dataGridViewCellStyle7;
             this.upcomingRaces.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
             this.upcomingRaces.GridColor = System.Drawing.SystemColors.Control;
-            this.upcomingRaces.Location = new System.Drawing.Point(10, 39);
+            this.upcomingRaces.Location = new System.Drawing.Point(12, 39);
             this.upcomingRaces.MultiSelect = false;
             this.upcomingRaces.Name = "upcomingRaces";
             this.upcomingRaces.ReadOnly = true;
@@ -479,15 +538,37 @@
             this.upcomingRaces.Size = new System.Drawing.Size(1063, 443);
             this.upcomingRaces.TabIndex = 170;
             // 
-            // label3
+            // returnButton
             // 
-            this.label3.AutoSize = true;
-            this.label3.BackColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(14, 12);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 13);
-            this.label3.TabIndex = 151;
-            this.label3.Text = "Not functioning yet";
+            this.returnButton.Location = new System.Drawing.Point(579, 9);
+            this.returnButton.Name = "returnButton";
+            this.returnButton.Size = new System.Drawing.Size(103, 25);
+            this.returnButton.TabIndex = 171;
+            this.returnButton.Text = "Back to overview";
+            this.returnButton.UseVisualStyleBackColor = true;
+            this.returnButton.Visible = false;
+            this.returnButton.Click += new System.EventHandler(this.returnButton_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 89);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Current Race:";
+            // 
+            // currentURL
+            // 
+            this.currentURL.AutoSize = true;
+            this.currentURL.Enabled = false;
+            this.currentURL.Location = new System.Drawing.Point(76, 89);
+            this.currentURL.Name = "currentURL";
+            this.currentURL.Size = new System.Drawing.Size(30, 13);
+            this.currentURL.TabIndex = 13;
+            this.currentURL.TabStop = true;
+            this.currentURL.Text = "Here";
+            this.currentURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // Form1
             // 
@@ -497,6 +578,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1092, 646);
+            this.Controls.Add(this.returnButton);
             this.Controls.Add(this.upcomingRaces);
             this.Controls.Add(this.timerLabel);
             this.Controls.Add(this.tabControl1);
@@ -529,7 +611,6 @@
         #endregion
 
         internal System.Windows.Forms.Label selectladderLabel;
-        internal System.Windows.Forms.ComboBox ladderselectBox;
         private System.Windows.Forms.CheckBox autoRefreshCheckBox;
         public System.Windows.Forms.DataGridView LadderTable;
         private System.Windows.Forms.DataGridView DeathTable;
@@ -557,6 +638,14 @@
         private System.Windows.Forms.RichTextBox questBox;
         public System.Windows.Forms.DataGridView upcomingRaces;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button trackButton;
+        public System.Windows.Forms.ComboBox ladderselectBox;
+        private System.Windows.Forms.Button lockButton;
+        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.TextBox trackBox;
+        private System.Windows.Forms.Button returnButton;
+        private System.Windows.Forms.LinkLabel currentURL;
+        private System.Windows.Forms.Label label6;
 
     }
 }
