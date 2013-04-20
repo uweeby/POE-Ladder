@@ -13,6 +13,8 @@ Screenshot
 
 Demo Link
 ---------
+1.3 - https://www.dropbox.com/s/nzsygnr26qtaxv4/POELadder%201.3.zip
+
 1.2 - https://www.dropbox.com/s/g7xpgq5143dqk6l/POELadder%201.2.zip
 
 1.1 - https://dl.dropbox.com/u/31365922/POELadder%201.1.zip
@@ -26,6 +28,14 @@ Bugs/Suggestions:
 uweenukr@gmail.com, 
 Ministry@live.com.au
 
+Version 1.3
+-----------
+Changes -
+
+         * Upcoming races table added: displays all upcoming races with their description, start time/date and official page link.
+         * JSON rewrite and cleanup
+         * Overall cleanup and bug fixes
+	 * Filting by class now shows the exp behind the top selected class instead of top overall
 
 Version 1.2
 -----------
