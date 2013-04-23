@@ -46,7 +46,7 @@ namespace POELadder
             }
             playerTable.DataSource = Player;
             // }
-
+            Console.WriteLine("Count: " + Player);
         }
 
         public void rURL(string raceURL)
