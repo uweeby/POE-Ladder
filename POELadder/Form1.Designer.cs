@@ -42,11 +42,13 @@
             this.autoRefreshCheckBox = new System.Windows.Forms.CheckBox();
             this.LadderTable = new System.Windows.Forms.DataGridView();
             this.DeathTable = new System.Windows.Forms.DataGridView();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.fifteenSecondTimer = new System.Windows.Forms.Timer(this.components);
+            this.oneSecondTimer = new System.Windows.Forms.Timer(this.components);
             this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.currentURL = new System.Windows.Forms.LinkLabel();
+            this.label6 = new System.Windows.Forms.Label();
             this.lockButton = new System.Windows.Forms.Button();
             this.trackBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -71,8 +73,8 @@
             this.timerLabel = new System.Windows.Forms.Label();
             this.upcomingRaces = new System.Windows.Forms.DataGridView();
             this.returnButton = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
-            this.currentURL = new System.Windows.Forms.LinkLabel();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.oneMinuteTimer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -177,16 +179,16 @@
             this.DeathTable.Size = new System.Drawing.Size(1055, 115);
             this.DeathTable.TabIndex = 150;
             // 
-            // timer1
+            // fifteenSecondTimer
             // 
-            this.timer1.Interval = 15000;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.fifteenSecondTimer.Interval = 15000;
+            this.fifteenSecondTimer.Tick += new System.EventHandler(this.fifteenSecondTimer_Tick);
             // 
-            // timer2
+            // oneSecondTimer
             // 
-            this.timer2.Enabled = true;
-            this.timer2.Interval = 1000;
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.oneSecondTimer.Enabled = true;
+            this.oneSecondTimer.Interval = 1000;
+            this.oneSecondTimer.Tick += new System.EventHandler(this.oneSecondTimer_Tick);
             // 
             // refreshButton
             // 
@@ -224,6 +226,27 @@
             this.tabPage1.Text = "Details";
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // currentURL
+            // 
+            this.currentURL.AutoSize = true;
+            this.currentURL.Enabled = false;
+            this.currentURL.Location = new System.Drawing.Point(76, 89);
+            this.currentURL.Name = "currentURL";
+            this.currentURL.Size = new System.Drawing.Size(30, 13);
+            this.currentURL.TabIndex = 13;
+            this.currentURL.TabStop = true;
+            this.currentURL.Text = "Here";
+            this.currentURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 89);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 12;
+            this.label6.Text = "Current Race:";
             // 
             // lockButton
             // 
@@ -549,26 +572,17 @@
             this.returnButton.Visible = false;
             this.returnButton.Click += new System.EventHandler(this.returnButton_Click);
             // 
-            // label6
+            // notifyIcon1
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 89);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(73, 13);
-            this.label6.TabIndex = 12;
-            this.label6.Text = "Current Race:";
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "POE L&L";
+            this.notifyIcon1.Visible = true;
             // 
-            // currentURL
+            // oneMinuteTimer
             // 
-            this.currentURL.AutoSize = true;
-            this.currentURL.Enabled = false;
-            this.currentURL.Location = new System.Drawing.Point(76, 89);
-            this.currentURL.Name = "currentURL";
-            this.currentURL.Size = new System.Drawing.Size(30, 13);
-            this.currentURL.TabIndex = 13;
-            this.currentURL.TabStop = true;
-            this.currentURL.Text = "Here";
-            this.currentURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.oneMinuteTimer.Enabled = true;
+            this.oneMinuteTimer.Interval = 60000;
+            this.oneMinuteTimer.Tick += new System.EventHandler(this.oneMinuteTimer_Tick);
             // 
             // Form1
             // 
@@ -614,8 +628,8 @@
         private System.Windows.Forms.CheckBox autoRefreshCheckBox;
         public System.Windows.Forms.DataGridView LadderTable;
         private System.Windows.Forms.DataGridView DeathTable;
-        private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer fifteenSecondTimer;
+        private System.Windows.Forms.Timer oneSecondTimer;
         private System.Windows.Forms.LinkLabel refreshButton;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabControl tabControl1;
@@ -646,6 +660,8 @@
         private System.Windows.Forms.Button returnButton;
         private System.Windows.Forms.LinkLabel currentURL;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Timer oneMinuteTimer;
 
     }
 }

@@ -43,7 +43,7 @@ namespace POELadder
             {
                 ladderselectBox.Items.Add(t.id);
             }
-            timer2.Enabled = true;
+            oneSecondTimer.Enabled = true;
             UpdateSeasonTable();
 
             PopulateRaces();
@@ -68,16 +68,6 @@ namespace POELadder
                 currentURL.Enabled = false;
                 returnButton.Visible = false;
                 upcomingRaces.Visible = true;
-            }
-            
-        }
-
-        //Ladder-auto Refresh - 15 seconds
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            if (autoRefreshCheckBox.Checked && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
-            {
-                DownloadSelectedLadder((int)displayAmount.Value);
             }
         }
         
@@ -121,12 +111,36 @@ namespace POELadder
         }
 
         //Counter timer - 1 second intervals
-        private void timer2_Tick(object sender, EventArgs e)
+        private void oneSecondTimer_Tick(object sender, EventArgs e)
         {
             if (ladderselectBox.SelectedItem != null && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
                 UpdateTimer((ladderselectBox.SelectedIndex - 1));
             }
+        }
+
+        //Ladder-auto Refresh - 15 seconds
+        private void fifteenSecondTimer_Tick(object sender, EventArgs e)
+        {
+            if (autoRefreshCheckBox.Checked && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
+            {
+                DownloadSelectedLadder((int)displayAmount.Value);
+            }
+        }
+
+        //Toast Timer - 60 seconds
+        private void oneMinuteTimer_Tick(object sender, EventArgs e)
+        {
+            System.Console.WriteLine("1min timer tick");
+
+            //Start at 1 to skip Upcoming Events Page
+            for (int i = 1; i < POELadderAll.Length - 1; i++)
+            {
+                RaceNotificationToast(POELadderAll[i].id, POELadderAll[i].startAt, 5000);
+            }
+
+            //RaceNotificationToast("test1", "2013-04-24T00:00:00Z", 5000);
+            //RaceNotificationToast("test2", "2013-04-23T23:00:00Z", 5000);
         }
 
         //Hyperlink manual refresh
@@ -146,7 +160,7 @@ namespace POELadder
         //Enable or disable the auto refresh timer on checkbox change
         private void autoRefreshCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            timer1.Enabled = autoRefreshCheckBox.Checked;
+            fifteenSecondTimer.Enabled = autoRefreshCheckBox.Checked;
         }
 
         private void searchBox_TextChanged(object sender, EventArgs e)
@@ -718,5 +732,52 @@ namespace POELadder
             }
         }
 
+        private void RaceNotificationToast(string tipText, string raceTime, int duration)
+        {
+            //Convert time from string to DateTime
+            if (!string.IsNullOrEmpty(raceTime))
+            {
+                DateTime raceStartTime = DateTime.ParseExact(raceTime, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
+                raceStartTime = raceStartTime.ToLocalTime();
+
+                DateTime hourBeforeStartTime = raceStartTime.AddHours(-1);
+                DateTime fifteenMinutesBeforeStartTime = raceStartTime.AddMinutes(-15);
+                DateTime currentLocalTime = DateTime.Now.ToLocalTime();
+
+                String beforeRace = (raceStartTime - currentLocalTime).ToString();
+
+                //The race has not started
+                if (currentLocalTime < raceStartTime)
+                {
+                    //The race will happen in less than an hour
+                    if (currentLocalTime > hourBeforeStartTime && currentLocalTime < hourBeforeStartTime.AddMinutes(1))
+                    {
+                        System.Console.WriteLine("Match Found");
+
+                        string formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+
+                        notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+
+                        notifyIcon1.ShowBalloonTip(duration);
+                    }
+
+                    //Fifteen minutes before race.
+                    if (currentLocalTime > fifteenMinutesBeforeStartTime && currentLocalTime < fifteenMinutesBeforeStartTime.AddMinutes(1))
+                    {
+                        System.Console.WriteLine("Match Found");
+
+                        string formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+
+                        notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+
+                        notifyIcon1.ShowBalloonTip(duration);
+                    }
+                }
+            }
+        }
     }
 }
