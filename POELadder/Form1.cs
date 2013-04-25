@@ -5,6 +5,7 @@ using PoELadder.JSON;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using Notifications;
 
 namespace POELadder
 {
@@ -13,7 +14,7 @@ namespace POELadder
         PathOfExileJSONLadderAll[] POELadderAll, raceData;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
-
+        List<ScheduledToastNotification> raceNotificationList;
         readonly List<string> URLs = new List<string>();
 
         public string selectedLadderURL, trackAccount;
@@ -48,6 +49,8 @@ namespace POELadder
             PopulateRaces();
             ladderselectBox.Text = "Upcoming Races";
 
+            //Populate Notification List
+            raceNotificationList = CreateNotificationSchedule(POELadderAll);
         }
 
 
@@ -126,21 +129,9 @@ namespace POELadder
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
-        }
 
-        //Toast Timer - 60 seconds
-        private void oneMinuteTimer_Tick(object sender, EventArgs e)
-        {
-            System.Console.WriteLine("1min timer tick");
-
-            //Start at 1 to skip Upcoming Events Page
-            for (int i = 1; i < POELadderAll.Length - 1; i++)
-            {
-                RaceNotificationToast(POELadderAll[i].id, POELadderAll[i].startAt, 5000);
-            }
-
-            //RaceNotificationToast("test1", "2013-04-24T00:00:00Z", 5000);
-            //RaceNotificationToast("test2", "2013-04-23T23:00:00Z", 5000);
+            //Check for upcoming Race Notifications
+            raceNotificationList = NotificationManager(raceNotificationList);
         }
 
         //Hyperlink manual refresh
@@ -190,6 +181,18 @@ namespace POELadder
         private void trackBox_TextChanged(object sender, EventArgs e)
         {
             trackAccount = trackBox.Text;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(URLs[(ladderselectBox.SelectedIndex - 1)]);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no forum page for this event yet.");
+            }
         }
         #endregion
 
@@ -720,60 +723,92 @@ namespace POELadder
             }
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+
+
+        private List<ScheduledToastNotification> CreateNotificationSchedule(PathOfExileJSONLadderAll[] ladderList)
         {
-            try
+            List<ScheduledToastNotification> toastList = new List<ScheduledToastNotification>();
+
+            //Iterate over the list of races
+            for (int i = 1; i < ladderList.Length - 1; i++)
             {
-                System.Diagnostics.Process.Start(URLs[(ladderselectBox.SelectedIndex - 1)]);
+                string RaceName = ladderList[i].id;
+                DateTime StartTime = DateTime.ParseExact(ladderList[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture).ToLocalTime();
+                
+                toastList.Add(new ScheduledToastNotification(RaceName, StartTime));
             }
-            catch (Exception)
-            {
-                MessageBox.Show("There is no forum page for this event yet.");
-            }
+
+
+            //Test
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+            notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+            notifyIcon1.BalloonTipText = "TEST";
+
+            return toastList;
         }
 
-        private void RaceNotificationToast(string tipText, string raceTime, int duration)
+        private List<ScheduledToastNotification> NotificationManager(List<ScheduledToastNotification> notificationList)
         {
-            //Convert time from string to DateTime
-            if (!string.IsNullOrEmpty(raceTime))
+            System.Console.WriteLine("NotificationManager()");
+
+            //Iterate over items
+            for (int i = 0; i < notificationList.Count; i++)
             {
-                //DateTime raceStartTime = DateTime.ParseExact(raceTime, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture).ToLocalTime();
-                //raceStartTime = raceStartTime.ToLocalTime();
+                bool notify = false;
 
-                //DateTime fifteenMinutesBeforeStartTime = raceStartTime.AddMinutes(-15);
-                //DateTime currentLocalTime = DateTime.Now.ToLocalTime();
+                //Race has already started
+                if (notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
+                {
+                    //No notificiation needs to be sent. Remove
+                    notificationList.RemoveAt(i);
+                    i--;
+                    continue;
+                }
 
-                //String beforeRace = (raceStartTime - currentLocalTime).ToString();
+                //Race is within an hour/15 minutes
+                if (notificationList[i].GetDeliveryTime().AddHours(-1) <= DateTime.Now.ToLocalTime() && notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
+                {
+                    if(!notificationList[i].GetHourNotification())
+                    {
+                        notify = true;
+                        notificationList[i].SetHourNotification(false);
+                    }
+                }
 
-                ////The race has not started
-                //if (currentLocalTime < raceStartTime)
-                //{
-                //    //The race will happen in an hour
-                //    if (currentLocalTime > raceStartTime.AddHours(-1))
-                //    {
+                if (notificationList[i].GetDeliveryTime().AddMinutes(-15) <= DateTime.Now.ToLocalTime() && notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
+                {
+                    if (!notificationList[i].GetFifteenMinuteNotification())
+                    {
+                        notify = true;
+                        notificationList[i].SetHourNotification(false);
+                        notificationList[i].SetFifteenMinuteNotification(false);
+                    }
+                }
 
-                //        var formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+                //Create Notification
+                if (notify)
+                {
+                    notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+                    notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                    notifyIcon1.BalloonTipText =
+                        notificationList[i].GetContent() +
+                        Environment.NewLine +
+                        notificationList[i].GetDeliveryTime();
 
-                //        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
-                //        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                //        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
-                //        notifyIcon1.ShowBalloonTip(duration);
+                    notifyIcon1.ShowBalloonTip(5000);
 
-                //    }
+                    notify = false;
+                }
 
-                //    //Fifteen minutes before race.
-                //    if (currentLocalTime > fifteenMinutesBeforeStartTime && currentLocalTime < fifteenMinutesBeforeStartTime.AddMinutes(1))
-                //    {
-
-                //        var formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
-
-                //        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
-                //        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                //        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
-                //        notifyIcon1.ShowBalloonTip(duration);
-
-                //    }                   
+                //All notification have been sent
+                if (notificationList[i].GetFifteenMinuteNotification())
+                {
+                    notificationList.RemoveAt(i);
+                    i--;
+                }
             }
+
+            return notificationList;
         }
     }
 }
