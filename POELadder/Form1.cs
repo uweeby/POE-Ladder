@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 
-
 namespace POELadder
 {
     public partial class Form1 : Form
@@ -48,6 +47,7 @@ namespace POELadder
 
             PopulateRaces();
             ladderselectBox.Text = "Upcoming Races";
+
         }
 
 
@@ -682,7 +682,7 @@ namespace POELadder
 
             DateTime localTime = DateTime.UtcNow;
             String beforeRace = (StartTime - localTime).ToString();
-            String duringRace = (EndTime - localTime).ToString();
+            String duringRace = (EndTime - localTime).ToString();           
 
             //If the race has started but has not ended. Currently running.
             if (localTime > StartTime && localTime < EndTime)
@@ -737,46 +737,42 @@ namespace POELadder
             //Convert time from string to DateTime
             if (!string.IsNullOrEmpty(raceTime))
             {
-                DateTime raceStartTime = DateTime.ParseExact(raceTime, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
-                raceStartTime = raceStartTime.ToLocalTime();
+                //DateTime raceStartTime = DateTime.ParseExact(raceTime, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture).ToLocalTime();
+                //raceStartTime = raceStartTime.ToLocalTime();
 
-                DateTime hourBeforeStartTime = raceStartTime.AddHours(-1);
-                DateTime fifteenMinutesBeforeStartTime = raceStartTime.AddMinutes(-15);
-                DateTime currentLocalTime = DateTime.Now.ToLocalTime();
+                //DateTime fifteenMinutesBeforeStartTime = raceStartTime.AddMinutes(-15);
+                //DateTime currentLocalTime = DateTime.Now.ToLocalTime();
 
-                String beforeRace = (raceStartTime - currentLocalTime).ToString();
+                //String beforeRace = (raceStartTime - currentLocalTime).ToString();
 
-                //The race has not started
-                if (currentLocalTime < raceStartTime)
-                {
-                    //The race will happen in less than an hour
-                    if (currentLocalTime > hourBeforeStartTime && currentLocalTime < hourBeforeStartTime.AddMinutes(1))
-                    {
-                        System.Console.WriteLine("Match Found");
+                ////The race has not started
+                //if (currentLocalTime < raceStartTime)
+                //{
+                //    //The race will happen in an hour
+                //    if (currentLocalTime > raceStartTime.AddHours(-1))
+                //    {
 
-                        string formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+                //        var formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
 
-                        notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+                //        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+                //        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                //        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+                //        notifyIcon1.ShowBalloonTip(duration);
 
-                        notifyIcon1.ShowBalloonTip(duration);
-                    }
+                //    }
 
-                    //Fifteen minutes before race.
-                    if (currentLocalTime > fifteenMinutesBeforeStartTime && currentLocalTime < fifteenMinutesBeforeStartTime.AddMinutes(1))
-                    {
-                        System.Console.WriteLine("Match Found");
+                //    //Fifteen minutes before race.
+                //    if (currentLocalTime > fifteenMinutesBeforeStartTime && currentLocalTime < fifteenMinutesBeforeStartTime.AddMinutes(1))
+                //    {
 
-                        string formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+                //        var formatedTimeBeforerace = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
 
-                        notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+                //        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+                //        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                //        notifyIcon1.BalloonTipText = tipText + Environment.NewLine + formatedTimeBeforerace;
+                //        notifyIcon1.ShowBalloonTip(duration);
 
-                        notifyIcon1.ShowBalloonTip(duration);
-                    }
-                }
+                //    }                   
             }
         }
     }
