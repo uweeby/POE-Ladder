@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Linq;
+using Microsoft.Win32;
 using PoELadder.JSON;
 using System.Collections.Generic;
 using System.Drawing;
@@ -51,6 +52,17 @@ namespace POELadder
 
             //Populate Notification List
             raceNotificationList = CreateNotificationSchedule(POELadderAll);
+           
+            toTrayCheck.Checked = Properties.Settings.Default.MinimizeToTray;
+            launchWithWindows.Checked = Properties.Settings.Default.LaunchWithWindows;
+            toastCheckBox.Checked = Properties.Settings.Default.EnableToasts;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Properties.Settings.Default.MinimizeToTray = toTrayCheck.Checked;
+            Properties.Settings.Default.LaunchWithWindows = launchWithWindows.Checked;
+            Properties.Settings.Default.EnableToasts = toastCheckBox.Checked;
         }
 
 
@@ -194,6 +206,78 @@ namespace POELadder
                 MessageBox.Show("There is no forum page for this event yet.");
             }
         }
+
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (toTrayCheck.Checked)
+            {
+                if (FormWindowState.Minimized == WindowState)
+                {
+                    ShowInTaskbar = false;
+                    notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                    notifyIcon1.BalloonTipText = "Click here to maximize.";
+                    notifyIcon1.BalloonTipTitle = "Minimized to tray";
+                    notifyIcon1.Text = "Path of Exile Ladder";
+                    notifyIcon1.ShowBalloonTip(500);
+                }
+            }
+        }
+
+        private void notifyIcon1_Click(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip1.Show(MousePosition);
+            }
+            else
+                if (e.Button == MouseButtons.Left)
+                {
+                    WindowState = FormWindowState.Normal;
+                    ShowInTaskbar = true;
+                    Show();
+                }
+        }
+
+        private void contextMenuStrip1_MouseLeave(object sender, EventArgs e)
+        {
+                contextMenuStrip1.Hide();            
+        }
+
+
+        private void Item_Click(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == maximizeItem)
+            {
+                WindowState = FormWindowState.Normal;
+                ShowInTaskbar = true;
+                Show();
+            }
+
+            if (e.ClickedItem == exitItem)
+            {
+                Dispose();
+            }
+        }
+
+
+        private void launchWithWindows_CheckedChanged(object sender, EventArgs e)
+        {
+            RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            if (registryKey != null)
+            {
+                if (launchWithWindows.Checked)
+                {
+                    registryKey.SetValue("POELadder", Application.ExecutablePath);
+                }
+                else
+                {
+                    registryKey.DeleteValue("POELadder");
+                }
+            }
+        }
+
+       
         #endregion
 
         //Custom Methods:
@@ -750,65 +834,69 @@ namespace POELadder
         private List<ScheduledToastNotification> NotificationManager(List<ScheduledToastNotification> notificationList)
         {
             System.Console.WriteLine("NotificationManager()");
-
-            //Iterate over items
-            for (int i = 0; i < notificationList.Count; i++)
+            if (toastCheckBox.Checked.Equals(true))
             {
-                bool notify = false;
-
-                //Race has already started
-                if (notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
+                //Iterate over items
+                for (int i = 0; i < notificationList.Count; i++)
                 {
-                    //No notificiation needs to be sent. Remove
-                    notificationList.RemoveAt(i);
-                    i--;
-                    continue;
-                }
+                    bool notify = false;
 
-                //Race is within an hour/15 minutes
-                if (notificationList[i].GetDeliveryTime().AddHours(-1) <= DateTime.Now.ToLocalTime() && notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
-                {
-                    if(!notificationList[i].GetHourNotification())
+                    //Race has already started
+                    if (notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
                     {
-                        notify = true;
-                        notificationList[i].SetHourNotification(false);
+                        //No notificiation needs to be sent. Remove
+                        notificationList.RemoveAt(i);
+                        i--;
+                        continue;
                     }
-                }
 
-                if (notificationList[i].GetDeliveryTime().AddMinutes(-15) <= DateTime.Now.ToLocalTime() && notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
-                {
-                    if (!notificationList[i].GetFifteenMinuteNotification())
+                    //Race is within an hour/15 minutes
+                    if (notificationList[i].GetDeliveryTime().AddHours(-1) <= DateTime.Now.ToLocalTime() &&
+                        notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
                     {
-                        notify = true;
-                        notificationList[i].SetHourNotification(false);
-                        notificationList[i].SetFifteenMinuteNotification(false);
+                        if (!notificationList[i].GetHourNotification())
+                        {
+                            notify = true;
+                            notificationList[i].SetHourNotification(false);
+                        }
                     }
-                }
 
-                //Create Notification
-                if (notify)
-                {
-                    notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
-                    notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                    notifyIcon1.BalloonTipText =
-                        notificationList[i].GetContent() +
-                        Environment.NewLine +
-                        notificationList[i].GetDeliveryTime();
+                    if (notificationList[i].GetDeliveryTime().AddMinutes(-15) <= DateTime.Now.ToLocalTime() &&
+                        notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
+                    {
+                        if (!notificationList[i].GetFifteenMinuteNotification())
+                        {
+                            notify = true;
+                            notificationList[i].SetHourNotification(false);
+                            notificationList[i].SetFifteenMinuteNotification(false);
+                        }
+                    }
 
-                    notifyIcon1.ShowBalloonTip(5000);
+                    //Create Notification
+                    if (notify)
+                    {
+                        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                        notifyIcon1.BalloonTipText =
+                            notificationList[i].GetContent() +
+                            Environment.NewLine +
+                            notificationList[i].GetDeliveryTime();
 
-                    notify = false;
-                }
+                        notifyIcon1.ShowBalloonTip(5000);
 
-                //All notification have been sent
-                if (notificationList[i].GetFifteenMinuteNotification())
-                {
-                    notificationList.RemoveAt(i);
-                    i--;
+                        notify = false;
+                    }
+
+                    //All notification have been sent
+                    if (notificationList[i].GetFifteenMinuteNotification())
+                    {
+                        notificationList.RemoveAt(i);
+                        i--;
+                    }
                 }
             }
-
             return notificationList;
+            
         }
     }
 }
