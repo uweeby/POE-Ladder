@@ -146,7 +146,14 @@ namespace POELadder
         public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time)
         {
             this.Online = Online;
-            this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
+            if (Level < 100)
+            {
+                this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
+            }
+            else
+            {
+                EXPToNextLevel = 0;
+            }
 
             //Insert the most recent update to index 0 of each list
             this.UpdateTime.Insert(0, Time);

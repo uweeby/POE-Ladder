@@ -530,6 +530,8 @@ namespace POELadder
             if (saveRow != 0 && saveRow < LadderTable.Rows.Count)
                 LadderTable.FirstDisplayedScrollingRowIndex = saveRow;
 
+
+
             #region ClassColoring
             //Color cells by Class
             for (int i = 0; i < PlayerList.Count; i++)
@@ -575,6 +577,23 @@ namespace POELadder
                     {
                         LadderTable.Rows[i].Cells[11].Style.ForeColor = Color.Red;
                     }
+                }
+
+                if (LadderTable.Rows[i].Cells[2].Value.Equals(trackBox.Text))
+                {
+                    LadderTable.Rows[i].Cells[0].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[1].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[2].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[3].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[5].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[6].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[7].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[8].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[9].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[10].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[11].Style.BackColor = Color.SlateBlue;
+
+
                 }
             }
             #endregion
