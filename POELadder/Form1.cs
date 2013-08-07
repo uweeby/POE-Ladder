@@ -75,7 +75,8 @@ namespace POELadder
                 currentURL.Enabled = true;
                 returnButton.Visible = true;
                 playerDB.Clear();
-                DownloadSelectedLadder((int)displayAmount.Value);               
+                DownloadSelectedLadder((int)displayAmount.Value);
+                UpdateSeasonTable();
             }
             
             if (ladderselectBox.Text.Equals("Upcoming Races"))
@@ -83,54 +84,111 @@ namespace POELadder
                 currentURL.Enabled = false;
                 returnButton.Visible = false;
                 upcomingRaces.Visible = true;
+                UpdateRaces();
+                UpdateSeasonTable();
             }
         }
         
         //Click functions for upcoming races - URL/Timer/Event
         private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex > -1 && e.ColumnIndex == 3)
-            {
-                try
+
+                if (e.RowIndex > -1 && e.ColumnIndex == 1)
                 {
-                    System.Diagnostics.Process.Start(URLs[e.RowIndex]);
+                    ladderselectBox.Text = upcomingRaces.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();  
+                    
                 }
-                catch (Exception)
-                {
-                    MessageBox.Show("There is no forum page for this event yet.");
-                }
-            }
-            else
-                if (e.RowIndex > -1 && e.ColumnIndex == 2)
+                if (e.RowIndex > -1 && e.ColumnIndex == 3)
                 {
                     UpdateTimer(e.RowIndex);
                 }
-                else
-                    if (e.RowIndex > -1 && e.ColumnIndex == 0)
+
+                if (e.RowIndex > -1 && e.ColumnIndex == 0)
+                {
+                    try
                     {
-                        ladderselectBox.Text = upcomingRaces.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();                        
+                        System.Diagnostics.Process.Start(URLs[e.RowIndex]);
+                        Console.WriteLine(currentURL);
                     }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("There is no forum page for this event yet.");
+                    }
+                }
         }
         
         //Set tooltips for upcoming races table
         private static void upcoming_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
         {
-            if (e.RowIndex > -1 && e.ColumnIndex == 3)
-            {
-                e.ToolTipText = string.Format("Click to view official forum event page.");
-            }
-            if (e.RowIndex > -1 && e.ColumnIndex == 0)
+            if (e.RowIndex > -1 && e.ColumnIndex == 1)
             {
                 e.ToolTipText = string.Format("Click to jump to this race");
             }
+            if (e.RowIndex > -1 && e.ColumnIndex == 3)
+            {
+                e.ToolTipText = string.Format("Starts in: ");
+            }
+            if (e.RowIndex > -1 && e.ColumnIndex == 0)
+            {
+                e.ToolTipText = string.Format("Click to view official forum event page.");
+            }
+
         }
 
-        //Counter timer - 1 second intervals
+        private static void Alert()
+        {
+            var helper = new FlashWindowHelper();
+            helper.FlashApplicationWindow();        
+        }
+
+        //Counter timer - 1 second intervals - Updates the appropriate timers
         private void oneSecondTimer_Tick(object sender, EventArgs e)
         {
+
             if (ladderselectBox.SelectedItem != null && !ladderselectBox.SelectedItem.Equals("Upcoming Races"))
             {
                 UpdateTimer((ladderselectBox.SelectedIndex - 1));
+            }
+            else if (ladderselectBox.SelectedItem.Equals("Upcoming Races"))
+            {
+                DateTime StartTime = DateTime.MinValue, LocalTime = DateTime.UtcNow;;
+                for (int i = 0; i < POELadderAll.Count(); i++)
+                {
+                    if (!string.IsNullOrEmpty(POELadderAll[i].startAt))
+                    {
+                        if (DateTime.ParseExact(POELadderAll[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                            CultureInfo.CurrentCulture) > LocalTime)
+                        {                         
+                            StartTime = DateTime.ParseExact(POELadderAll[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                                CultureInfo.CurrentCulture);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        StartTime = DateTime.MinValue;
+                    }
+                }
+
+                if (DateTime.UtcNow < StartTime)
+                {
+                    String beforeRace = (StartTime - LocalTime).ToString();
+                    StartTime = new DateTime(StartTime.Ticks - (StartTime.Ticks%TimeSpan.TicksPerSecond), StartTime.Kind);
+                    LocalTime = new DateTime(LocalTime.Ticks - (LocalTime.Ticks%TimeSpan.TicksPerSecond), StartTime.Kind);
+
+                    timerLabel.Text = "Next Race In " +
+                                         String.Format(beforeRace, "{0:hh:mm:ss}")
+                                             .Substring(0, beforeRace.LastIndexOf("."));
+                    if ((StartTime - LocalTime).ToString().Equals("01:00:00") || (StartTime - LocalTime).ToString().Equals("00:15:00"))
+                    {
+                        Alert();
+                        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
+                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
+                        notifyIcon1.BalloonTipText = "At the upcoming hour.";
+
+                        notifyIcon1.ShowBalloonTip(10);
+                    }             
+                }
             }
         }
 
@@ -193,18 +251,6 @@ namespace POELadder
         private void trackBox_TextChanged(object sender, EventArgs e)
         {
             trackAccount = trackBox.Text;
-        }
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(URLs[(ladderselectBox.SelectedIndex - 1)]);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("There is no forum page for this event yet.");
-            }
         }
 
 
@@ -287,12 +333,12 @@ namespace POELadder
             UpdateLadderTable();
         }
 
-        //Upcoming Races table
-        private void PopulateRaces()
+        //Update Races table
+        private void UpdateRaces()
         {
             raceData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
-            var links = new DataGridViewLinkColumn();
             var leagueData = new UpcomingRaces[raceData.Length];
+
             for (int i = 0; i < raceData.Length; i++)
             {
                 DateTime startTime = DateTime.ParseExact(raceData[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
@@ -303,37 +349,70 @@ namespace POELadder
                     Description = raceData[i].description,
                     StartAt = startAt,
                 };
+
                 upcomingRaces.DataSource = leagueData;
                 URLs.Insert(i, raceData[i].url);
             }
-                    links.Text = "Link";
-                    links.UseColumnTextForLinkValue = true;
-                    links.ActiveLinkColor = Color.White;
-                    links.VisitedLinkColor = Color.Blue;
-                    links.LinkBehavior = LinkBehavior.SystemDefault;
-                    upcomingRaces.CellContentClick += upcomingRaces_CellContentClick;
-                    upcomingRaces.CellToolTipTextNeeded += upcoming_CellToolTipTextNeeded;
-                    timerLabel.Text = "00:00:00";
+            timerLabel.Text = "00:00:00";
+        }
 
-                    upcomingRaces.Columns.Insert(3, links);
-                    upcomingRaces.Columns.RemoveAt(4);
+        //Upcoming Races table
+        private void PopulateRaces()
+        {
+            raceData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
+            var links = new DataGridViewLinkColumn();
+            var leagueData = new UpcomingRaces[raceData.Length];
 
-                    #region Table Formatting
-                    upcomingRaces.Columns[0].Width = 230;
-                    upcomingRaces.Columns[1].Width = 475;
-                    upcomingRaces.Columns[2].Width = 188;
-                    upcomingRaces.Columns[3].Width = 150;
+            UpdateSeasonTable();
 
-                    upcomingRaces.Columns[0].HeaderText = "Race Title";
-                    upcomingRaces.Columns[1].HeaderText = "Description";
-                    upcomingRaces.Columns[2].HeaderText = "Start time/date";
-                    upcomingRaces.Columns[3].HeaderText = "Forum event page";
+            for (int i = 0; i < raceData.Length; i++)
+            {
+                DateTime startTime = DateTime.ParseExact(raceData[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                    CultureInfo.CurrentCulture);
+                string startAt = startTime.ToLocalTime().ToString("hh:mm:ss tt - dd/MM/yy");
 
-                    upcomingRaces.Rows[0].Cells[2].Value = "";
-                    upcomingRaces.Rows[1].Cells[2].Value = "";
+                leagueData[i] = new UpcomingRaces
+                {
+                    ID = raceData[i].id,
+                    Description = raceData[i].description,
+                    StartAt = startAt,
+                };
+
+                upcomingRaces.DataSource = leagueData;
+                URLs.Insert(i, raceData[i].url);
+            }
+
+            upcomingRaces.Columns.Insert(3, links);
+
+            links.Text = "Forum Page";
+            links.UseColumnTextForLinkValue = true;
+            links.ActiveLinkColor = Color.White;
+            links.VisitedLinkColor = Color.Blue;
+            links.LinkBehavior = LinkBehavior.SystemDefault;
+            upcomingRaces.CellContentClick += upcomingRaces_CellContentClick;
+            upcomingRaces.CellToolTipTextNeeded += upcoming_CellToolTipTextNeeded;                                                  
+
+            #region Table Formatting
+            upcomingRaces.Columns[0].Width = 230;
+            upcomingRaces.Columns[1].Width = 475;
+            upcomingRaces.Columns[2].Width = 188;
+            upcomingRaces.Columns[3].Width = 150;
+
+            upcomingRaces.Columns[0].DisplayIndex = 0;
+            upcomingRaces.Columns[1].DisplayIndex = 1;
+            upcomingRaces.Columns[2].DisplayIndex = 2;
+            upcomingRaces.Columns[3].DisplayIndex = 3;
+
+            upcomingRaces.Columns[0].HeaderText = "Race Title";
+            upcomingRaces.Columns[1].HeaderText = "Description";
+            upcomingRaces.Columns[2].HeaderText = "Start time/date";
+            upcomingRaces.Columns[3].HeaderText = "Forum event page";
+
+            upcomingRaces.Rows[0].Cells[2].Value = "";
+            upcomingRaces.Rows[1].Cells[2].Value = "";
 
 
-                    #endregion
+            #endregion
         }
 
         //Download the ladder selected in the drop down according to the max results numerical

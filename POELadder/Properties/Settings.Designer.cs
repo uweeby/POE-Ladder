@@ -37,7 +37,7 @@ namespace POELadder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+Two")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+Three")]
         public string SeasonOneStandingsURL {
             get {
                 return ((string)(this["SeasonOneStandingsURL"]));
