@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 namespace POELadder
@@ -31,5 +31,6 @@ namespace POELadder
         public string ID { get; set; }
         public string Description { get; set; }
         public string StartAt { get; set; }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using System.Linq;
 using Microsoft.Win32;
@@ -13,6 +15,7 @@ namespace POELadder
     public partial class Form1 : Form
     {
         PathOfExileJSONLadderAll[] POELadderAll, raceData;
+        private SeasonTable[] seaLadder;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
         List<ScheduledToastNotification> raceNotificationList;
@@ -20,11 +23,13 @@ namespace POELadder
 
         public string selectedLadderURL, trackAccount;
 
+        private bool secondsSet = false;
+
         Form2 f2; 
 
         DateTime LastUpdateCache = DateTime.UtcNow;
 
-        int caseNo;
+        int maxValue, ticks, seconds;
 
         public Form1()
         {
@@ -45,10 +50,11 @@ namespace POELadder
                 ladderselectBox.Items.Add(t.id);
             }
             oneSecondTimer.Enabled = true;
-            UpdateSeasonTable();
 
             PopulateRaces();
             ladderselectBox.Text = "Upcoming Races";
+
+            seasonSelector.Text = "Season One";
 
             //Populate Notification List
             raceNotificationList = CreateNotificationSchedule(POELadderAll);
@@ -76,7 +82,6 @@ namespace POELadder
                 returnButton.Visible = true;
                 playerDB.Clear();
                 DownloadSelectedLadder((int)displayAmount.Value);
-                UpdateSeasonTable();
             }
             
             if (ladderselectBox.Text.Equals("Upcoming Races"))
@@ -85,7 +90,6 @@ namespace POELadder
                 returnButton.Visible = false;
                 upcomingRaces.Visible = true;
                 UpdateRaces();
-                UpdateSeasonTable();
             }
         }
         
@@ -116,6 +120,19 @@ namespace POELadder
                     }
                 }
         }
+
+        private void currentURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
+                Console.WriteLine(currentURL);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no forum page for this event yet.");
+            }
+        }
         
         //Set tooltips for upcoming races table
         private static void upcoming_CellToolTipTextNeeded(object sender, DataGridViewCellToolTipTextNeededEventArgs e)
@@ -141,6 +158,7 @@ namespace POELadder
             helper.FlashApplicationWindow();        
         }
 
+
         //Counter timer - 1 second intervals - Updates the appropriate timers
         private void oneSecondTimer_Tick(object sender, EventArgs e)
         {
@@ -149,7 +167,7 @@ namespace POELadder
             {
                 UpdateTimer((ladderselectBox.SelectedIndex - 1));
             }
-            else if (ladderselectBox.SelectedItem.Equals("Upcoming Races"))
+            else if (ladderselectBox.SelectedItem.Equals("Upcoming Races") && toastCheckBox.Checked)
             {
                 DateTime StartTime = DateTime.MinValue, LocalTime = DateTime.UtcNow;;
                 for (int i = 0; i < POELadderAll.Count(); i++)
@@ -179,7 +197,11 @@ namespace POELadder
                     timerLabel.Text = "Next Race In " +
                                          String.Format(beforeRace, "{0:hh:mm:ss}")
                                              .Substring(0, beforeRace.LastIndexOf("."));
-                    if ((StartTime - LocalTime).ToString().Equals("01:00:00") || (StartTime - LocalTime).ToString().Equals("00:15:00"))
+
+                    seconds = ((((DateTime.UtcNow - StartTime).Days * 24) * 3600) + ((DateTime.UtcNow - StartTime).Hours * 3600) + ((DateTime.UtcNow - StartTime).Minutes * 60) + ((DateTime.UtcNow - StartTime).Seconds)) * -1;                   
+
+                    if ((StartTime - LocalTime).ToString().Equals("01:00:00") ||
+                        (StartTime - LocalTime).ToString().Equals("00:15:00"))
                     {
                         Alert();
                         notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
@@ -187,9 +209,27 @@ namespace POELadder
                         notifyIcon1.BalloonTipText = "At the upcoming hour.";
 
                         notifyIcon1.ShowBalloonTip(10);
-                    }             
+                    }
+
                 }
             }
+            var prog = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
+            prog.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
+            if (seconds > 0 && progressCheck.Checked)
+            {
+                if (!secondsSet)
+                {
+                    maxValue = seconds;
+                    ticks = 0;
+                    secondsSet = true;
+                }
+                ticks++;
+                prog.SetProgressValue(ticks, maxValue);
+            }
+            else
+            {
+                secondsSet = false;
+            }    
         }
 
         //Ladder-auto Refresh - 15 seconds
@@ -363,8 +403,6 @@ namespace POELadder
             var links = new DataGridViewLinkColumn();
             var leagueData = new UpcomingRaces[raceData.Length];
 
-            UpdateSeasonTable();
-
             for (int i = 0; i < raceData.Length; i++)
             {
                 DateTime startTime = DateTime.ParseExact(raceData[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'",
@@ -429,114 +467,7 @@ namespace POELadder
 
             seasonPoints.Visible = true;
             UpdateAll(LadderSingleURL);
-        }
-
-        #region RaceInformation
-        private void pointBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (pointBox.Text == "1 Hour")
-            {
-                caseNo = 0;
-            }
-            if (pointBox.Text == "2 Hour")
-            {
-                caseNo = 1;
-            }
-            if (pointBox.Text == "3 Hour")
-            {
-                caseNo = 2;
-            }
-            if (pointBox.Text == "4 Hour")
-            {
-                caseNo = 3;
-            }
-            if (pointBox.Text == "1 Week")
-            {
-                caseNo = 4;
-            }
-            PopulateInformation();
-        }
-
-        private void PopulateInformation()
-        {
-            if (!pointBox.Text.Equals("1 Week"))
-            {
-                topPrizeBox.Text = "#1 player by experience       : 3 Reward Points\n" +
-                                   "#1 player of each class        :Demigod's Triumph & 10 Reward Points\n" +
-                                   "#2 player of each class        : 6 Reward Points\n" +
-                                   "#3 player of each class        : 5 Reward Points\n" +
-                                   "#4 player of each class        : 4 Reward Points\n" +
-                                   "#5 player of each class        : 3 Reward Points\n" +
-                                   "#6-10 player of each class   : 2 Reward Points\n" +
-                                   "#11-20 player of each class : 1 Reward Point";
-
-                questBox.Text = "Normal - Hillock              : 2 Reward Points\n" +
-                                "Normal - Medicine Chest: 2 Reward Points\n" +
-                                "Normal - Fairgraves        : 2 Reward Points\n" +
-                                "Normal - Deep Dweller   : 2 Reward Points\n" +
-                                "Cruel - Hillock                 : 2 Reward Points\n" +
-                                "Cruel - Medicine Chest   : 2 Reward Points\n" +
-                                "Cruel - Fairgraves           : 2 Reward Points\n" +
-                                "Cruel - Deep Dweller      : 2 Reward Points";
-
-                clearBox.Text = "Normal - Fetid Pool          : 2 Reward Points\n" +
-                                "Normal - Old Fields Cave : 2 Reward Points\n" +
-                                "Normal - Dread Thicket   : 2 Reward Points\n" +
-                                "Normal - Catacombs        : 2 Reward Points\n" +
-                                "Cruel - Fetid Pool             : 2 Reward Points\n" +
-                                "Cruel - Old Fields Cave    : 2 Reward Points\n" +
-                                "Cruel - Dread Thicket      : 2 Reward Points\n" +
-                                "Cruel - Catacombs           : 2 Reward Points";
-
-            }
-            else
-                if (pointBox.Text.Equals("1 Week") || ladderselectBox.Text.Contains("Week"))
-            {
-                topPrizeBox.Text = "#1 player              : 60 Reward Points\n" +
-                                   "#2 player              : 40 Reward Points\n" +
-                                   "#3 player              : 35 Reward Points\n" +
-                                   "#4 player              : 32 Reward Points\n" +
-                                   "#5 player              : 30 Reward Points\n" +
-                                   "#6 player              : 28 Reward Points\n" +
-                                   "#7 player              : 26 Reward Points\n" +
-                                   "#8 player              : 24 Reward Points\n" +
-                                   "#9 player              : 22 Reward Points\n" +
-                                   "#10 player            : 20 Reward Points\n" +
-                                   "#11-20 players     : 15 Reward Points\n" +
-                                   "#21-50 players     : 10 Reward Points\n" +
-                                   "#51-200 players   : 5 Reward Points\n" +
-                                   "#201-500 players : 2 Reward Points\n";
-                questBox.Text = "";
-                clearBox.Text = "";
-            }
-            switch(caseNo)
-            {
-                case 0:
-                    //1 hour
-                    levelBracket.Text = "Level 20      : 7 Reward Points\nLevel 17-19 : 6 Reward Points\nLevel 15-16 : 5 Reward Points\nLevel 13-14 : 4 Reward Points\nLevel 11-12 : 3 Reward Points\nLevel 8-10   : 1 Reward Point";
-                    break;
-                case 1:
-                    //2 hour
-                    levelBracket.Text = "Level 28      : 7 Reward Points\nLevel 26-27 : 6 Reward Points\nLevel 23-25 : 5 Reward Points\nLevel 21-22 : 4 Reward Points\nLevel 16-20 : 3 Reward Points\nLevel 10-15 : 1 Reward Point";
-                    break;
-                case 2:
-                    //3 hour
-                    levelBracket.Text = "Level 33      : 7 Reward Points\nLevel 30-32 : 6 Reward Points\nLevel 27-29 : 5 Reward Points\nLevel 24-26 : 4 Reward Points\nLevel 20-23 : 3 Reward Points\nLevel 11-19 : 1 Reward Point";
-                    break;
-                case 3:
-                    //4 hour
-                    levelBracket.Text = "Level 37      : 7 Reward Points\nLevel 34-36 : 6 Reward Points\nLevel 29-33 : 5 Reward Points\nLevel 26-28 : 4 Reward Points\nLevel 21-25 : 3 Reward Points\nLevel 12-20 : 1 Reward Point";
-                    break;
-                case 4:
-                    //One week
-                    levelBracket.Text = "Level 86      : 20 Reward Points\nLevel 85      : 18 Reward Points\nLevel 84      : 17 Reward Points\nLevel 83      : 16 Reward Points\nLevel 82      : 15 Reward Points\nLevel 80-81 : 14 Reward Points\nLevel 75-79 : 10 Reward Points\nLevel 70-74 :   8 Reward Points\nLevel 60-69 :   4 Reward Points";
-                    break;
-                default:
-                    levelBracket.Text = "";
-                    break;
-            }
-        }
-        #endregion
+        }      
 
         //Update Table - Filting and visual formating
         private void UpdateLadderTable()
@@ -733,22 +664,37 @@ namespace POELadder
 
         //Season Ladder Table
         private void UpdateSeasonTable()
-        {
-            var SeasonData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSeason>(Properties.Settings.Default.SeasonOneStandingsURL);
-            var seaLadder = new SeasonTable[SeasonData.entries.Count];
+        {        
+            Properties.Settings.Default.SeasonStandingsURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+" + seasonSelector.Text.Replace(" ", "+");           
+            var SeasonData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSeason>(Properties.Settings.Default.SeasonStandingsURL);
+            bool fetch = true;
 
-            for (var i = 0; i < SeasonData.entries.Count; i++)
+            try
+            {                   
+                seaLadder = new SeasonTable[SeasonData.entries.Count];
+            }
+            catch
             {
-                seaLadder[i] = new SeasonTable
+                MessageBox.Show("This seasons ladder doesn't exist yet!");
+                seasonSelector.Text = "Season One";
+                fetch = false;
+            }
+                
+            if (fetch)
+            {
+                for (var i = 0; i < SeasonData.entries.Count; i++)
                 {
-                    Rank = SeasonData.entries[i].rank,
-                    Name = SeasonData.entries[i].account.name,
-                    Points = SeasonData.entries[i].points
-                };
+                    seaLadder[i] = new SeasonTable
+                    {
+                        Rank = SeasonData.entries[i].rank,
+                        Name = SeasonData.entries[i].account.name,
+                        Points = SeasonData.entries[i].points
+                    };
 
-                seasonPoints.DataSource = seaLadder;
-                seasonPoints.Columns[0].Width = 30;
-                seasonPoints.Columns[1].Width = 80;
+                    seasonPoints.DataSource = seaLadder;
+                    seasonPoints.Columns[0].Width = 30;
+                    seasonPoints.Columns[1].Width = 80;
+                }
             }
         }
 
@@ -995,6 +941,11 @@ namespace POELadder
             }
             return notificationList;
             
+        }
+
+        private void seasonSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSeasonTable();
         }
     }
 }

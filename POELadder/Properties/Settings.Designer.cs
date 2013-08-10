@@ -37,13 +37,13 @@ namespace POELadder.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+Season+Three")]
-        public string SeasonOneStandingsURL {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+")]
+        public string SeasonStandingsURL {
             get {
-                return ((string)(this["SeasonOneStandingsURL"]));
+                return ((string)(this["SeasonStandingsURL"]));
             }
             set {
-                this["SeasonOneStandingsURL"] = value;
+                this["SeasonStandingsURL"] = value;
             }
         }
         
