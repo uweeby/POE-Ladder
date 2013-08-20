@@ -60,7 +60,11 @@ Current Bugs -
 
 Current Goals -
 
-          * [Maybe] grabbing data from exilestats such as race records(?)
-          * Death tracking
+	1.4 Goals:
+          * Death tracking - Now in JSON API
+          * Twitch Streamers - Now in JSON API
+          
+	Misc: 
           * Log area to log events (Race start/finish) and at a later date potentially server global messages.
-          * [Maybe] Hard-coded list of people who are known to stream races (Nugi/Kripp/Rhox etc)
+          * [Maybe] grabbing data from exilestats such as race records(?)
+          
