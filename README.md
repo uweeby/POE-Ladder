@@ -63,6 +63,7 @@ Current Goals -
 	1.4 Goals:
           * Death tracking - Now in JSON API
           * Twitch Streamers - Now in JSON API
+          * Images to replace confusing icons (online/offline)
           
 	Misc: 
           * Log area to log events (Race start/finish) and at a later date potentially server global messages.
