@@ -163,8 +163,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\path_of_exile_icon_gamer_by_maknusdave-d503bm7.ico" />
-    <Content Include="Assets\twitch-offline.png" />
-    <Content Include="Assets\twitch-online.png" />
+    <Content Include="Assets\twitch-offline.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\twitch-online.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

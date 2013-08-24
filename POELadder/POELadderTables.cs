@@ -7,7 +7,9 @@ namespace POELadder
     {
         public bool Online { get; set; }
         public int Rank { get; set; }
+        public int ChallengeCount { get; set; }
         public String Account { get; set; }
+        public String TwitchURL { get; set; }
         public String Chracter { get; set; }
         public String CharacterClass { get; set; }
         public byte Level { get; set; }
