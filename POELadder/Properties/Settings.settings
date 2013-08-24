@@ -20,5 +20,11 @@
     <Setting Name="EnableToasts" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="TwitchOffline" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\\Assets\\twitch-offline.png</Value>
+    </Setting>
+    <Setting Name="TwitchOnline" Type="System.String" Scope="User">
+      <Value Profile="(Default)">.\\Assets\\twitch-online.png</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

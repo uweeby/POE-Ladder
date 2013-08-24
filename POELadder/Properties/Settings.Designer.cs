@@ -94,5 +94,29 @@ namespace POELadder.Properties {
                 this["EnableToasts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\\\Assets\\\\twitch-offline.png")]
+        public string TwitchOffline {
+            get {
+                return ((string)(this["TwitchOffline"]));
+            }
+            set {
+                this["TwitchOffline"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".\\\\Assets\\\\twitch-online.png")]
+        public string TwitchOnline {
+            get {
+                return ((string)(this["TwitchOnline"]));
+            }
+            set {
+                this["TwitchOnline"] = value;
+            }
+        }
     }
 }
