@@ -161,6 +161,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\path_of_exile_icon_gamer_by_maknusdave-d503bm7.ico" />
+    <Content Include="Assets\twitch-offline.png" />
+    <Content Include="Assets\twitch-online.png" />
     <Content Include="path_of_exile_icon_gamer_by_maknusdave-d503bm7.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
