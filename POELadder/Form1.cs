@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region Usings
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,21 +10,24 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using Notifications;
+#endregion Usings
 
 namespace POELadder
 {
     public partial class Form1 : Form
     {
-        LeagueList[] POELadderAll, raceData;
+        #region Fields
         private SeasonTable[] seaLadder;
-
-        public List<PlayerDB> playerDB = new List<PlayerDB>();
-        List<ScheduledToastNotification> raceNotificationList;
-        readonly List<string> URLs = new List<string>();
+        private bool secondsSet = false;
 
         public string selectedLadderURL, trackAccount;
+        public List<PlayerDB> playerDB = new List<PlayerDB>();
 
-        private bool secondsSet = false;
+        List<ScheduledToastNotification> raceNotificationList;
+
+        readonly List<string> URLs = new List<string>();
+
+        LeagueList[] POELadderAll, raceData;
 
         Form2 f2;
 
@@ -31,13 +35,14 @@ namespace POELadder
 
         int maxValue, ticks, seconds;
 
+        #endregion Fields
+
+        #region GUI Code
+        //Form Driven Methods:
         public Form1()
         {
             InitializeComponent();
         }
-
-        #region GUI Code
-        //Form Driven Methods:
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -274,6 +279,11 @@ namespace POELadder
             UpdateLadderTable();
         }
 
+        private void seasonSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateSeasonTable();
+        }
+
         private void resetButton_Click(object sender, EventArgs e)
         {
             classBox.SelectedItem = "All";
@@ -292,7 +302,6 @@ namespace POELadder
         {
             trackAccount = trackBox.Text;
         }
-
 
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -330,7 +339,6 @@ namespace POELadder
             contextMenuStrip1.Hide();
         }
 
-
         private void Item_Click(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem == maximizeItem)
@@ -345,7 +353,6 @@ namespace POELadder
                 Dispose();
             }
         }
-
 
         private void launchWithWindows_CheckedChanged(object sender, EventArgs e)
         {
@@ -362,11 +369,9 @@ namespace POELadder
                 }
             }
         }
-
-
         #endregion
 
-        //Custom Methods:
+        #region Display Methods
         private void UpdateAll(String raceUrl)
         {
             PopulatePlayerDB(raceUrl);
@@ -400,13 +405,17 @@ namespace POELadder
         private void PopulateRaces()
         {
             raceData = JSONHandler.ParseJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
+
             var links = new DataGridViewLinkColumn();
             var leagueData = new UpcomingRaces[raceData.Length];
 
             for (int i = 0; i < raceData.Length; i++)
             {
-                DateTime startTime = DateTime.ParseExact(raceData[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                DateTime startTime = DateTime.ParseExact(
+                    raceData[i].startAt, 
+                    "yyyy-MM-dd'T'HH:mm:ss'Z'",
                     CultureInfo.CurrentCulture);
+
                 string startAt = startTime.ToLocalTime().ToString("hh:mm:ss tt - dd/MM/yy");
 
                 leagueData[i] = new UpcomingRaces
@@ -530,7 +539,7 @@ namespace POELadder
                 }
             }
 
-            //Save the cell position
+            //Save the cell position during Scroll up/down
             int saveRow = 0;
             if (LadderTable.Rows.Count > 0)
                 saveRow = LadderTable.FirstDisplayedCell.RowIndex;
@@ -784,9 +793,8 @@ namespace POELadder
         //Update the Race Timer with the Time Left before the End of the Race
         private void UpdateTimer(int LadderSelectIndex)
         {
-            DateTime StartTime, EndTime;
-
             //Convert time from string to DateTime
+            DateTime StartTime;
             if (!string.IsNullOrEmpty(POELadderAll[LadderSelectIndex].startAt))
             {
                 StartTime = DateTime.ParseExact(POELadderAll[LadderSelectIndex].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
@@ -798,6 +806,7 @@ namespace POELadder
             }
 
             //Convert time from string to DateTime
+            DateTime EndTime;
             if (!string.IsNullOrEmpty(POELadderAll[LadderSelectIndex].endAt))
             {
                 EndTime = DateTime.ParseExact(POELadderAll[LadderSelectIndex].endAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture);
@@ -809,13 +818,13 @@ namespace POELadder
             }
 
             DateTime localTime = DateTime.UtcNow;
-            String beforeRace = (StartTime - localTime).ToString();
-            String duringRace = (EndTime - localTime).ToString();
+            String timeBeforeRace = (StartTime - localTime).ToString();
+            String timeRemainingRace = (EndTime - localTime).ToString();
 
             //If the race has started but has not ended. Currently running.
             if (localTime > StartTime && localTime < EndTime)
             {
-                timerLabel.Text = String.Format(duringRace, "hh:mm:ss").Substring(0, duringRace.LastIndexOf("."));
+                timerLabel.Text = String.Format(timeRemainingRace, "hh:mm:ss").Substring(0, timeRemainingRace.LastIndexOf("."));
             }
 
             else
@@ -825,7 +834,7 @@ namespace POELadder
                 {
                     DateTime raceDate = StartTime.ToLocalTime();
                     toolTip1.SetToolTip(timerLabel, raceDate.ToString());
-                    timerLabel.Text = "Starts in " + String.Format(beforeRace, "{0:hh:mm:ss}").Substring(0, beforeRace.LastIndexOf("."));
+                    timerLabel.Text = "Starts in " + String.Format(timeBeforeRace, "{0:hh:mm:ss}").Substring(0, timeBeforeRace.LastIndexOf("."));
                 }
 
                 else
@@ -847,7 +856,9 @@ namespace POELadder
                 }
             }
         }
+        #endregion Table Methods
 
+        #region Toast
         private List<ScheduledToastNotification> CreateNotificationSchedule(LeagueList[] ladderList)
         {
             List<ScheduledToastNotification> toastList = new List<ScheduledToastNotification>();
@@ -937,10 +948,6 @@ namespace POELadder
             return notificationList;
 
         }
-
-        private void seasonSelector_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            UpdateSeasonTable();
-        }
+        #endregion Toast
     }
 }

@@ -106,7 +106,7 @@
     <Compile Include="JSON\LadderEvent.cs" />
     <Compile Include="Database\PlayerDB.cs" />
     <Compile Include="JSON\PathOfExileJSONLeagues.cs" />
-    <Compile Include="POELadderTables.cs" />
+    <Compile Include="Database\Table.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduledToastNotification.cs" />
