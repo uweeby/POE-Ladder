@@ -13,6 +13,7 @@ namespace POELadder
         private String Class;
         private int ChallengeCount;
         private String TwitchURL;
+        private bool Dead;
 
         //Custom Data:
         private uint EXPToNextLevel;
@@ -145,11 +146,12 @@ namespace POELadder
             this.Class = Class;
         }
 
-        public void Update(bool Online, ushort Rank, byte Level, uint Experience, int ChallengeCount, String TwitchURL, DateTime Time)
+        public void Update(bool Online, ushort Rank, byte Level, uint Experience, int ChallengeCount, String TwitchURL, bool Dead, DateTime Time)
         {
             this.Online = Online;
             this.ChallengeCount = ChallengeCount;
             this.TwitchURL = TwitchURL;
+            this.Dead = Dead;
 
             if (Level < 100)
             {
@@ -352,6 +354,16 @@ namespace POELadder
         public void SetTwitchURL(String TwitchURL)
         {
             this.TwitchURL = TwitchURL;
+        }
+
+        public bool GetDeathStatus()
+        {
+            return this.Dead;
+        }
+
+        public void SetDeathStatus(bool Dead)
+        {
+            this.Dead = Dead;
         }
     }
 }

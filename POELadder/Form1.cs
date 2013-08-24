@@ -503,6 +503,12 @@ namespace POELadder
                 Entry.RankChange = t.GetRankChange();
 
                 PlayerList.Add(Entry);
+
+                //Apply Death Status
+                if (t.GetDeathStatus())
+                {
+                    Entry.Chracter = "(dead)" + Entry.Chracter;
+                }
             }
 
             //Class Sorting
@@ -550,8 +556,6 @@ namespace POELadder
             //Reapply the cell position
             if (saveRow != 0 && saveRow < LadderTable.Rows.Count)
                 LadderTable.FirstDisplayedScrollingRowIndex = saveRow;
-
-
 
             #region ClassColoring
             //Color cells by Class
@@ -764,6 +768,7 @@ namespace POELadder
                                 LadderData.entries[i].character.experience,
                                 LadderData.entries[i].account.challenges.total,
                                 "URL/ICON?",
+                                LadderData.entries[i].dead,
                                 DateTime.UtcNow);
                         }
                     }
