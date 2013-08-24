@@ -9,9 +9,9 @@ namespace POELadder
     public class JSONHandler
     {        
         //All Ladders currently running
-        public static T ParsePOELadderJSON<T>(String JSON)
+        public static T ParseJSON<T>(String JSON)
         {
-            String WebPage = DownloadFile(JSON);
+            String WebPage = DownloadURL(JSON);
 
             if (WebPage != null)
             {
@@ -36,15 +36,13 @@ namespace POELadder
         }
 
         //Download provided URL and return as String
-        private static String DownloadFile(String URL)
+        private static String DownloadURL(String URL)
         {
             WebClient WebReqeust = new WebClient();
 
             try
             {
-                String WebPage = WebReqeust.DownloadString(URL);
-
-                return WebPage;
+                return WebReqeust.DownloadString(URL);
             }
 
             catch (Exception e)
