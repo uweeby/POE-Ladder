@@ -11,6 +11,8 @@ namespace POELadder
         private String Account;
         private String Character;
         private String Class;
+        private int ChallengeCount;
+        private String TwitchURL;
 
         //Custom Data:
         private uint EXPToNextLevel;
@@ -143,9 +145,12 @@ namespace POELadder
             this.Class = Class;
         }
 
-        public void Update(bool Online, ushort Rank, byte Level, uint Experience, DateTime Time)
+        public void Update(bool Online, ushort Rank, byte Level, uint Experience, int ChallengeCount, String TwitchURL, DateTime Time)
         {
             this.Online = Online;
+            this.ChallengeCount = ChallengeCount;
+            this.TwitchURL = TwitchURL;
+
             if (Level < 100)
             {
                 this.EXPToNextLevel = ExpToLevelArray[Level + 1] - Experience;
@@ -327,6 +332,26 @@ namespace POELadder
         public DateTime GetLastUpdateTime()
         {
             return this.UpdateTime[0];
+        }
+
+        public int GetChallengeCount()
+        {
+            return this.ChallengeCount;
+        }
+
+        public void SetChallengeCount(int ChallengeCount)
+        {
+            this.ChallengeCount = ChallengeCount;
+        }
+
+        public String GetTwitchURL()
+        {
+            return this.TwitchURL;
+        }
+
+        public void SetTwitchURL(String TwitchURL)
+        {
+            this.TwitchURL = TwitchURL;
         }
     }
 }
