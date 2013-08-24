@@ -11,7 +11,8 @@
     <RootNamespace>POELadder</RootNamespace>
     <AssemblyName>POELadder</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Users\M1nistry\Desktop\</PublishUrl>
@@ -74,9 +75,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web.Extensions">
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Extensions.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -101,9 +100,9 @@
       <DependentUpon>Form2.cs</DependentUpon>
     </Compile>
     <Compile Include="JSONHandler.cs" />
-    <Compile Include="JSON\PathOfExileJSONLadderAll.cs" />
-    <Compile Include="JSON\PathOfExileJSONLadderSeason.cs" />
-    <Compile Include="JSON\PathOfExileJSONLadderSingle.cs" />
+    <Compile Include="JSON\LeagueList.cs" />
+    <Compile Include="JSON\SeasonRank.cs" />
+    <Compile Include="JSON\LadderEvent.cs" />
     <Compile Include="Database\PlayerDB.cs" />
     <Compile Include="JSON\PathOfExileJSONLeagues.cs" />
     <Compile Include="POELadderTables.cs" />
@@ -125,6 +124,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
     <None Include="POELadder_TemporaryKey.pfx" />

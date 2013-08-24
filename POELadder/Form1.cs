@@ -14,7 +14,7 @@ namespace POELadder
 {
     public partial class Form1 : Form
     {
-        PathOfExileJSONLadderAll[] POELadderAll, raceData;
+        LeagueList[] POELadderAll, raceData;
         private SeasonTable[] seaLadder;
 
         public List<PlayerDB> playerDB = new List<PlayerDB>();
@@ -41,7 +41,7 @@ namespace POELadder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            POELadderAll = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
+            POELadderAll = JSONHandler.ParsePOELadderJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
 
             //Populate the Ladder Drop Down
             ladderselectBox.Items.Add("Upcoming Races");
@@ -376,7 +376,7 @@ namespace POELadder
         //Update Races table
         private void UpdateRaces()
         {
-            raceData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
+            raceData = JSONHandler.ParsePOELadderJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
             var leagueData = new UpcomingRaces[raceData.Length];
 
             for (int i = 0; i < raceData.Length; i++)
@@ -399,7 +399,7 @@ namespace POELadder
         //Upcoming Races table
         private void PopulateRaces()
         {
-            raceData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderAll[]>(Properties.Settings.Default.SeasonEventListURL);
+            raceData = JSONHandler.ParsePOELadderJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
             var links = new DataGridViewLinkColumn();
             var leagueData = new UpcomingRaces[raceData.Length];
 
@@ -666,7 +666,7 @@ namespace POELadder
         private void UpdateSeasonTable()
         {        
             Properties.Settings.Default.SeasonStandingsURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+" + seasonSelector.Text.Replace(" ", "+");           
-            var SeasonData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSeason>(Properties.Settings.Default.SeasonStandingsURL);
+            var SeasonData = JSONHandler.ParsePOELadderJSON<SeasonRank>(Properties.Settings.Default.SeasonStandingsURL);
             bool fetch = true;
 
             try
@@ -701,7 +701,7 @@ namespace POELadder
         //Update DB with current JSON data
         private void PopulatePlayerDB(String raceUrl)
         {
-            var LadderData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSingle>(raceUrl);
+            var LadderData = JSONHandler.ParsePOELadderJSON<LadderEvent>(raceUrl);
 
             #region Add
             if (LadderData.entries.Count > 1 && !LadderData.entries.Count.Equals(null))
@@ -853,7 +853,7 @@ namespace POELadder
 
 
 
-        private List<ScheduledToastNotification> CreateNotificationSchedule(PathOfExileJSONLadderAll[] ladderList)
+        private List<ScheduledToastNotification> CreateNotificationSchedule(LeagueList[] ladderList)
         {
             List<ScheduledToastNotification> toastList = new List<ScheduledToastNotification>();
 

@@ -2,7 +2,7 @@
 
 namespace PoELadder.JSON
 {
-    public class PathOfExileJSONLadderAll
+    public class LeagueList
     {
         public string id { get; set; }
         public string description { get; set; }

@@ -15,7 +15,7 @@ namespace PoELadder.JSON
             public int rank { get; set; }
         }
 
-        public class PathOfExileJSONLadderSeason
+        public class SeasonRank
         {
             public string total { get; set; }
             public List<Start> entries { get; set; }

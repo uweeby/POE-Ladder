@@ -20,7 +20,7 @@ namespace POELadder
 
         public void populatePlayer()
         {
-            var playerData = JSONHandler.ParsePOELadderJSON<PathOfExileJSONLadderSingle>(fullURL);
+            var playerData = JSONHandler.ParsePOELadderJSON<LadderEvent>(fullURL);
             var frm = new Form1();
             var Player = new RaceTable();
             Console.WriteLine(":" + fullURL);
