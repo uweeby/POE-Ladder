@@ -758,6 +758,8 @@ namespace POELadder
                                 LadderData.entries[i].rank,
                                 LadderData.entries[i].character.level,
                                 LadderData.entries[i].character.experience,
+                                LadderData.entries[i].account.challenges.total,
+                                "Temp Fix for Null Object",
                                 DateTime.UtcNow);
                         }
                     }
