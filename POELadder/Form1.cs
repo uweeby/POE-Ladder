@@ -237,6 +237,23 @@ namespace POELadder
             }
         }
 
+        private void upcomingRaces_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            for (int i = -1; i < e.RowIndex; i++)
+            {
+                if (e.ColumnIndex == 3)
+                {
+                    using (Image img = Image.FromFile(@"C:\Users\M1nistry\Desktop\POELadder\POELadder\Assets\twitch-offline.png"))
+                    {
+                        e.Graphics.DrawImage(img, e.CellBounds.Left, e.CellBounds.Top + 1, 20, 20);
+
+                        e.PaintContent(e.ClipBounds);
+                        e.Handled = true;
+                    }
+                }
+            }
+        }
+
         //Ladder-auto Refresh - 15 seconds
         private void fifteenSecondTimer_Tick(object sender, EventArgs e)
         {
@@ -954,5 +971,6 @@ namespace POELadder
 
         }
         #endregion Toast
+
     }
 }

@@ -31,13 +31,13 @@ namespace POELadder
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle50 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle51 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle52 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle53 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle54 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle55 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle56 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.selectladderLabel = new System.Windows.Forms.Label();
             this.ladderselectBox = new System.Windows.Forms.ComboBox();
@@ -49,15 +49,17 @@ namespace POELadder
             this.refreshButton = new System.Windows.Forms.LinkLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.seasonSelector = new System.Windows.Forms.ComboBox();
             this.progressCheck = new System.Windows.Forms.CheckBox();
             this.toastCheckBox = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
             this.launchWithWindows = new System.Windows.Forms.CheckBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.toTrayCheck = new System.Windows.Forms.CheckBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.currentURL = new System.Windows.Forms.LinkLabel();
             this.label6 = new System.Windows.Forms.Label();
             this.lockButton = new System.Windows.Forms.Button();
@@ -82,8 +84,6 @@ namespace POELadder
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.maximizeItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.seasonSelector = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -142,21 +142,21 @@ namespace POELadder
             this.LadderTable.AllowUserToDeleteRows = false;
             this.LadderTable.AllowUserToResizeColumns = false;
             this.LadderTable.AllowUserToResizeRows = false;
-            dataGridViewCellStyle50.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.LadderTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle50;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.LadderTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.LadderTable.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LadderTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle51.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle51.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle51.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle51.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle51.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle51.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle51.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.LadderTable.DefaultCellStyle = dataGridViewCellStyle51;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.LadderTable.DefaultCellStyle = dataGridViewCellStyle2;
             this.LadderTable.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
             this.LadderTable.Location = new System.Drawing.Point(10, 39);
             this.LadderTable.MultiSelect = false;
@@ -172,8 +172,8 @@ namespace POELadder
             this.DeathTable.AllowUserToOrderColumns = true;
             this.DeathTable.AllowUserToResizeColumns = false;
             this.DeathTable.AllowUserToResizeRows = false;
-            dataGridViewCellStyle52.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.DeathTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle52;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.DeathTable.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             this.DeathTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -182,14 +182,14 @@ namespace POELadder
             this.DeathTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.DeathTable.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.DeathTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle53.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle53.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle53.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle53.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle53.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle53.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle53.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DeathTable.DefaultCellStyle = dataGridViewCellStyle53;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DeathTable.DefaultCellStyle = dataGridViewCellStyle4;
             this.DeathTable.Location = new System.Drawing.Point(0, 3);
             this.DeathTable.Name = "DeathTable";
             this.DeathTable.Size = new System.Drawing.Size(1055, 115);
@@ -256,24 +256,26 @@ namespace POELadder
             this.toolTip1.SetToolTip(this.tabPage1, "Filter table results");
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // seasonSelector
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(536, 10);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(48, 13);
-            this.label12.TabIndex = 26;
-            this.label12.Text = "Settings:";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(541, 99);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(103, 13);
-            this.label11.TabIndex = 25;
-            this.label11.Text = "Enable Progress Bar";
+            this.seasonSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.seasonSelector.FormattingEnabled = true;
+            this.seasonSelector.Items.AddRange(new object[] {
+            "Season One",
+            "Season Two",
+            "Season Three",
+            "Season Four",
+            "Season Five",
+            "Season Six",
+            "Season Seven",
+            "Season Eight",
+            "Season Nine",
+            "Season Ten"});
+            this.seasonSelector.Location = new System.Drawing.Point(883, 3);
+            this.seasonSelector.Name = "seasonSelector";
+            this.seasonSelector.Size = new System.Drawing.Size(174, 21);
+            this.seasonSelector.TabIndex = 173;
+            this.seasonSelector.SelectedIndexChanged += new System.EventHandler(this.seasonSelector_SelectedIndexChanged);
             // 
             // progressCheck
             // 
@@ -299,15 +301,6 @@ namespace POELadder
             this.toastCheckBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toastCheckBox.UseVisualStyleBackColor = true;
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(541, 77);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(131, 13);
-            this.label9.TabIndex = 22;
-            this.label9.Text = "Enable Toast Notifications";
-            // 
             // launchWithWindows
             // 
             this.launchWithWindows.AutoSize = true;
@@ -319,15 +312,6 @@ namespace POELadder
             this.launchWithWindows.UseVisualStyleBackColor = true;
             this.launchWithWindows.CheckedChanged += new System.EventHandler(this.launchWithWindows_CheckedChanged);
             // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(541, 54);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(109, 13);
-            this.label8.TabIndex = 20;
-            this.label8.Text = "Launch with windows";
-            // 
             // toTrayCheck
             // 
             this.toTrayCheck.AutoSize = true;
@@ -338,6 +322,33 @@ namespace POELadder
             this.toTrayCheck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toTrayCheck.UseVisualStyleBackColor = true;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(541, 99);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(103, 13);
+            this.label11.TabIndex = 25;
+            this.label11.Text = "Enable Progress Bar";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(541, 77);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(131, 13);
+            this.label9.TabIndex = 22;
+            this.label9.Text = "Enable Toast Notifications";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(541, 54);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(109, 13);
+            this.label8.TabIndex = 20;
+            this.label8.Text = "Launch with windows";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -346,6 +357,25 @@ namespace POELadder
             this.label7.Size = new System.Drawing.Size(79, 13);
             this.label7.TabIndex = 18;
             this.label7.Text = "Minimize to tray";
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Location = new System.Drawing.Point(539, 26);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(168, 92);
+            this.checkedListBox1.TabIndex = 172;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(536, 10);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(48, 13);
+            this.label12.TabIndex = 26;
+            this.label12.Text = "Settings:";
             // 
             // currentURL
             // 
@@ -463,14 +493,14 @@ namespace POELadder
             this.seasonPoints.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.seasonPoints.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.seasonPoints.ColumnHeadersVisible = false;
-            dataGridViewCellStyle54.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle54.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle54.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle54.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle54.SelectionBackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle54.SelectionForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle54.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.seasonPoints.DefaultCellStyle = dataGridViewCellStyle54;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.seasonPoints.DefaultCellStyle = dataGridViewCellStyle5;
             this.seasonPoints.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.seasonPoints.Location = new System.Drawing.Point(883, 26);
             this.seasonPoints.MultiSelect = false;
@@ -583,21 +613,21 @@ namespace POELadder
             this.upcomingRaces.AllowUserToDeleteRows = false;
             this.upcomingRaces.AllowUserToResizeColumns = false;
             this.upcomingRaces.AllowUserToResizeRows = false;
-            dataGridViewCellStyle55.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.upcomingRaces.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle55;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.upcomingRaces.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
             this.upcomingRaces.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.upcomingRaces.BackgroundColor = System.Drawing.SystemColors.Control;
             this.upcomingRaces.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.upcomingRaces.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            dataGridViewCellStyle56.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle56.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle56.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle56.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle56.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle56.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle56.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.upcomingRaces.DefaultCellStyle = dataGridViewCellStyle56;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.upcomingRaces.DefaultCellStyle = dataGridViewCellStyle7;
             this.upcomingRaces.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
             this.upcomingRaces.GridColor = System.Drawing.SystemColors.Control;
             this.upcomingRaces.Location = new System.Drawing.Point(12, 39);
@@ -607,6 +637,7 @@ namespace POELadder
             this.upcomingRaces.RowHeadersVisible = false;
             this.upcomingRaces.Size = new System.Drawing.Size(1063, 443);
             this.upcomingRaces.TabIndex = 170;
+            this.upcomingRaces.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.upcomingRaces_CellPainting);
             // 
             // returnButton
             // 
@@ -650,36 +681,6 @@ namespace POELadder
             this.exitItem.Name = "exitItem";
             this.exitItem.Size = new System.Drawing.Size(124, 22);
             this.exitItem.Text = "Exit";
-            // 
-            // checkedListBox1
-            // 
-            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Location = new System.Drawing.Point(539, 26);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(168, 92);
-            this.checkedListBox1.TabIndex = 172;
-            // 
-            // seasonSelector
-            // 
-            this.seasonSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.seasonSelector.FormattingEnabled = true;
-            this.seasonSelector.Items.AddRange(new object[] {
-            "Season One",
-            "Season Two",
-            "Season Three",
-            "Season Four",
-            "Season Five",
-            "Season Six",
-            "Season Seven",
-            "Season Eight",
-            "Season Nine",
-            "Season Ten"});
-            this.seasonSelector.Location = new System.Drawing.Point(883, 3);
-            this.seasonSelector.Name = "seasonSelector";
-            this.seasonSelector.Size = new System.Drawing.Size(174, 21);
-            this.seasonSelector.TabIndex = 173;
-            this.seasonSelector.SelectedIndexChanged += new System.EventHandler(this.seasonSelector_SelectedIndexChanged);
             // 
             // Form1
             // 
