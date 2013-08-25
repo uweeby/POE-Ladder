@@ -243,7 +243,7 @@ namespace POELadder
             {
                 if (e.ColumnIndex == 3)
                 {
-                    using (Image img = Image.FromFile(Properties.Settings.Default.TwitchOffline))
+                    using (Image img = Image.FromFile(@"C:\Users\M1nistry\Desktop\POELadder\POELadder\Assets\twitch-offline.png"))
                     {
                         e.Graphics.DrawImage(img, e.CellBounds.Left, e.CellBounds.Top + 1, 20, 20);
 
