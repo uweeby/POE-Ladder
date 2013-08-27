@@ -69,3 +69,9 @@ Current Goals -
           * Log area to log events (Race start/finish) and at a later date potentially server global messages.
           * [Maybe] grabbing data from exilestats such as race records(?)
           
+        To-Do:
+          * Intergrate Twitch API to allow for stream online checking.
+          * Switching current DGV Column setup to fixed instead of dynamic (necesarry for upcoming races? nope).
+          * Hyperlinking the twitch column.
+          * Add icons for challenges
+          
