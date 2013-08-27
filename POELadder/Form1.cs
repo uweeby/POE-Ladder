@@ -594,50 +594,54 @@ namespace POELadder
 
             #region ClassColoring
             //Color cells by Class
+            bool coloring = false;
             int colorColumn = 6;
             string[] classArray = { "Marauder", "Ranger", "Witch", "Shadow", "Templar", "Duelist" };
             Color[] classColors = { Color.IndianRed, Color.LightGreen, Color.RoyalBlue, Color.BlueViolet, Color.Gold, Color.Violet };
-
-            for (int i = 0; i < PlayerList.Count; i++)
+            if (coloring)
             {
-                for (int j = 0; j < classArray.Length; j++)
+                for (int i = 0; i < PlayerList.Count; i++)
                 {
-                    if (LadderTable.Rows[i].Cells[colorColumn].Value.Equals(classArray[j]) && !LadderTable.Rows[i].Cells[4].Value.Equals(""))
+                    for (int j = 0; j < classArray.Length; j++)
                     {
-                        LadderTable.Rows[i].Cells[colorColumn].Style.BackColor = classColors[j];
+                        if (LadderTable.Rows[i].Cells[colorColumn].Value.Equals(classArray[j]) &&
+                            !LadderTable.Rows[i].Cells[4].Value.Equals(""))
+                        {
+                            LadderTable.Rows[i].Cells[colorColumn].Style.BackColor = classColors[j];
+                        }
                     }
-                }
 
-                if (!LadderTable.Rows[i].Cells[13].Value.Equals("0"))
-                {
-                    if (playerDB[0].GetRankChange() > 0)
+                    if (!LadderTable.Rows[i].Cells[13].Value.Equals("0"))
                     {
-                        LadderTable.Rows[i].Cells[13].Style.ForeColor = Color.Green;
-                    }
-                    else
-                        if (playerDB[0].GetRankChange() < 0)
+                        if (playerDB[0].GetRankChange() > 0)
+                        {
+                            LadderTable.Rows[i].Cells[13].Style.ForeColor = Color.Green;
+                        }
+                        else if (playerDB[0].GetRankChange() < 0)
                         {
                             LadderTable.Rows[i].Cells[13].Style.ForeColor = Color.Red;
                         }
-                }
+                    }
 
-                if (LadderTable.Rows[i].Cells[2].Value.Equals(trackBox.Text))
-                {
-                    LadderTable.Rows[i].Cells[0].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[1].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[2].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[3].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[5].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[6].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[7].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[8].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[9].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[10].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[11].Style.BackColor = Color.SlateBlue;
+                    if (LadderTable.Rows[i].Cells[2].Value.Equals(trackBox.Text))
+                    {
+                        LadderTable.Rows[i].Cells[0].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[1].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[2].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[3].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[5].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[6].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[7].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[8].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[9].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[10].Style.BackColor = Color.SlateBlue;
+                        LadderTable.Rows[i].Cells[11].Style.BackColor = Color.SlateBlue;
 
 
+                    }
                 }
             }
+
             #endregion
 
             #region LadderTable Formatting
