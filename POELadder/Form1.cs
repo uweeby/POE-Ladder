@@ -9,7 +9,6 @@ using PoELadder.JSON;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using Notifications;
 #endregion Usings
 
 namespace POELadder
@@ -22,8 +21,6 @@ namespace POELadder
 
         public string selectedLadderURL, trackAccount;
         public List<PlayerDB> playerDB = new List<PlayerDB>();
-
-        List<ScheduledToastNotification> raceNotificationList;
 
         readonly List<string> URLs = new List<string>();
 
@@ -62,7 +59,6 @@ namespace POELadder
             seasonSelector.Text = "Season One";
 
             //Populate Notification List
-            raceNotificationList = CreateNotificationSchedule(POELadderAll);
 
             toTrayCheck.Checked = Properties.Settings.Default.MinimizeToTray;
             launchWithWindows.Checked = Properties.Settings.Default.LaunchWithWindows;
@@ -237,18 +233,27 @@ namespace POELadder
             }
         }
 
-        private void upcomingRaces_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        private void LadderTable_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            for (int i = -1; i < e.RowIndex; i++)
-            {
-                if (e.ColumnIndex == 3)
-                {
-                    using (Image img = Image.FromFile(@"C:\Users\M1nistry\Desktop\POELadder\POELadder\Assets\twitch-offline.png"))
-                    {
-                        e.Graphics.DrawImage(img, e.CellBounds.Left, e.CellBounds.Top + 1, 20, 20);
 
-                        e.PaintContent(e.ClipBounds);
-                        e.Handled = true;
+                for (int i = -1; i < e.RowIndex; i++)
+                {
+
+                    if (e.ColumnIndex == 4)
+                    {
+                    for (int j = 0; j < playerDB.Count; j++)
+                    {
+                        if (playerDB[j].GetTwitchURL() != null)
+                        {
+                                
+                        }
+                        using (Image img = Image.FromFile(@"C:\Users\M1nistry\Desktop\POELadder\POELadder\Assets\twitch-offline.png"))
+                        {
+                            e.Graphics.DrawImage(img, e.CellBounds.Left, e.CellBounds.Top + 1, 20, 20);
+
+                            e.PaintContent(e.ClipBounds);
+                            e.Handled = true;
+                        }
                     }
                 }
             }
@@ -261,9 +266,6 @@ namespace POELadder
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
-
-            //Check for upcoming Race Notifications
-            raceNotificationList = NotificationManager(raceNotificationList);
         }
 
         //Hyperlink manual refresh
@@ -368,6 +370,22 @@ namespace POELadder
             if (e.ClickedItem == exitItem)
             {
                 Dispose();
+            }
+        }
+
+        //Open the selected players twitch stream when the icon is clicked on
+        private void LadderTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex.Equals(4))
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Twitch stream not found.");
+                } 
             }
         }
 
@@ -508,7 +526,6 @@ namespace POELadder
                 Entry.Rank = t.GetRank();
                 Entry.ChallengeCount = t.GetChallengeCount();
                 Entry.Account = t.GetAccount();
-                Entry.TwitchURL = t.GetTwitchURL();
                 Entry.Chracter = t.GetCharacter();
                 Entry.CharacterClass = t.GetClass();
                 Entry.Level = t.GetLevel();
@@ -527,6 +544,7 @@ namespace POELadder
                     Entry.Chracter = "(dead)" + Entry.Chracter;
                 }
             }
+
 
             //Class Sorting
             if (!classBox.Text.Equals("All"))
@@ -635,7 +653,7 @@ namespace POELadder
             LadderTable.Columns[1].HeaderText = "Rank:";
             LadderTable.Columns[2].HeaderText = "Challenge:";
             LadderTable.Columns[3].HeaderText = "Account:";
-            LadderTable.Columns[4].HeaderText = "Twitch:";
+            LadderTable.Columns[4].HeaderText = "";
             LadderTable.Columns[5].HeaderText = "Character:";
             LadderTable.Columns[6].HeaderText = "Class:";
             LadderTable.Columns[7].HeaderText = "Level:";
@@ -654,6 +672,7 @@ namespace POELadder
             LadderTable.Columns[13].ToolTipText = "Change in rank since the last update";
 
             LadderTable.Columns[0].ReadOnly = true;
+            LadderTable.Columns[4].ReadOnly = true;
 
             //Auto Size Columns
             for (int i = 0; i < 11; i++)
@@ -661,7 +680,7 @@ namespace POELadder
                 LadderTable.Columns[0].Width = 45;
                 LadderTable.Columns[1].Width = 45;
                 LadderTable.Columns[2].Width = 65;
-                LadderTable.Columns[4].Width = 45;
+                LadderTable.Columns[4].Width = 20;
                 LadderTable.Columns[5].Width = 125;
                 LadderTable.Columns[6].Width = 90;
                 LadderTable.Columns[7].Width = 90;
@@ -784,7 +803,7 @@ namespace POELadder
                                 LadderData.entries[i].character.level,
                                 LadderData.entries[i].character.experience,
                                 LadderData.entries[i].account.challenges.total,
-                                "URL/ICON?",
+                                "",
                                 LadderData.entries[i].dead,
                                 DateTime.UtcNow);
                         }
@@ -879,98 +898,7 @@ namespace POELadder
             }
         }
         #endregion Table Methods
-
-        #region Toast
-        private List<ScheduledToastNotification> CreateNotificationSchedule(LeagueList[] ladderList)
-        {
-            List<ScheduledToastNotification> toastList = new List<ScheduledToastNotification>();
-
-            //Iterate over the list of races
-            for (int i = 1; i < ladderList.Length - 1; i++)
-            {
-                string RaceName = ladderList[i].id;
-                DateTime StartTime = DateTime.ParseExact(ladderList[i].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture).ToLocalTime();
-
-                toastList.Add(new ScheduledToastNotification(RaceName, StartTime));
-            }
-
-
-            //Test
-            notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
-            notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-            notifyIcon1.BalloonTipText = "TEST";
-
-            return toastList;
-        }
-
-        private List<ScheduledToastNotification> NotificationManager(List<ScheduledToastNotification> notificationList)
-        {
-            System.Console.WriteLine("NotificationManager()");
-            if (toastCheckBox.Checked.Equals(true))
-            {
-                //Iterate over items
-                for (int i = 0; i < notificationList.Count; i++)
-                {
-                    bool notify = false;
-
-                    //Race has already started
-                    if (notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
-                    {
-                        //No notificiation needs to be sent. Remove
-                        notificationList.RemoveAt(i);
-                        i--;
-                        continue;
-                    }
-
-                    //Race is within an hour/15 minutes
-                    if (notificationList[i].GetDeliveryTime().AddHours(-1) <= DateTime.Now.ToLocalTime() &&
-                        notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
-                    {
-                        if (!notificationList[i].GetHourNotification())
-                        {
-                            notify = true;
-                            notificationList[i].SetHourNotification(false);
-                        }
-                    }
-
-                    if (notificationList[i].GetDeliveryTime().AddMinutes(-15) <= DateTime.Now.ToLocalTime() &&
-                        notificationList[i].GetDeliveryTime() <= DateTime.Now.ToLocalTime())
-                    {
-                        if (!notificationList[i].GetFifteenMinuteNotification())
-                        {
-                            notify = true;
-                            notificationList[i].SetHourNotification(false);
-                            notificationList[i].SetFifteenMinuteNotification(false);
-                        }
-                    }
-
-                    //Create Notification
-                    if (notify)
-                    {
-                        notifyIcon1.BalloonTipIcon = ToolTipIcon.None;
-                        notifyIcon1.BalloonTipTitle = "Upcoming Race:";
-                        notifyIcon1.BalloonTipText =
-                            notificationList[i].GetContent() +
-                            Environment.NewLine +
-                            notificationList[i].GetDeliveryTime();
-
-                        notifyIcon1.ShowBalloonTip(5000);
-
-                        notify = false;
-                    }
-
-                    //All notification have been sent
-                    if (notificationList[i].GetFifteenMinuteNotification())
-                    {
-                        notificationList.RemoveAt(i);
-                        i--;
-                    }
-                }
-            }
-            return notificationList;
-
-        }
-        #endregion Toast
+       
 
     }
 }

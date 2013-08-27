@@ -84,6 +84,20 @@ namespace POELadder
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.maximizeItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onlineColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.rankColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.challengeColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.accountColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.twitchColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.characterColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.classColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.levelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.experienceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.explvlColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.expbehindColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.expUpdate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.expminColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.changeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.LadderTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DeathTable)).BeginInit();
             this.tabPage1.SuspendLayout();
@@ -140,6 +154,7 @@ namespace POELadder
             // 
             this.LadderTable.AllowUserToAddRows = false;
             this.LadderTable.AllowUserToDeleteRows = false;
+            this.LadderTable.AllowUserToOrderColumns = true;
             this.LadderTable.AllowUserToResizeColumns = false;
             this.LadderTable.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.InactiveCaption;
@@ -149,6 +164,21 @@ namespace POELadder
             this.LadderTable.BackgroundColor = System.Drawing.SystemColors.Control;
             this.LadderTable.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.LadderTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.LadderTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.onlineColumn,
+            this.rankColumn,
+            this.challengeColumn,
+            this.accountColumn,
+            this.twitchColumn,
+            this.characterColumn,
+            this.classColumn,
+            this.levelColumn,
+            this.experienceColumn,
+            this.explvlColumn,
+            this.expbehindColumn,
+            this.expUpdate,
+            this.expminColumn,
+            this.changeColumn});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -161,9 +191,11 @@ namespace POELadder
             this.LadderTable.Location = new System.Drawing.Point(10, 39);
             this.LadderTable.MultiSelect = false;
             this.LadderTable.Name = "LadderTable";
+            this.LadderTable.ReadOnly = true;
             this.LadderTable.RowHeadersVisible = false;
             this.LadderTable.Size = new System.Drawing.Size(1063, 443);
             this.LadderTable.TabIndex = 149;
+            this.LadderTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.LadderTable_CellClick);
             // 
             // DeathTable
             // 
@@ -637,7 +669,6 @@ namespace POELadder
             this.upcomingRaces.RowHeadersVisible = false;
             this.upcomingRaces.Size = new System.Drawing.Size(1063, 443);
             this.upcomingRaces.TabIndex = 170;
-            this.upcomingRaces.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.upcomingRaces_CellPainting);
             // 
             // returnButton
             // 
@@ -681,6 +712,107 @@ namespace POELadder
             this.exitItem.Name = "exitItem";
             this.exitItem.Size = new System.Drawing.Size(124, 22);
             this.exitItem.Text = "Exit";
+            // 
+            // onlineColumn
+            // 
+            this.onlineColumn.HeaderText = "Online:";
+            this.onlineColumn.Name = "onlineColumn";
+            this.onlineColumn.ReadOnly = true;
+            this.onlineColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // rankColumn
+            // 
+            this.rankColumn.HeaderText = "Rank:";
+            this.rankColumn.MaxInputLength = 500;
+            this.rankColumn.Name = "rankColumn";
+            this.rankColumn.ReadOnly = true;
+            this.rankColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // challengeColumn
+            // 
+            this.challengeColumn.HeaderText = "Challenges:";
+            this.challengeColumn.Name = "challengeColumn";
+            this.challengeColumn.ReadOnly = true;
+            this.challengeColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // accountColumn
+            // 
+            this.accountColumn.HeaderText = "Account:";
+            this.accountColumn.MaxInputLength = 50;
+            this.accountColumn.Name = "accountColumn";
+            this.accountColumn.ReadOnly = true;
+            this.accountColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // twitchColumn
+            // 
+            this.twitchColumn.HeaderText = "";
+            this.twitchColumn.Image = global::POELadder.Properties.Resources._twitchOnline;
+            this.twitchColumn.Name = "twitchColumn";
+            this.twitchColumn.ReadOnly = true;
+            this.twitchColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // characterColumn
+            // 
+            this.characterColumn.HeaderText = "Character:";
+            this.characterColumn.MaxInputLength = 50;
+            this.characterColumn.Name = "characterColumn";
+            this.characterColumn.ReadOnly = true;
+            // 
+            // classColumn
+            // 
+            this.classColumn.HeaderText = "Class:";
+            this.classColumn.MaxInputLength = 50;
+            this.classColumn.Name = "classColumn";
+            this.classColumn.ReadOnly = true;
+            // 
+            // levelColumn
+            // 
+            this.levelColumn.HeaderText = "Level:";
+            this.levelColumn.MaxInputLength = 5;
+            this.levelColumn.Name = "levelColumn";
+            this.levelColumn.ReadOnly = true;
+            // 
+            // experienceColumn
+            // 
+            this.experienceColumn.HeaderText = "Experience:";
+            this.experienceColumn.MaxInputLength = 20;
+            this.experienceColumn.Name = "experienceColumn";
+            this.experienceColumn.ReadOnly = true;
+            // 
+            // explvlColumn
+            // 
+            this.explvlColumn.HeaderText = "Exp/Level:";
+            this.explvlColumn.MaxInputLength = 20;
+            this.explvlColumn.Name = "explvlColumn";
+            this.explvlColumn.ReadOnly = true;
+            // 
+            // expbehindColumn
+            // 
+            this.expbehindColumn.HeaderText = "Exp/behind:";
+            this.expbehindColumn.MaxInputLength = 20;
+            this.expbehindColumn.Name = "expbehindColumn";
+            this.expbehindColumn.ReadOnly = true;
+            // 
+            // expUpdate
+            // 
+            this.expUpdate.HeaderText = "Exp/update:";
+            this.expUpdate.MaxInputLength = 50;
+            this.expUpdate.Name = "expUpdate";
+            this.expUpdate.ReadOnly = true;
+            // 
+            // expminColumn
+            // 
+            this.expminColumn.HeaderText = "Exp/Minute";
+            this.expminColumn.MaxInputLength = 50;
+            this.expminColumn.Name = "expminColumn";
+            this.expminColumn.ReadOnly = true;
+            // 
+            // changeColumn
+            // 
+            this.changeColumn.HeaderText = "Change:";
+            this.changeColumn.MaxInputLength = 50;
+            this.changeColumn.Name = "changeColumn";
+            this.changeColumn.ReadOnly = true;
             // 
             // Form1
             // 
@@ -769,6 +901,20 @@ namespace POELadder
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.ComboBox seasonSelector;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn onlineColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rankColumn;
+        private System.Windows.Forms.DataGridViewImageColumn challengeColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn accountColumn;
+        private System.Windows.Forms.DataGridViewImageColumn twitchColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn characterColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn classColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn levelColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn experienceColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn explvlColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn expbehindColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn expUpdate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn expminColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn changeColumn;
 
     }
 }
