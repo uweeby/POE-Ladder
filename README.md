@@ -32,6 +32,17 @@ Bugs/Suggestions:
 uweenukr@gmail.com, 
 Ministry@live.com.au
 
+Version 1.4
+-----------
+Changes-
+
+          * Death tracking - Now in JSON API
+          * Twitch Streamers - Now in JSON API
+          * Intergrate Twitch API to allow for stream online checking.
+    	  * Hyperlinking the twitch column.
+    	  * Images to replace confusing icons (online/offline)
+          * Add icons for challenges
+          
 Version 1.3
 -----------
 Changes -
@@ -64,13 +75,7 @@ Current Bugs -
 
 Current Goals -
 
-	1.4 Completed:
-          * Death tracking - Now in JSON API
-          * Twitch Streamers - Now in JSON API
-          * Intergrate Twitch API to allow for stream online checking.
-    	  * Hyperlinking the twitch column.
-    	  * Images to replace confusing icons (online/offline)
-          * Add icons for challenges
+
           
 	Misc: 
           * Log area to log events (Race start/finish) and at a later date potentially server global messages.
