@@ -481,8 +481,17 @@ namespace POELadder
         {
             for (var i = 0; i < LadderTable.RowCount; i++)
             {
-                var twitchJSON = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[i]);
+                var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[i]);
+                if(twitchJson.stream.Equals(null))
+                {
+                    //Stream offline
 
+                    continue;
+                }
+
+                //Stream online
+
+                continue;
             }
         }
 
