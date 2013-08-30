@@ -174,7 +174,7 @@ namespace POELadder
             UpdateEXPThisUpdate();
             UpdateRankChange(Rank);
             UpdateEXPMin();
-            UpdateTwtichStatus(); //The fuck kind of name is this. I hate myself.
+            UpdateTwtichStatus(); 
         }
 
         //Remove Extra data from lists. Only need to store the last 10 updates
