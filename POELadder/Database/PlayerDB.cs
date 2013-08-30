@@ -13,6 +13,8 @@ namespace POELadder
         private String Class;
         private int ChallengeCount;
         private String TwitchURL;
+        private bool TwitchOnline;
+        private DateTime TwitchCacheTime;
         private bool Dead;
 
         //Custom Data:
@@ -172,8 +174,8 @@ namespace POELadder
             UpdateEXPThisUpdate();
             UpdateRankChange(Rank);
             UpdateEXPMin();
+            UpdateTwtichStatus();
         }
-
 
         //Remove Extra data from lists. Only need to store the last 10 updates
         private void ShrinkCollections()
@@ -266,6 +268,12 @@ namespace POELadder
             }
         }
 
+        #region Getters and Setters
+        private void UpdateTwtichStatus()
+        {
+            
+        }
+
         public bool GetOnlineStatus()
         {
             return this.Online;
@@ -356,6 +364,26 @@ namespace POELadder
             this.TwitchURL = TwitchURL;
         }
 
+        public bool GetTwitchOnline()
+        {
+            return this.TwitchOnline;
+        }
+
+        public void SetTwitchOnline(bool TwitchOnline)
+        {
+            this.TwitchOnline = TwitchOnline;
+        }
+
+        public DateTime GetTwitchCacheTime()
+        {
+            return this.TwitchCacheTime;
+        }
+
+        public void SetTwitchCacheTime(DateTime TwitchCacheTime)
+        {
+            this.TwitchCacheTime = TwitchCacheTime;
+        }
+
         public bool GetDeathStatus()
         {
             return this.Dead;
@@ -365,5 +393,6 @@ namespace POELadder
         {
             this.Dead = Dead;
         }
+        #endregion Getters and Setters
     }
 }
