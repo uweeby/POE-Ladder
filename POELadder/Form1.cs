@@ -79,22 +79,32 @@ namespace POELadder
         //A new Ladder has been Selected from the dropdown box
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!ladderselectBox.Text.Equals("Upcoming Races"))
+            if (ladderselectBox.Text.Equals("Upcoming Races"))
             {
+                //Set flags
+                upcomingRaces.Visible = true;
+                currentURL.Enabled = false;
+                returnButton.Visible = false;
+
+                UpdateRaces();
+            }
+
+            else
+            {
+                //Set flags
                 upcomingRaces.Visible = false;
                 currentURL.Enabled = true;
                 returnButton.Visible = true;
+
+                //Clear old data
                 playerDB.Clear();
+                TwitchURLs.Clear();
+
+                //Download the new data
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
 
-            if (ladderselectBox.Text.Equals("Upcoming Races"))
-            {
-                currentURL.Enabled = false;
-                returnButton.Visible = false;
-                upcomingRaces.Visible = true;
-                UpdateRaces();
-            }
+
         }
 
         //Click functions for upcoming races - URL/Timer/Event
