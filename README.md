@@ -60,18 +60,20 @@ Current Bugs -
 
 Current Goals -
 
-	1.4 Goals:
+	1.4 Completed:
           * Death tracking - Now in JSON API
           * Twitch Streamers - Now in JSON API
-          * Images to replace confusing icons (online/offline)
+          * Intergrate Twitch API to allow for stream online checking.
+    	  * Hyperlinking the twitch column.
+    	  * Images to replace confusing icons (online/offline)
+          * Add icons for challenges
           
 	Misc: 
           * Log area to log events (Race start/finish) and at a later date potentially server global messages.
           * [Maybe] grabbing data from exilestats such as race records(?)
           
         To-Do:
-          * Intergrate Twitch API to allow for stream online checking.
-          * Switching current DGV Column setup to fixed instead of dynamic (necesarry for upcoming races? nope).
-          * Hyperlinking the twitch column.
-          * Add icons for challenges
+          
+          * Add real threading to reduce GUI lag
+
           
