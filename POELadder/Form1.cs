@@ -543,14 +543,15 @@ namespace POELadder
                 {
                     TwitchURLs.Add(t.GetTwitchURL());
 
-                    if (TwitchOnline(rowNumber))
-                    {
-                        Entry.TwitchURL = Resources._twitchOnline;
-                    }
-                    else
-                    {
+//Disabled for now due to latency issues. Should be using threading...all over the place
+                    //if (TwitchOnline(rowNumber))
+                    //{
+                    //    Entry.TwitchURL = Resources._twitchOnline;
+                    //}
+                    //else
+                    //{
                         Entry.TwitchURL = Resources._twitchOffline;
-                    }
+                    //}
                     
                 }
                 else
