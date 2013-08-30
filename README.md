@@ -11,13 +11,15 @@ Screenshot
 ----------
 [![](http://i.imgur.com/He1hEEn.png)](http://i.imgur.com/He1hEEn.png)
 
-Demo Link
+Application Download
 ---------
-1.3 - https://www.dropbox.com/s/nzsygnr26qtaxv4/POELadder%201.3.zip
+1.4 - [Dropbox Download][4]
 
-1.2 - https://www.dropbox.com/s/g7xpgq5143dqk6l/POELadder%201.2.zip
+1.3 - [Dropbox Download][3]
 
-1.1 - https://dl.dropbox.com/u/31365922/POELadder%201.1.zip
+1.2 - [Dropbox Download][2]
+
+1.1 - [Dropbox Download][1]
 
 
 Tools
@@ -76,4 +78,9 @@ Current Goals -
           
           * Add real threading to reduce GUI lag
 
-          
+        
+        
+[1]: https://dl.dropbox.com/u/31365922/POELadder%201.1.zip
+[2]: https://www.dropbox.com/s/g7xpgq5143dqk6l/POELadder%201.2.zip
+[3]: https://www.dropbox.com/s/nzsygnr26qtaxv4/POELadder%201.3.zip
+[4]: https://dl.dropboxusercontent.com/u/31365922/POELadder%20v1.4.zip
