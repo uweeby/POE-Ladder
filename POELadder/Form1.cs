@@ -66,14 +66,12 @@ namespace POELadder
             //Populate Notification List
 
             toTrayCheck.Checked = Properties.Settings.Default.MinimizeToTray;
-            launchWithWindows.Checked = Properties.Settings.Default.LaunchWithWindows;
             toastCheckBox.Checked = Properties.Settings.Default.EnableToasts;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.MinimizeToTray = toTrayCheck.Checked;
-            Properties.Settings.Default.LaunchWithWindows = launchWithWindows.Checked;
             Properties.Settings.Default.EnableToasts = toastCheckBox.Checked;
         }
 
@@ -359,29 +357,20 @@ namespace POELadder
             {
                 try
                 {
-                    System.Diagnostics.Process.Start("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
-                    Console.WriteLine("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
+                    if (TwitchURLs[e.RowIndex].Equals("NULL"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Process.Start("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
+                        Console.WriteLine("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
+                    }  
                 }
                 catch (Exception)
                 {
                     MessageBox.Show("Twitch stream not found.");
                 } 
-            }
-        }
-
-        private void launchWithWindows_CheckedChanged(object sender, EventArgs e)
-        {
-            RegistryKey registryKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if (registryKey != null)
-            {
-                if (launchWithWindows.Checked)
-                {
-                    registryKey.SetValue("POELadder", Application.ExecutablePath);
-                }
-                else
-                {
-                    registryKey.DeleteValue("POELadder");
-                }
             }
         }
         #endregion
@@ -477,22 +466,18 @@ namespace POELadder
             #endregion
         }
 
-        private void TwitchOnline()
+        private bool TwitchOnline(int Row)
         {
-            for (var i = 0; i < LadderTable.RowCount; i++)
+            Console.WriteLine("https://api.twitch.tv/kraken/streams/" + TwitchURLs[Row]);
+            var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[Row]);
+
+            if (twitchJson.stream != null && !TwitchURLs[Row].Equals("NULL"))
             {
-                var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[i]);
-                if(twitchJson.stream.Equals(null))
-                {
-                    //Stream offline
-
-                    continue;
-                }
-
-                //Stream online
-
-                continue;
+                //Stream is online
+                return true;
             }
+            //Stream is offline
+            return false;
         }
 
         //Download the ladder selected in the drop down according to the max results numerical
@@ -516,6 +501,7 @@ namespace POELadder
         {
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
             var PlayerList = new List<RaceTable>();
+            int rowNumber = -1;
 
             foreach (PlayerDB t in playerDB)
             {
@@ -537,6 +523,7 @@ namespace POELadder
                 Entry.RankChange = t.GetRankChange();
 
                 PlayerList.Add(Entry);
+                rowNumber++;
 
                 //Apply Death Status
                 if (t.GetDeathStatus())
@@ -546,8 +533,17 @@ namespace POELadder
 
                 if (t.GetTwitchURL() != "NULL")
                 {
-                    Entry.TwitchURL = Resources._twitchOnline;
                     TwitchURLs.Add(t.GetTwitchURL());
+
+                    if (TwitchOnline(rowNumber))
+                    {
+                        Entry.TwitchURL = Resources._twitchOnline;
+                    }
+                    else
+                    {
+                        Entry.TwitchURL = Resources._twitchOffline;
+                    }
+                    
                 }
                 else
                 {
@@ -938,7 +934,26 @@ namespace POELadder
             }
         }
         #endregion Table Methods
-       
 
+        private void hideButton_Click(object sender, EventArgs e)
+        {
+            tabControl1.Visible = false;
+            hideButton.Visible = false;
+            restoreButton.Visible = true;
+
+            LadderTable.Height = 595;
+            upcomingRaces.Height = 595;
+        }
+
+        private void restoreButton_Click(object sender, EventArgs e)
+        {
+            tabControl1.Visible = true;
+            hideButton.Visible = true;
+            restoreButton.Visible = false;
+
+            LadderTable.Height = 443;
+            upcomingRaces.Height = 443;
+        }
+       
     }
 }
