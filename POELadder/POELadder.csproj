@@ -169,6 +169,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\0.png" />
     <Content Include="Assets\1.png" />
     <Content Include="Assets\2.png" />
     <Content Include="Assets\3.png" />
@@ -184,6 +185,7 @@
     <Content Include="Assets\twitch-online.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\_0.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

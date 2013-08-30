@@ -554,6 +554,9 @@ namespace POELadder
                 #region ChallengeSwitch
                 switch (t.GetChallengeCount())
                 {
+                    case 0:
+                        Entry.ChallengeCount = Resources._0;
+                        break;
                     case 1:
                         Entry.ChallengeCount = Resources._1;
                         break;
