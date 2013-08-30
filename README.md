@@ -7,7 +7,7 @@ Track Path of Exile Ladders with expanded race details in real time.
 
 Screenshot
 ----------
-[![](http://i.imgur.com/He1hEEn.png)](http://i.imgur.com/He1hEEn.png)
+[![](http://i.imgur.com/4snXFjq.png)](http://i.imgur.com/4snXFjq.png)
 
 Application Download
 ---------
