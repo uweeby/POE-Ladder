@@ -116,7 +116,6 @@ namespace POELadder
                 try
                 {
                     System.Diagnostics.Process.Start(URLs[e.RowIndex]);
-                    Console.WriteLine(currentURL);
                 }
                 catch (Exception)
                 {
@@ -130,7 +129,6 @@ namespace POELadder
             try
             {
                 System.Diagnostics.Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
-                Console.WriteLine(currentURL);
             }
             catch (Exception)
             {
@@ -444,8 +442,8 @@ namespace POELadder
             upcomingRaces.CellToolTipTextNeeded += upcoming_CellToolTipTextNeeded;
 
             #region Table Formatting
-            upcomingRaces.Columns[0].Width = 230;
-            upcomingRaces.Columns[1].Width = 475;
+            upcomingRaces.Columns[0].Width = 237;
+            upcomingRaces.Columns[1].Width = 550;
             upcomingRaces.Columns[2].Width = 188;
             upcomingRaces.Columns[3].Width = 150;
 
