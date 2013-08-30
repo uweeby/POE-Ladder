@@ -5,8 +5,6 @@ Overview
 --------
 Track Path of Exile Ladders with expanded race details in real time.
 
-Note: .Net Framework 4.0 is required for this application to properly run from SOURCE, get it [here](http://www.microsoft.com/en-au/download/details.aspx?id=17718).
-
 Screenshot
 ----------
 [![](http://i.imgur.com/He1hEEn.png)](http://i.imgur.com/He1hEEn.png)
@@ -20,6 +18,10 @@ Application Download
 1.2 - [Dropbox Download][2]
 
 1.1 - [Dropbox Download][1]
+
+
+Note: When running from source code .Net Framework 4.0 is required for this application to setup properly
+Get it [here](http://www.microsoft.com/en-au/download/details.aspx?id=17718).
 
 
 Tools
