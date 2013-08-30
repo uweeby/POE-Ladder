@@ -1,5 +1,6 @@
 ﻿#region Usings
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -9,6 +10,9 @@ using PoELadder.JSON;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using POELadder.JSON;
+using POELadder.Properties;
+
 #endregion Usings
 
 namespace POELadder
@@ -19,11 +23,12 @@ namespace POELadder
         private SeasonTable[] seaLadder;
         private bool secondsSet = false;
 
-        public string selectedLadderURL, trackAccount;
+        public string selectedLadderURL, trackAccount, TwitchURL;
         public List<PlayerDB> playerDB = new List<PlayerDB>();
 
         readonly List<string> URLs = new List<string>();
-
+        readonly List<string> TwitchURLs = new List<string>();
+        
         LeagueList[] POELadderAll, raceData;
 
         Form2 f2;
@@ -231,33 +236,7 @@ namespace POELadder
             {
                 secondsSet = false;
             }
-        }
-
-        private void LadderTable_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
-        {
-
-                for (int i = -1; i < e.RowIndex; i++)
-                {
-
-                    if (e.ColumnIndex == 4)
-                    {
-                    for (int j = 0; j < playerDB.Count; j++)
-                    {
-                        if (playerDB[j].GetTwitchURL() != null)
-                        {
-                                
-                        }
-                        using (Image img = Image.FromFile(@"C:\Users\M1nistry\Desktop\POELadder\POELadder\Assets\twitch-offline.png"))
-                        {
-                            e.Graphics.DrawImage(img, e.CellBounds.Left, e.CellBounds.Top + 1, 20, 20);
-
-                            e.PaintContent(e.ClipBounds);
-                            e.Handled = true;
-                        }
-                    }
-                }
-            }
-        }
+        }      
 
         //Ladder-auto Refresh - 15 seconds
         private void fifteenSecondTimer_Tick(object sender, EventArgs e)
@@ -380,7 +359,8 @@ namespace POELadder
             {
                 try
                 {
-                    System.Diagnostics.Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
+                    System.Diagnostics.Process.Start("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
+                    Console.WriteLine("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
                 }
                 catch (Exception)
                 {
@@ -497,6 +477,15 @@ namespace POELadder
             #endregion
         }
 
+        private void TwitchOnline()
+        {
+            for (var i = 0; i < LadderTable.RowCount; i++)
+            {
+                var twitchJSON = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[i]);
+
+            }
+        }
+
         //Download the ladder selected in the drop down according to the max results numerical
         private void DownloadSelectedLadder(int LimitResults)
         {
@@ -519,14 +508,16 @@ namespace POELadder
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
             var PlayerList = new List<RaceTable>();
 
-            foreach (var t in playerDB)
+            foreach (PlayerDB t in playerDB)
             {
                 var Entry = new RaceTable();
+
                 Entry.Online = t.GetOnlineStatus();
                 Entry.Rank = t.GetRank();
-                Entry.ChallengeCount = t.GetChallengeCount();
+                Entry.ChallengeCount = new Bitmap(1, 1);
+                Entry.TwitchURL = Resources._twitchOffline;
                 Entry.Account = t.GetAccount();
-                Entry.Chracter = t.GetCharacter();
+                Entry.Character = t.GetCharacter();
                 Entry.CharacterClass = t.GetClass();
                 Entry.Level = t.GetLevel();
                 Entry.EXP = t.GetExperience();
@@ -541,8 +532,49 @@ namespace POELadder
                 //Apply Death Status
                 if (t.GetDeathStatus())
                 {
-                    Entry.Chracter = "(dead)" + Entry.Chracter;
+                    Entry.Character = "(dead) " + t.GetCharacter();
                 }
+
+                if (t.GetTwitchURL() != "NULL")
+                {
+                    Entry.TwitchURL = Resources._twitchOnline;
+                    TwitchURLs.Add(t.GetTwitchURL());
+                }
+                else
+                {
+                    Entry.TwitchURL = new Bitmap(1, 1);
+                    TwitchURLs.Add(t.GetTwitchURL());
+                }
+
+                #region ChallengeSwitch
+                switch (t.GetChallengeCount())
+                {
+                    case 1:
+                        Entry.ChallengeCount = Resources._1;
+                        break;
+                    case 2:
+                        Entry.ChallengeCount = Resources._2;
+                        break;
+                    case 3:
+                        Entry.ChallengeCount = Resources._3;
+                        break;
+                    case 4:
+                        Entry.ChallengeCount = Resources._4;
+                        break;
+                    case 5:
+                        Entry.ChallengeCount = Resources._5;
+                        break;
+                    case 6:
+                        Entry.ChallengeCount = Resources._6;
+                        break;
+                    case 7:
+                        Entry.ChallengeCount = Resources._7;
+                        break;
+                    case 8:
+                        Entry.ChallengeCount = Resources._8;
+                        break;
+                }
+                #endregion
             }
 
 
@@ -594,7 +626,6 @@ namespace POELadder
 
             #region ClassColoring
             //Color cells by Class
-            int colorColumn = 6;
             string[] classArray = { "Marauder", "Ranger", "Witch", "Shadow", "Templar", "Duelist" };
             Color[] classColors = { Color.IndianRed, Color.LightGreen, Color.RoyalBlue, Color.BlueViolet, Color.Gold, Color.Violet };
 
@@ -602,9 +633,9 @@ namespace POELadder
             {
                 for (int j = 0; j < classArray.Length; j++)
                 {
-                    if (LadderTable.Rows[i].Cells[colorColumn].Value.Equals(classArray[j]) && !LadderTable.Rows[i].Cells[4].Value.Equals(""))
+                    if (LadderTable.Rows[i].Cells[6].Value.Equals(classArray[j]))
                     {
-                        LadderTable.Rows[i].Cells[colorColumn].Style.BackColor = classColors[j];
+                        LadderTable.Rows[i].Cells[6].Style.BackColor = classColors[j];
                     }
                 }
 
@@ -787,15 +818,15 @@ namespace POELadder
                         if (LadderData.entries[i].account.name.Equals(playerDB[j].GetAccount()) &&
                             LadderData.entries[i].character.name.Equals(playerDB[j].GetCharacter()))
                         {
-                            //string TwitchURL;
-                            //if (!LadderData.entries[i].account.twitch.Equals(null))
-                            //{
-                            //    TwitchURL = LadderData.entries[i].account.twitch.name;
-                            //}
-                            //else
-                            //{
-                            //    TwitchURL = "null";
-                            //}
+
+                            if (LadderData.entries[i].account.twitch != null)
+                            {
+                                playerDB[j].SetTwitchURL(LadderData.entries[i].account.twitch.name);
+                            }
+                            else
+                            {
+                                playerDB[j].SetTwitchURL("NULL");
+                            }
 
                             playerDB[j].Update(
                                 LadderData.entries[i].online,
@@ -803,7 +834,7 @@ namespace POELadder
                                 LadderData.entries[i].character.level,
                                 LadderData.entries[i].character.experience,
                                 LadderData.entries[i].account.challenges.total,
-                                "",
+                                playerDB[j].GetTwitchURL(),
                                 LadderData.entries[i].dead,
                                 DateTime.UtcNow);
                         }

@@ -16,7 +16,7 @@ namespace PoELadder.JSON
     }
 
     public class Twitch
-    {
+    {               
         public string name { get; set; }
     }
 

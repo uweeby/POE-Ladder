@@ -33,7 +33,7 @@ namespace POELadder
                 Player.Online = t.online;
                 Player.Rank = t.rank;
                 Player.Account = t.account.name;
-                Player.Chracter = t.character.name;
+                Player.Character = t.character.name;
                 Player.CharacterClass = t.character.@class;
                 Player.Level = t.character.level;
                 Player.EXP = t.character.experience;

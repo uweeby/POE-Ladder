@@ -206,7 +206,7 @@ namespace POELadder
             {
                 if (Experience.Count > 1)
                 {
-                    this.EXPThisUpdate = (int)(Experience[0] - Experience[1]);
+                    EXPThisUpdate = (int)(Experience[0] - Experience[1]);
                 }
             }          
         }

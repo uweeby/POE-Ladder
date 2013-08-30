@@ -5,7 +5,7 @@ using System.Text;
 
 namespace POELadder.JSON
 {
-    class Twitch
+    class TwitchAPI
     {
         public class Links
         {
