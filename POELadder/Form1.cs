@@ -509,7 +509,7 @@ namespace POELadder
         {
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
             var PlayerList = new List<RaceTable>();
-            int rowNumber = -1;
+            //int rowNumber = -1;
 
             foreach (PlayerDB t in playerDB)
             {
@@ -531,26 +531,20 @@ namespace POELadder
                 Entry.RankChange = t.GetRankChange();
 
                 PlayerList.Add(Entry);
-                rowNumber++;
-
-                //Apply Death Status
-                if (t.GetDeathStatus())
-                {
-                    Entry.Character = "(dead) " + t.GetCharacter();
-                }
+                //rowNumber++;
 
                 if (!t.GetTwitchURL().Equals("NULL"))
                 {
                     TwitchURLs.Add(t.GetTwitchURL());
 
-                    if (TwitchOnline(rowNumber))
-                    {
+                    //if (TwitchOnline(rowNumber))
+                    //{
                         Entry.TwitchURL = Resources._twitchOnline;
-                    }
-                    else
-                    {
-                        Entry.TwitchURL = Resources._twitchOffline;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    Entry.TwitchURL = Resources._twitchOffline;
+                    //}
                     
                 }
                 else
@@ -611,7 +605,7 @@ namespace POELadder
                 //Index at 1 to include the race leader
                 for (var i = 0; i < PlayerList.Count; i++)
                 {
-                    if (PlayerList[i].Account.Contains(searchBox.Text)) continue;
+                    if (PlayerList[i].Account.ToLower().Contains(searchBox.Text.ToLower())) continue;
                     PlayerList.RemoveAt(i);
                     i--;
                 }
@@ -668,7 +662,7 @@ namespace POELadder
                         }
                 }
 
-                if (LadderTable.Rows[i].Cells[2].Value.Equals(trackBox.Text))
+                if (LadderTable.Rows[i].Cells[3].Value.ToString().ToLower().Equals(trackBox.Text.ToLower()))
                 {
                     LadderTable.Rows[i].Cells[0].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[1].Style.BackColor = Color.SlateBlue;
@@ -681,8 +675,14 @@ namespace POELadder
                     LadderTable.Rows[i].Cells[9].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[10].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[11].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[12].Style.BackColor = Color.SlateBlue;
+                    LadderTable.Rows[i].Cells[13].Style.BackColor = Color.SlateBlue;
+                }
 
-
+                if (playerDB[i].GetDeathStatus().Equals(true))
+                {
+                    LadderTable.Rows[i].Cells[5].Style.ForeColor = Color.DarkGray;
+                    LadderTable.Rows[i].Cells[1].Style.ForeColor = Color.DarkGray;
                 }
             }
             #endregion
