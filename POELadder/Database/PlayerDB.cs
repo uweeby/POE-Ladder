@@ -174,7 +174,7 @@ namespace POELadder
             UpdateEXPThisUpdate();
             UpdateRankChange(Rank);
             UpdateEXPMin();
-            UpdateTwtichStatus();
+            UpdateTwtichStatus(); //The fuck kind of name is this. I hate myself.
         }
 
         //Remove Extra data from lists. Only need to store the last 10 updates
@@ -243,6 +243,7 @@ namespace POELadder
                     expDifference = (int)(Experience[0] - Experience[1]);
                     timeGap = UpdateTime[0] - UpdateTime[1];
                 }
+
                 else
                 {
                     for (int i = 0; i < UpdateTime.Count; i++)
@@ -258,10 +259,12 @@ namespace POELadder
                     }
                 }
             }
+
             if (expDifference != 0)
             {
                 this.EST_EXP_Minute = (int)(expDifference / timeGap.TotalSeconds) * 60;
             }
+
             else 
             {
                 this.EST_EXP_Minute = 0;
