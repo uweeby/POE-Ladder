@@ -531,7 +531,7 @@ namespace POELadder
                     Entry.Character = "(dead) " + t.GetCharacter();
                 }
 
-                if (t.GetTwitchURL() != "NULL")
+                if (!t.GetTwitchURL().Equals("NULL"))
                 {
                     TwitchURLs.Add(t.GetTwitchURL());
 
