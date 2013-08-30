@@ -1,5 +1,7 @@
-﻿using System;
+﻿using POELadder.JSON;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace POELadder
 {
@@ -13,7 +15,7 @@ namespace POELadder
         private String Class;
         private int ChallengeCount;
         private String TwitchURL;
-        private bool TwitchOnline;
+        private bool? TwitchOnlineStatus;
         private DateTime TwitchCacheTime;
         private bool Dead;
 
@@ -174,7 +176,6 @@ namespace POELadder
             UpdateEXPThisUpdate();
             UpdateRankChange(Rank);
             UpdateEXPMin();
-            UpdateTwtichStatus(); 
         }
 
         //Remove Extra data from lists. Only need to store the last 10 updates
@@ -272,11 +273,6 @@ namespace POELadder
         }
 
         #region Getters and Setters
-        private void UpdateTwtichStatus()
-        {
-            
-        }
-
         public bool GetOnlineStatus()
         {
             return this.Online;
@@ -367,14 +363,19 @@ namespace POELadder
             this.TwitchURL = TwitchURL;
         }
 
-        public bool GetTwitchOnline()
+        public bool? GetTwitchOnline()
         {
-            return this.TwitchOnline;
+            if (this.TwitchOnlineStatus.HasValue)
+            {
+                return this.TwitchOnlineStatus.Value;
+            }
+
+            return null;
         }
 
         public void SetTwitchOnline(bool TwitchOnline)
         {
-            this.TwitchOnline = TwitchOnline;
+            this.TwitchOnlineStatus = TwitchOnline;
         }
 
         public DateTime GetTwitchCacheTime()

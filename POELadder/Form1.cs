@@ -474,20 +474,6 @@ namespace POELadder
             #endregion
         }
 
-        private bool TwitchOnline(int Row)
-        {
-            Console.WriteLine("https://api.twitch.tv/kraken/streams/" + TwitchURLs[Row]);
-            var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + TwitchURLs[Row]);
-
-            if (twitchJson.stream != null && !TwitchURLs[Row].Equals("NULL"))
-            {
-                //Stream is online
-                return true;
-            }
-            //Stream is offline
-            return false;
-        }
-
         //Download the ladder selected in the drop down according to the max results numerical
         private void DownloadSelectedLadder(int LimitResults)
         {
@@ -539,11 +525,11 @@ namespace POELadder
 
                     //if (TwitchOnline(rowNumber))
                     //{
-                        Entry.TwitchURL = Resources._twitchOnline;
+                    //    Entry.TwitchURL = Resources._twitchOnline;
                     //}
                     //else
                     //{
-                    //    Entry.TwitchURL = Resources._twitchOffline;
+                        Entry.TwitchURL = Resources._twitchOffline;
                     //}
                     
                 }
@@ -965,6 +951,41 @@ namespace POELadder
             LadderTable.Height = 443;
             upcomingRaces.Height = 443;
         }
-       
+
+        #region BackGround Worker for Twitch Status
+        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            //List of all current players in displayed ladder
+            for (int i = 0; i < playerDB.Count(); i++)
+            {
+                if (playerDB[i].GetTwitchURL().Equals("NULL"))
+                {
+                    //They do not have an account registered. Move along.
+                    continue;
+                }
+
+                if(playerDB[i].GetTwitchCacheTime() == DateTime.UtcNow.AddMinutes(-1) || playerDB[i].GetTwitchCacheTime() == null)
+                {
+                    
+                }
+                Console.WriteLine("https://api.twitch.tv/kraken/streams/" + playerDB[i].GetTwitchURL());
+                var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + playerDB[i].GetTwitchURL());
+
+                if(twitchJson.stream == null)
+                {
+                    //They are not currently online. Move alone.
+                    continue;
+                }
+
+                playerDB[i].SetTwitchOnline(true);
+                playerDB[i].SetTwitchCacheTime(DateTime.UtcNow);
+            }
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+        #endregion BackGround Worker for Twitch Status
     }
 }
