@@ -31,8 +31,6 @@ namespace POELadder
         
         LeagueList[] POELadderAll, raceData;
 
-        Form2 f2;
-
         DateTime LastUpdateCache = DateTime.UtcNow;
 
         int maxValue, ticks, seconds;
@@ -48,7 +46,7 @@ namespace POELadder
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            POELadderAll = JSONHandler.ParseJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
+            POELadderAll = JSONHandler.ParseJSON<LeagueList[]>(Settings.Default.SeasonEventListURL);
 
             //Populate the Ladder Drop Down
             ladderselectBox.Items.Add("Upcoming Races");
@@ -61,20 +59,17 @@ namespace POELadder
             PopulateRaces();
             ladderselectBox.Text = "Upcoming Races";
 
-            seasonSelector.Text = "Season One";
+            seasonSelector.Text = "Season Four";
 
-            //Populate Notification List
-
-            toTrayCheck.Checked = Properties.Settings.Default.MinimizeToTray;
-            toastCheckBox.Checked = Properties.Settings.Default.EnableToasts;
+            toTrayCheck.Checked = Settings.Default.MinimizeToTray;
+            toastCheckBox.Checked = Settings.Default.EnableToasts;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.MinimizeToTray = toTrayCheck.Checked;
-            Properties.Settings.Default.EnableToasts = toastCheckBox.Checked;
+            Settings.Default.MinimizeToTray = toTrayCheck.Checked;
+            Settings.Default.EnableToasts = toastCheckBox.Checked;
         }
-
 
         //A new Ladder has been Selected from the dropdown box
         private void ladderselectBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -99,51 +94,14 @@ namespace POELadder
                 //Clear old data
                 playerDB.Clear();
                 TwitchURLs.Clear();
+                secondsSet = false;
+                ticks = 0;
 
                 //Download the new data
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
 
 
-        }
-
-        //Click functions for upcoming races - URL/Timer/Event
-        private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-            if (e.RowIndex > -1 && e.ColumnIndex == 1)
-            {
-                ladderselectBox.Text = upcomingRaces.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-
-            }
-            if (e.RowIndex > -1 && e.ColumnIndex == 3)
-            {
-                UpdateTimer(e.RowIndex);
-            }
-
-            if (e.RowIndex > -1 && e.ColumnIndex == 0)
-            {
-                try
-                {
-                    System.Diagnostics.Process.Start(URLs[e.RowIndex]);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("There is no forum page for this event yet.");
-                }
-            }
-        }
-
-        private void currentURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("There is no forum page for this event yet.");
-            }
         }
 
         //Set tooltips for upcoming races table
@@ -155,7 +113,12 @@ namespace POELadder
             }
             if (e.RowIndex > -1 && e.ColumnIndex == 3)
             {
-                e.ToolTipText = string.Format("Starts in: ");
+                var raceData = JSONHandler.ParseJSON<LeagueList[]>(Settings.Default.SeasonEventListURL);
+                DateTime startTime = DateTime.ParseExact(raceData[e.RowIndex].startAt, "yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.CurrentCulture).ToLocalTime();
+                String timeBeforeRace = (startTime - DateTime.UtcNow).ToString();
+
+                e.ToolTipText = string.Format("Starts in: " + String.Format(timeBeforeRace, "{0:hh:mm:ss}").Substring(0, timeBeforeRace.LastIndexOf(".")));
+
             }
             if (e.RowIndex > -1 && e.ColumnIndex == 0)
             {
@@ -164,13 +127,14 @@ namespace POELadder
 
         }
 
+        //Taskbar flash alert method for interval alerts
         private static void Alert()
         {
             var helper = new FlashWindowHelper();
             helper.FlashApplicationWindow();
         }
 
-
+        #region Timer tick methods
         //Counter timer - 1 second intervals - Updates the appropriate timers
         private void oneSecondTimer_Tick(object sender, EventArgs e)
         {
@@ -225,9 +189,11 @@ namespace POELadder
 
                 }
             }
+
             var prog = Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.Instance;
             prog.SetProgressState(Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState.Normal);
-            if (seconds > 0 && progressCheck.Checked)
+
+            if ( seconds > 0 && progressCheck.Checked )
             {
                 if (!secondsSet)
                 {
@@ -240,7 +206,9 @@ namespace POELadder
             }
             else
             {
+                ticks = 0;
                 secondsSet = false;
+                prog.SetProgressValue(0, 1);
             }
         }      
 
@@ -252,7 +220,32 @@ namespace POELadder
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
         }
+        #endregion
 
+        #region Table click methods
+        //Open the selected players twitch stream when the icon is clicked on
+        private void LadderTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex.Equals(4))
+            {
+                try
+                {
+                    if (TwitchURLs[e.RowIndex].Equals("NULL"))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        Process.Start("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Twitch stream not found.");
+                }
+            }
+        }
+        
         //Hyperlink manual refresh
         private void refreshButton_LinkClicked_1(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -260,22 +253,70 @@ namespace POELadder
             {
                 DownloadSelectedLadder((int)displayAmount.Value);
             }
+
+            if (ladderselectBox.SelectedItem.Equals("Upcoming Races"))
+            {
+                UpdateRaces();
+            }
         }
 
+        //Click functions for upcoming races - URL/Timer/Event
+        private void upcomingRaces_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            if (e.RowIndex > -1 && e.ColumnIndex == 1)
+            {
+                ladderselectBox.Text = upcomingRaces.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+
+            }
+            if (e.RowIndex > -1 && e.ColumnIndex == 3)
+            {
+                UpdateTimer(e.RowIndex);
+            }
+
+            if (e.RowIndex > -1 && e.ColumnIndex == 0)
+            {
+                try
+                {
+                    Process.Start(URLs[e.RowIndex]);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("There is no forum page for this event yet.");
+                }
+            }
+        }
+
+        //Click event for the current race event url
+        private void currentURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start(URLs[ladderselectBox.SelectedIndex - 1]);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no forum page for this event yet.");
+            }
+        }
+
+        //Method to return to upcoming races
         private void returnButton_Click(object sender, EventArgs e)
         {
-            ladderselectBox.Text = "Upcoming Races";
+            ladderselectBox.Text = "Upcoming Races";            
+        }
+        #endregion
+
+        #region Details pannel methods
+        private void searchBox_TextChanged(object sender, EventArgs e)
+        {
+            UpdateLadderTable();
         }
 
         //Enable or disable the auto refresh timer on checkbox change
         private void autoRefreshCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             fifteenSecondTimer.Enabled = autoRefreshCheckBox.Checked;
-        }
-
-        private void searchBox_TextChanged(object sender, EventArgs e)
-        {
-            UpdateLadderTable();
         }
 
         private void classBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -295,34 +336,13 @@ namespace POELadder
             displayAmount.Value = 50;
         }
 
-        private void trackButton_Click(object sender, EventArgs e)
-        {
-            f2 = new Form2();
-            f2.Show();
-            f2.rURL(ladderselectBox.Text.Replace(" ", "%20"));
-        }
-
         private void trackBox_TextChanged(object sender, EventArgs e)
         {
             trackAccount = trackBox.Text;
         }
+        #endregion
 
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-            if (toTrayCheck.Checked)
-            {
-                if (FormWindowState.Minimized == WindowState)
-                {
-                    ShowInTaskbar = false;
-                    notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
-                    notifyIcon1.BalloonTipText = "Click here to maximize.";
-                    notifyIcon1.BalloonTipTitle = "Minimized to tray";
-                    notifyIcon1.Text = "Path of Exile Ladder";
-                    notifyIcon1.ShowBalloonTip(500);
-                }
-            }
-        }
-
+        #region Notification Icon and Menu
         private void notifyIcon1_Click(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -338,9 +358,11 @@ namespace POELadder
                 }
         }
 
-        private void contextMenuStrip1_MouseLeave(object sender, EventArgs e)
+        private void notifyIcon1_BalloonTipClicked(object sender, EventArgs e)
         {
-            contextMenuStrip1.Hide();
+            WindowState = FormWindowState.Normal;
+            ShowInTaskbar = true;
+            Show();
         }
 
         private void Item_Click(object sender, ToolStripItemClickedEventArgs e)
@@ -357,30 +379,30 @@ namespace POELadder
                 Dispose();
             }
         }
+        #endregion
 
-        //Open the selected players twitch stream when the icon is clicked on
-        private void LadderTable_CellClick(object sender, DataGridViewCellEventArgs e)
+        #region Expand/Minimize details pannel
+        private void hideButton_Click(object sender, EventArgs e)
         {
-            if (e.ColumnIndex.Equals(4))
-            {
-                try
-                {
-                    if (TwitchURLs[e.RowIndex].Equals("NULL"))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        System.Diagnostics.Process.Start("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
-                        Console.WriteLine("http://twitch.tv/" + TwitchURLs[e.RowIndex]);
-                    }  
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Twitch stream not found.");
-                } 
-            }
+            tabControl1.Visible = false;
+            hideButton.Visible = false;
+            restoreButton.Visible = true;
+
+            LadderTable.Height = 595;
+            upcomingRaces.Height = 595;
         }
+
+        private void restoreButton_Click(object sender, EventArgs e)
+        {
+            tabControl1.Visible = true;
+            hideButton.Visible = true;
+            restoreButton.Visible = false;
+
+            LadderTable.Height = 443;
+            upcomingRaces.Height = 443;
+        }
+        #endregion       
+        
         #endregion
 
         #region Display Methods
@@ -388,6 +410,22 @@ namespace POELadder
         {
             PopulatePlayerDB(raceUrl);
             UpdateLadderTable();
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            if (toTrayCheck.Checked)
+            {
+                if (FormWindowState.Minimized == WindowState)
+                {
+                    ShowInTaskbar = false;
+                    notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                    notifyIcon1.BalloonTipText = "Click here to maximize.";
+                    notifyIcon1.BalloonTipTitle = "Minimized to tray";
+                    notifyIcon1.Text = "Path of Exile Ladder";
+                    notifyIcon1.ShowBalloonTip(500);
+                }
+            }
         }
 
         //Update Races table
@@ -416,7 +454,7 @@ namespace POELadder
         //Upcoming Races table
         private void PopulateRaces()
         {
-            raceData = JSONHandler.ParseJSON<LeagueList[]>(Properties.Settings.Default.SeasonEventListURL);
+            raceData = JSONHandler.ParseJSON<LeagueList[]>(Settings.Default.SeasonEventListURL);
 
             var links = new DataGridViewLinkColumn();
             var leagueData = new UpcomingRaces[raceData.Length];
@@ -496,7 +534,7 @@ namespace POELadder
             //Add the Ladder JSON Data to the Player Objects to be displayed in the Ladder Table
             var PlayerList = new List<RaceTable>();
             //int rowNumber = -1;
-
+            if (!twitchStatusWorker.IsBusy) twitchStatusWorker.RunWorkerAsync();
             foreach (PlayerDB t in playerDB)
             {
                 var Entry = new RaceTable();
@@ -520,17 +558,17 @@ namespace POELadder
                 //rowNumber++;
 
                 if (!t.GetTwitchURL().Equals("NULL"))
-                {
+                {                                     
                     TwitchURLs.Add(t.GetTwitchURL());
 
-                    //if (TwitchOnline(rowNumber))
-                    //{
-                    //    Entry.TwitchURL = Resources._twitchOnline;
-                    //}
-                    //else
-                    //{
+                    if (t.GetTwitchOnline().Equals(true))
+                    {
+                        Entry.TwitchURL = Resources._twitchOnline;
+                    }
+                    else
+                    {
                         Entry.TwitchURL = Resources._twitchOffline;
-                    //}
+                    }
                     
                 }
                 else
@@ -655,7 +693,6 @@ namespace POELadder
                     LadderTable.Rows[i].Cells[2].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[3].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[5].Style.BackColor = Color.SlateBlue;
-                    LadderTable.Rows[i].Cells[6].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[7].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[8].Style.BackColor = Color.SlateBlue;
                     LadderTable.Rows[i].Cells[9].Style.BackColor = Color.SlateBlue;
@@ -732,7 +769,7 @@ namespace POELadder
         //Season Ladder Table
         private void UpdateSeasonTable()
         {
-            Properties.Settings.Default.SeasonStandingsURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+" + seasonSelector.Text.Replace(" ", "+");
+            Settings.Default.SeasonStandingsURL = "http://www.pathofexile.com/api/season-ladders?&limit=50&id=Race+" + seasonSelector.Text.Replace(" ", "+");
             var SeasonData = JSONHandler.ParseJSON<SeasonRank>(Properties.Settings.Default.SeasonStandingsURL);
             bool fetch = true;
 
@@ -743,7 +780,7 @@ namespace POELadder
             catch
             {
                 MessageBox.Show("This seasons ladder doesn't exist yet!");
-                seasonSelector.Text = "Season One";
+                seasonSelector.Text = "Season Four";
                 fetch = false;
             }
 
@@ -932,28 +969,14 @@ namespace POELadder
         }
         #endregion Table Methods
 
-        private void hideButton_Click(object sender, EventArgs e)
-        {
-            tabControl1.Visible = false;
-            hideButton.Visible = false;
-            restoreButton.Visible = true;
-
-            LadderTable.Height = 595;
-            upcomingRaces.Height = 595;
-        }
-
-        private void restoreButton_Click(object sender, EventArgs e)
-        {
-            tabControl1.Visible = true;
-            hideButton.Visible = true;
-            restoreButton.Visible = false;
-
-            LadderTable.Height = 443;
-            upcomingRaces.Height = 443;
-        }
-
         #region BackGround Worker for Twitch Status
-        private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+
+        private void twitchStatusWorker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+
+        }
+
+        private void twitchStatusWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             //List of all current players in displayed ladder
             for (int i = 0; i < playerDB.Count(); i++)
@@ -964,28 +987,24 @@ namespace POELadder
                     continue;
                 }
 
-                if(playerDB[i].GetTwitchCacheTime() == DateTime.UtcNow.AddMinutes(-1) || playerDB[i].GetTwitchCacheTime() == null)
-                {
+                if (playerDB[i].GetTwitchCacheTime() <= DateTime.UtcNow.AddMinutes(-1) || playerDB[i].GetTwitchCacheTime().Year.Equals(0001))
+                {                    
+                    var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + playerDB[i].GetTwitchURL());
                     
-                }
-                Console.WriteLine("https://api.twitch.tv/kraken/streams/" + playerDB[i].GetTwitchURL());
-                var twitchJson = JSONHandler.ParseJSON<TwitchAPI>("https://api.twitch.tv/kraken/streams/" + playerDB[i].GetTwitchURL());
+                    if (twitchJson.stream == null)
+                    {
+                        //Player is offline, set cache time and move along.
+                        playerDB[i].SetTwitchCacheTime(DateTime.UtcNow);
+                        continue;
+                    }
 
-                if(twitchJson.stream == null)
-                {
-                    //They are not currently online. Move alone.
-                    continue;
+                    playerDB[i].SetTwitchCacheTime(DateTime.UtcNow);
+                    playerDB[i].SetTwitchOnline(true);
                 }
-
-                playerDB[i].SetTwitchOnline(true);
-                playerDB[i].SetTwitchCacheTime(DateTime.UtcNow);
             }
         }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-
-        }
         #endregion BackGround Worker for Twitch Status
+        
     }
 }
